@@ -44,22 +44,22 @@
             z-index: 0; 
         }
 
-        /* QUẢN LÝ BỐ CỤC ĐÁY MÀN HÌNH (CỐ ĐỊNH PIXEL TỐI ĐA) */
+        /* QUẢN LÝ BỐ CỤC ĐÁY MÀN HÌNH (MÂY - VẠC - PIANO KHỔ LỚN) */
         .scenery-container {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 250px; 
+            height: 100%; 
             z-index: 1; 
             pointer-events: none;
-            overflow: hidden;
         }
 
         .cloud-left {
             position: absolute;
-            bottom: -30px;
-            left: -50px;
-            width: 600px; /* Kích thước cố định tuyệt đối */
+            bottom: -5vh;
+            left: -5vw;
+            width: 55vw; 
+            min-width: 400px;
             height: auto;
             opacity: 0.8;
             filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
@@ -67,9 +67,10 @@
 
         .cloud-right {
             position: absolute;
-            bottom: -30px;
-            right: -50px;
-            width: 600px; /* Kích thước cố định tuyệt đối */
+            bottom: -5vh;
+            right: -5vw;
+            width: 55vw; 
+            min-width: 400px;
             height: auto;
             opacity: 0.8;
             transform: scaleX(-1); 
@@ -78,9 +79,11 @@
 
         .cauldron {
             position: absolute;
-            bottom: 30px;
-            left: 100px; /* Tọa độ cố định tuyệt đối */
-            width: 160px;
+            bottom: 5vh;
+            left: 8vw; 
+            width: 18vw;
+            min-width: 140px;
+            max-width: 200px;
         }
 
         .cauldron::after {
@@ -99,9 +102,11 @@
 
         .piano {
             position: absolute;
-            bottom: 30px;
-            right: 100px; /* Tọa độ cố định tuyệt đối */
-            width: 200px;
+            bottom: 5vh;
+            right: 8vw; 
+            width: 22vw;
+            min-width: 160px;
+            max-width: 250px;
         }
 
         .piano::after {
@@ -116,14 +121,14 @@
             opacity: 0.9;
         }
 
-        /* TỜ GIẤY CỔ (CỐ ĐỊNH KÍCH THƯỚC TRÁNH BIẾN DẠNG) */
+        /* TỜ GIẤY CỔ (DÁNG DỌC, VỪA VẶN) */
         .paper-wrapper {
             position: relative;
-            width: 500px;  /* Không sử dụng % */
-            height: 600px; /* Không sử dụng vh */
+            width: 420px;  /* Chiều ngang hẹp lại cho đúng dáng giấy */
+            height: 600px; 
             background: url('assets/paper.png') no-repeat center center;
             background-size: 100% 100%;
-            padding: 85px 60px 100px 60px; 
+            padding: 85px 40px 100px 40px; /* Căn chỉnh khoảng trống 2 bên */
             box-sizing: border-box;
             z-index: 20; 
             display: flex;
@@ -134,15 +139,15 @@
             content: '';
             position: absolute;
             top: 25px;
-            right: 35px;
-            width: 70px;
-            height: 70px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
             background: url('assets/paper_stars.png') no-repeat center center; 
             background-size: contain;
             pointer-events: none;
         }
 
-        /* CĂN CHỈNH DÒNG CHỮ (PIXEL-PERFECT VỚI LINE-HEIGHT) */
+        /* CĂN CHỈNH DÒNG CHỮ (LOẠI BỎ DÒNG KẺ ẢO) */
         .input-group {
             display: flex;
             align-items: center;
@@ -168,24 +173,23 @@
         }
 
         .paper-input {
-            border-bottom: 2px dashed #8b6b4a;
+            border-bottom: 2px dashed #8b6b4a; /* Dòng kẻ cho phần Tên (nếu cần) */
             padding-bottom: 5px;
         }
 
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            margin-top: 15px; 
-            line-height: 40px; /* Khóa chặt khoảng cách dòng */
-            background-image: linear-gradient(transparent, transparent 38px, #8b6b4a 38px, #8b6b4a 40px);
-            background-size: 100% 40px;
+            margin-top: 5px; 
+            /* CẢNH BÁO: Tăng/giảm con số 42px dưới đây để căn chữ trùng với dòng kẻ có sẵn trên ảnh giấy của bạn */
+            line-height: 42px; 
         }
 
-        /* NÚT BẤM VÀ NHÂN VẬT BỌC LỌT TRONG TỜ GIẤY */
+        /* NÚT BẤM VÀ NHÂN VẬT NẰM GỌN TRONG GÓC PHẢI DƯỚI TỜ GIẤY */
         .submit-section {
             position: absolute;
-            bottom: 25px; 
-            right: 25px; 
+            bottom: 15px; 
+            right: 15px; 
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -196,16 +200,16 @@
             background-color: #f7e0b5;
             border: 2px solid #3b2818;
             color: #3b2818;
-            padding: 10px 15px;
+            padding: 8px 12px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             border-radius: 8px;
             box-shadow: 2px 2px 0px #3b2818;
             white-space: nowrap;
         }
 
         .witch-character {
-            width: 70px;
+            width: 60px;
             margin-left: -5px;
         }
 
@@ -347,10 +351,8 @@
                         });
                     }
                     
-                    // XỬ LÝ ĐIỀU HƯỚNG TẠM THỜI (THAY THẾ CHUYỂN TRANG BẰNG THÔNG BÁO)
                     setTimeout(() => {
-                        alert("Gửi thành công! Lá thư của bạn đã hòa vào dải ngân hà. (Trang hiển thị 259 lá thư đang được xây dựng)");
-                        // Phục hồi lại giao diện sau khi ấn OK (Tùy chọn)
+                        alert("Gửi thành công! Lá thư của bạn đã hòa vào dải ngân hà.");
                         location.reload(); 
                     }, 1500);
 
