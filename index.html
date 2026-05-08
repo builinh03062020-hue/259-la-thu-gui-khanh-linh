@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gửi Thư Đến Những Vì Sao</title>
     <style>
-        /* * THIẾT LẬP GIAO DIỆN CHUNG 
-         * Cấu hình phông nền gradient và ẩn các thanh cuộn để tối ưu hóa trải nghiệm toàn màn hình.
-         */
+        /* 1. THIẾT LẬP CƠ SỞ (TRẢ LẠI NỀN OMBRE) */
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: linear-gradient(180deg, #0d0722 0%, #2b1154 100%);
+            background: linear-gradient(180deg, #0d0722 0%, #2b1154 100%); /* Nền ombre mượt mà */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -21,7 +19,7 @@
             color: #ffffff;
         }
 
-        /* KHU VỰC CẢNH 1: GIAO DIỆN VIẾT THƯ */
+        /* 2. KHU VỰC CẢNH 1: PHỤC HỒI BỐ CỤC GỐC VÀ HIỆU ỨNG MA THUẬT */
         #scene-1 {
             position: absolute;
             width: 100%;
@@ -34,46 +32,142 @@
             z-index: 10;
         }
 
-        /* Các yếu tố trang trí nền (Mây, Vạc ma thuật, Đàn Piano) */
-        .scenery-bottom {
+        /* Lớp nền Ngân hà tĩnh lấp lánh đằng sau */
+        .stars-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/stars_background.png') no-repeat center center;
+            background-size: cover;
+            z-index: 0; 
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4)); /* Viền ma thuật mờ cho mây */
+        }
+
+        /* 3. QUẢN LÝ BỐ CỤC ĐÁY MÀN HÌNH (MÂY - VẠC - PIANO)
+         * Sử dụng Flexbox để dàn trải mây kín 2 bên và giữ vạc/piano đúng vị trí.
+         */
+        .scenery-container {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 250px;
+            height: auto;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            padding: 0 10%;
+            padding: 0 5%;
             box-sizing: border-box;
-            background: url('assets/clouds.png') repeat-x bottom center;
-            background-size: auto 100px;
-            z-index: 1;
+            z-index: 1; /* Nằm trên nền sao */
         }
 
-        .scenery-bottom img {
-            max-height: 180px;
-            object-fit: contain;
-        }
-
-        /* Khu vực hiển thị giấy viết thư */
-        .paper-wrapper {
+        /* Bố cục cụm bên trái (Vạc nằm trên mây) */
+        .scenery-left, .scenery-right {
             position: relative;
-            width: 500px;
-            height: 600px;
-            background: url('assets/paper.png') no-repeat center center;
-            background-size: 100% 100%;
-            padding: 80px 60px 100px 60px;
-            box-sizing: border-box;
-            z-index: 2;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            width: 40%;
+            max-width: 500px;
         }
 
-        /* Định dạng trường dữ liệu nhập (Input & Textarea) */
+        .cloud-left, .cloud-right {
+            width: 100%;
+            height: auto;
+            opacity: 0.8;
+            object-fit: contain;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4)); /* Viền ma thuật mờ cho mây */
+        }
+        
+        .cloud-right {
+            transform: scaleX(-1); /* Đảo chiều mây cho tự nhiên */
+        }
+
+        .cauldron {
+            position: absolute;
+            bottom: 25px; /* Nằm trên mây */
+            left: 10px;
+            width: 120px;
+            max-width: 25vw;
+            pointer-events: none;
+        }
+        /* Hiệu ứng khói vạc */
+        .cauldron::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
+            filter: blur(5px);
+            opacity: 0.8;
+            animation: steamRise 2s ease-out infinite;
+        }
+        @keyframes steamRise {
+            0% { transform: translateX(-50%) translateY(0); opacity: 0; }
+            50% { transform: translateX(-50%) translateY(-20px); opacity: 0.8; }
+            100% { transform: translateX(-50%) translateY(-40px); opacity: 0; }
+        }
+
+        .piano {
+            position: absolute;
+            bottom: 25px; /* Nằm trên mây */
+            right: 10px;
+            width: 150px;
+            max-width: 30vw;
+            pointer-events: none;
+        }
+        /* Hiệu ứng khói và sao piano */
+        .piano::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/piano_smoke_effect.png') no-repeat center center; /* File khói+sao */
+            background-size: contain;
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        /* 4. TỜ GIẤY CỔ (PHỤC HỒI KÍCH THƯỚC TO RÕ) */
+        .paper-wrapper {
+            position: relative;
+            width: 95%;
+            max-width: 500px; /* Giữ kích thước to rộng */
+            aspect-ratio: 500/600; /* Cố định tỷ lệ khung giấy */
+            background: url('assets/paper.png') no-repeat center center;
+            background-size: 100% 100%;
+            /* Tăng padding dưới để bọc lót phù thủy & nút bấm */
+            padding: 70px 60px 100px 60px; 
+            box-sizing: border-box;
+            z-index: 20; /* Nằm trên tất cả bố cục đáy */
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        /* Hiệu ứng 3 ngôi sao tím trên giấy */
+        .paper-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: url('assets/paper_stars.png') no-repeat center center; /* File 3 ngôi sao tím */
+            background-size: contain;
+            pointer-events: none;
+        }
+
+        /* TỐI ƯU CĂN CHỈNH DÒNG CHỮ (PIXEL-PERFECT TỐI ĐA) */
         .input-group {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 2px; /* Căn chỉnh khoảng cách From: vs dòng kẻ */
         }
 
         .input-group label {
@@ -81,6 +175,7 @@
             font-weight: bold;
             font-size: 18px;
             margin-right: 10px;
+            white-space: nowrap;
         }
 
         .paper-input, .paper-textarea {
@@ -98,50 +193,45 @@
             padding-bottom: 5px;
         }
 
-        /* Tạo đường kẻ ngang cho phần nội dung thư */
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            line-height: 40px;
+            margin-top: 15px; /* Căn lề dòng đầu tiên */
+            
+            /* CHÍ MẠNG: LINE-HEIGHT PHẢI KHỚP VỚI HÌNH NỀN GIẤY */
+            line-height: 40px; 
             background-image: linear-gradient(transparent, transparent 38px, #8b6b4a 38px, #8b6b4a 40px);
             background-size: 100% 40px;
         }
 
-        /* Nút gửi thư và Phù thủy nhỏ */
+        /* 5. PHÙ THỦY & NÚT BẤM (PHẢI NẰM GỌN TRONG GIẤY) */
         .submit-section {
             position: absolute;
-            bottom: 30px;
-            right: -20px;
+            bottom: 30px; /* Căn chỉnh nằm gọn phía dưới giấy */
+            right: 30px; /* Căn chỉnh nằm gọn phía phải giấy */
             display: flex;
             align-items: center;
             cursor: pointer;
+            z-index: 30; /* Nằm trên giấy */
+            transform: scale(0.9); /* Thu nhỏ xíu cho đẹp */
+            transform-origin: right bottom;
         }
 
         .submit-btn {
             background-color: #f7e0b5;
             border: 2px solid #3b2818;
             color: #3b2818;
-            padding: 10px 20px;
+            padding: 10px 15px;
             font-weight: bold;
+            font-size: 16px;
             border-radius: 8px;
             box-shadow: 2px 2px 0px #3b2818;
-            transition: transform 0.1s;
-        }
-
-        .submit-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 0px 0px 0px #3b2818;
+            white-space: nowrap;
         }
 
         .witch-character {
-            width: 80px;
-            margin-left: -15px;
-            transition: transform 0.3s ease;
-        }
-
-        /* Hiệu ứng Phù thủy gõ đũa phép */
-        .witch-tap-animation {
-            transform: rotate(-25deg) translateY(-10px);
+            width: 70px;
+            margin-left: -5px;
         }
 
         /* KHU VỰC CẢNH 2: VÒNG XOÁY NGÂN HÀ */
@@ -154,71 +244,106 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 1s ease-in-out;
-            z-index: 5;
+            transition: opacity 0.8s ease-in-out;
+            z-index: 50;
         }
 
-        /* Hiệu ứng xoay tròn của nền Ngân hà */
         .galaxy-spiral {
             position: absolute;
-            width: 150vw;
-            height: 150vw;
+            width: 200vw;
+            height: 200vw;
+            max-width: 1000px;
+            max-height: 1000px;
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
-            animation: rotateSpiral 40s linear infinite;
+            animation: rotateSpiral 30s linear infinite;
         }
 
-        /* Hiệu ứng bay của lá thư */
         .flying-envelope {
             position: absolute;
-            width: 60px;
-            z-index: 6;
+            width: 50px;
+            z-index: 55;
             opacity: 0;
         }
 
-        .envelope-fly-animation {
-            animation: flyIntoGalaxy 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+        /* ĐỊNH NGHĨA KEYFRAMES */
+        @keyframes witchTap {
+            0% { transform: rotate(0deg) translateY(0); }
+            50% { transform: rotate(-30deg) translateY(-15px); }
+            100% { transform: rotate(0deg) translateY(0); }
         }
 
-        /* ĐỊNH NGHĨA KEYFRAMES (ẢNH ĐỘNG) */
+        .witch-tap-animation {
+            animation: witchTap 0.6s ease-in-out;
+        }
+
         @keyframes rotateSpiral {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         @keyframes flyIntoGalaxy {
-            0% {
-                transform: rotate(0deg) translateX(300px) rotate(0deg) scale(1.5);
-                opacity: 1;
-            }
-            100% {
-                transform: rotate(720deg) translateX(0px) rotate(-720deg) scale(0);
-                opacity: 0;
-            }
+            0% { transform: scale(1.5) rotate(0deg); opacity: 1; }
+            50% { transform: scale(1) rotate(360deg); opacity: 1; }
+            100% { transform: scale(0) rotate(720deg); opacity: 0; }
         }
 
-        /* Lớp hỗ trợ ẩn phần tử */
+        .envelope-fly-animation {
+            animation: flyIntoGalaxy 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
         .hidden {
             opacity: 0 !important;
             pointer-events: none !important;
+        }
+
+        /* TỐI ƯU HÓA HIỂN THỊ THIẾT BỊ DI ĐỘNG */
+        @media screen and (max-width: 768px) {
+            .paper-wrapper {
+                padding: 50px 30px 80px 30px; /* Giảm padding trên mobile */
+            }
+            .scenery-left, .scenery-right {
+                width: 45%; /* Tăng độ bao phủ mây trên mobile */
+            }
+            .cauldron {
+                width: 90px;
+                bottom: 15px;
+            }
+            .piano {
+                width: 110px;
+                bottom: 15px;
+            }
+            .submit-section {
+                bottom: 15px;
+                right: 15px;
+                transform: scale(0.8);
+            }
         }
     </style>
 </head>
 <body>
 
     <div id="scene-1">
-        <div class="scenery-bottom">
-            <img src="assets/cauldron.png" alt="Vạc ma thuật">
-            <img src="assets/piano.png" alt="Đàn piano ma thuật">
+        <div class="stars-layer"></div>
+        
+        <div class="scenery-container">
+            <div class="scenery-left">
+                <img src="assets/cauldron.png" class="cauldron" alt="Vạc ma thuật">
+                <img src="assets/clouds.png" class="cloud-left" alt="Mây trái">
+            </div>
+            <div class="scenery-right">
+                <img src="assets/piano.png" class="piano" alt="Đàn piano ma thuật">
+                <img src="assets/clouds.png" class="cloud-right" alt="Mây phải">
+            </div>
         </div>
 
         <div class="paper-wrapper">
             <div class="input-group">
                 <label for="sender">From:</label>
-                <input type="text" id="sender" class="paper-input" placeholder="Nhập tên của bạn...">
+                <input type="text" id="sender" class="paper-input" placeholder="Tên của bạn...">
             </div>
             
-            <textarea id="message" class="paper-textarea" placeholder="Viết lời nhắn gửi đến người giữ những vì sao..."></textarea>
+            <textarea id="message" class="paper-textarea" placeholder="Viết lời nhắn..."></textarea>
             
             <div class="submit-section" onclick="processSubmission()">
                 <div class="submit-btn">To the star holder</div>
@@ -235,44 +360,47 @@
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
-        /**
-         * Hàm xử lý tiến trình gửi thư và kích hoạt hiệu ứng hình ảnh/âm thanh.
-         */
         function processSubmission() {
+            const senderValue = document.getElementById('sender').value.trim();
+            const messageValue = document.getElementById('message').value.trim();
+
+            if (senderValue === "" || messageValue === "") {
+                alert("Vui lòng điền đầy đủ tên của bạn và lời nhắn trước khi gửi đến những vì sao nhé!");
+                return; 
+            }
+
             const scene1 = document.getElementById('scene-1');
             const scene2 = document.getElementById('scene-2');
             const witch = document.getElementById('witch');
             const envelope = document.getElementById('flying-envelope');
             const audio = document.getElementById('twinkle-audio');
 
-            // Bước 1: Kích hoạt hiệu ứng cô bé phù thủy gõ đũa phép
             witch.classList.add('witch-tap-animation');
 
-            // Thiết lập thời gian chờ sau khi đũa phép gõ
             setTimeout(() => {
-                // Khôi phục trạng thái ban đầu của đũa phép
-                witch.classList.remove('witch-tap-animation');
-
-                // Bước 2: Ẩn giao diện viết thư, hiển thị giao diện vũ trụ
                 scene1.classList.add('hidden');
                 scene2.style.opacity = '1';
                 scene2.style.pointerEvents = 'auto';
 
-                // Bước 3: Kích hoạt hiệu ứng lá thư bị cuốn vào vòng xoáy ngân hà
                 setTimeout(() => {
                     envelope.classList.add('envelope-fly-animation');
-                }, 500); // Chờ 0.5s để giao diện 2 hiển thị rõ ràng
+                }, 300);
 
-                // Bước 4: Phát âm thanh xác nhận khi lá thư chạm đến tâm vòng xoáy
-                // Khớp thời gian với kết thúc của animation flyIntoGalaxy (3.5 giây)
                 setTimeout(() => {
-                    audio.play();
+                    let playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(error => {
+                            console.log("Audio playback prevented by browser policy.");
+                        });
+                    }
                     
-                    // (Tùy chọn) Có thể thêm lệnh chuyển hướng đến trang Lưu trữ tại đây sau khi hoàn tất.
-                    // window.location.href = "gallery.html"; 
-                }, 4000); 
+                    setTimeout(() => {
+                        window.location.href = "gallery.html"; 
+                    }, 1500);
 
-            }, 600); // Thời gian chờ của hiệu ứng gõ đũa phép (0.6 giây)
+                }, 3000); 
+
+            }, 600); 
         }
     </script>
 </body>
