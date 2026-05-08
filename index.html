@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gửi Thư Đến Những Vì Sao</title>
     <style>
-        /* 1. THIẾT LẬP CƠ SỞ (TRẢ LẠI NỀN OMBRE) */
+        /* THIẾT LẬP CƠ SỞ */
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: linear-gradient(180deg, #0d0722 0%, #2b1154 100%); /* Nền ombre mượt mà */
+            background: linear-gradient(180deg, #0d0722 0%, #2b1154 100%); 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -19,7 +19,7 @@
             color: #ffffff;
         }
 
-        /* 2. KHU VỰC CẢNH 1: PHỤC HỒI BỐ CỤC GỐC VÀ HIỆU ỨNG MA THUẬT */
+        /* KHU VỰC CẢNH 1: GIAO DIỆN CHÍNH */
         #scene-1 {
             position: absolute;
             width: 100%;
@@ -32,7 +32,7 @@
             z-index: 10;
         }
 
-        /* Lớp nền Ngân hà tĩnh lấp lánh đằng sau */
+        /* Lớp nền Ngân hà tĩnh */
         .stars-layer {
             position: absolute;
             top: 0;
@@ -42,57 +42,50 @@
             background: url('assets/stars_background.png') no-repeat center center;
             background-size: cover;
             z-index: 0; 
-            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4)); /* Viền ma thuật mờ cho mây */
         }
 
-        /* 3. QUẢN LÝ BỐ CỤC ĐÁY MÀN HÌNH (MÂY - VẠC - PIANO)
-         * Sử dụng Flexbox để dàn trải mây kín 2 bên và giữ vạc/piano đúng vị trí.
-         */
+        /* QUẢN LÝ BỐ CỤC ĐÁY MÀN HÌNH (MÂY - VẠC - PIANO KHỔ LỚN) */
         .scenery-container {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            padding: 0 5%;
-            box-sizing: border-box;
-            z-index: 1; /* Nằm trên nền sao */
+            height: 100%; 
+            z-index: 1; 
+            pointer-events: none;
         }
 
-        /* Bố cục cụm bên trái (Vạc nằm trên mây) */
-        .scenery-left, .scenery-right {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 40%;
-            max-width: 500px;
-        }
-
-        .cloud-left, .cloud-right {
-            width: 100%;
+        .cloud-left {
+            position: absolute;
+            bottom: -5vh;
+            left: -5vw;
+            width: 55vw; 
+            min-width: 400px;
             height: auto;
             opacity: 0.8;
-            object-fit: contain;
-            pointer-events: none;
-            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4)); /* Viền ma thuật mờ cho mây */
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
         }
-        
+
         .cloud-right {
-            transform: scaleX(-1); /* Đảo chiều mây cho tự nhiên */
+            position: absolute;
+            bottom: -5vh;
+            right: -5vw;
+            width: 55vw; 
+            min-width: 400px;
+            height: auto;
+            opacity: 0.8;
+            transform: scaleX(-1); 
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
         }
 
         .cauldron {
             position: absolute;
-            bottom: 25px; /* Nằm trên mây */
-            left: 10px;
-            width: 120px;
-            max-width: 25vw;
-            pointer-events: none;
+            bottom: 5vh;
+            left: 8vw; 
+            width: 18vw;
+            min-width: 140px;
+            max-width: 200px;
         }
-        /* Hiệu ứng khói vạc */
+
         .cauldron::after {
             content: '';
             position: absolute;
@@ -106,68 +99,59 @@
             opacity: 0.8;
             animation: steamRise 2s ease-out infinite;
         }
-        @keyframes steamRise {
-            0% { transform: translateX(-50%) translateY(0); opacity: 0; }
-            50% { transform: translateX(-50%) translateY(-20px); opacity: 0.8; }
-            100% { transform: translateX(-50%) translateY(-40px); opacity: 0; }
-        }
 
         .piano {
             position: absolute;
-            bottom: 25px; /* Nằm trên mây */
-            right: 10px;
-            width: 150px;
-            max-width: 30vw;
-            pointer-events: none;
+            bottom: 5vh;
+            right: 8vw; 
+            width: 22vw;
+            min-width: 160px;
+            max-width: 250px;
         }
-        /* Hiệu ứng khói và sao piano */
+
         .piano::after {
             content: '';
             position: absolute;
-            top: 0;
+            top: -20px;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: url('assets/piano_smoke_effect.png') no-repeat center center; /* File khói+sao */
+            height: 120%;
+            background: url('assets/piano_smoke_effect.png') no-repeat center center; 
             background-size: contain;
             opacity: 0.9;
-            pointer-events: none;
         }
 
-        /* 4. TỜ GIẤY CỔ (PHỤC HỒI KÍCH THƯỚC TO RÕ) */
+        /* TỜ GIẤY CỔ (DÁNG DỌC, VỪA VẶN) */
         .paper-wrapper {
             position: relative;
-            width: 95%;
-            max-width: 500px; /* Giữ kích thước to rộng */
-            aspect-ratio: 500/600; /* Cố định tỷ lệ khung giấy */
+            width: 420px;  /* Chiều ngang hẹp lại cho đúng dáng giấy */
+            height: 600px; 
             background: url('assets/paper.png') no-repeat center center;
             background-size: 100% 100%;
-            /* Tăng padding dưới để bọc lót phù thủy & nút bấm */
-            padding: 70px 60px 100px 60px; 
+            padding: 85px 40px 100px 40px; /* Căn chỉnh khoảng trống 2 bên */
             box-sizing: border-box;
-            z-index: 20; /* Nằm trên tất cả bố cục đáy */
+            z-index: 20; 
             display: flex;
             flex-direction: column;
-            transition: all 0.3s ease;
         }
-        /* Hiệu ứng 3 ngôi sao tím trên giấy */
+
         .paper-wrapper::after {
             content: '';
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 25px;
+            right: 25px;
             width: 60px;
             height: 60px;
-            background: url('assets/paper_stars.png') no-repeat center center; /* File 3 ngôi sao tím */
+            background: url('assets/paper_stars.png') no-repeat center center; 
             background-size: contain;
             pointer-events: none;
         }
 
-        /* TỐI ƯU CĂN CHỈNH DÒNG CHỮ (PIXEL-PERFECT TỐI ĐA) */
+        /* CĂN CHỈNH DÒNG CHỮ (LOẠI BỎ DÒNG KẺ ẢO) */
         .input-group {
             display: flex;
             align-items: center;
-            margin-bottom: 2px; /* Căn chỉnh khoảng cách From: vs dòng kẻ */
+            margin-bottom: 2px;
         }
 
         .input-group label {
@@ -189,48 +173,43 @@
         }
 
         .paper-input {
-            border-bottom: 2px dashed #8b6b4a;
+            border-bottom: 2px dashed #8b6b4a; /* Dòng kẻ cho phần Tên (nếu cần) */
             padding-bottom: 5px;
         }
 
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            margin-top: 15px; /* Căn lề dòng đầu tiên */
-            
-            /* CHÍ MẠNG: LINE-HEIGHT PHẢI KHỚP VỚI HÌNH NỀN GIẤY */
-            line-height: 40px; 
-            background-image: linear-gradient(transparent, transparent 38px, #8b6b4a 38px, #8b6b4a 40px);
-            background-size: 100% 40px;
+            margin-top: 5px; 
+            /* CẢNH BÁO: Tăng/giảm con số 42px dưới đây để căn chữ trùng với dòng kẻ có sẵn trên ảnh giấy của bạn */
+            line-height: 42px; 
         }
 
-        /* 5. PHÙ THỦY & NÚT BẤM (PHẢI NẰM GỌN TRONG GIẤY) */
+        /* NÚT BẤM VÀ NHÂN VẬT NẰM GỌN TRONG GÓC PHẢI DƯỚI TỜ GIẤY */
         .submit-section {
             position: absolute;
-            bottom: 30px; /* Căn chỉnh nằm gọn phía dưới giấy */
-            right: 30px; /* Căn chỉnh nằm gọn phía phải giấy */
+            bottom: 15px; 
+            right: 15px; 
             display: flex;
             align-items: center;
             cursor: pointer;
-            z-index: 30; /* Nằm trên giấy */
-            transform: scale(0.9); /* Thu nhỏ xíu cho đẹp */
-            transform-origin: right bottom;
+            z-index: 30; 
         }
 
         .submit-btn {
             background-color: #f7e0b5;
             border: 2px solid #3b2818;
             color: #3b2818;
-            padding: 10px 15px;
+            padding: 8px 12px;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 14px;
             border-radius: 8px;
             box-shadow: 2px 2px 0px #3b2818;
             white-space: nowrap;
         }
 
         .witch-character {
-            width: 70px;
+            width: 60px;
             margin-left: -5px;
         }
 
@@ -250,10 +229,8 @@
 
         .galaxy-spiral {
             position: absolute;
-            width: 200vw;
-            height: 200vw;
-            max-width: 1000px;
-            max-height: 1000px;
+            width: 2000px;
+            height: 2000px;
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
@@ -261,12 +238,18 @@
 
         .flying-envelope {
             position: absolute;
-            width: 50px;
+            width: 60px;
             z-index: 55;
             opacity: 0;
         }
 
         /* ĐỊNH NGHĨA KEYFRAMES */
+        @keyframes steamRise {
+            0% { transform: translateX(-50%) translateY(0); opacity: 0; }
+            50% { transform: translateX(-50%) translateY(-20px); opacity: 0.8; }
+            100% { transform: translateX(-50%) translateY(-40px); opacity: 0; }
+        }
+
         @keyframes witchTap {
             0% { transform: rotate(0deg) translateY(0); }
             50% { transform: rotate(-30deg) translateY(-15px); }
@@ -296,29 +279,6 @@
             opacity: 0 !important;
             pointer-events: none !important;
         }
-
-        /* TỐI ƯU HÓA HIỂN THỊ THIẾT BỊ DI ĐỘNG */
-        @media screen and (max-width: 768px) {
-            .paper-wrapper {
-                padding: 50px 30px 80px 30px; /* Giảm padding trên mobile */
-            }
-            .scenery-left, .scenery-right {
-                width: 45%; /* Tăng độ bao phủ mây trên mobile */
-            }
-            .cauldron {
-                width: 90px;
-                bottom: 15px;
-            }
-            .piano {
-                width: 110px;
-                bottom: 15px;
-            }
-            .submit-section {
-                bottom: 15px;
-                right: 15px;
-                transform: scale(0.8);
-            }
-        }
     </style>
 </head>
 <body>
@@ -327,14 +287,11 @@
         <div class="stars-layer"></div>
         
         <div class="scenery-container">
-            <div class="scenery-left">
-                <img src="assets/cauldron.png" class="cauldron" alt="Vạc ma thuật">
-                <img src="assets/clouds.png" class="cloud-left" alt="Mây trái">
-            </div>
-            <div class="scenery-right">
-                <img src="assets/piano.png" class="piano" alt="Đàn piano ma thuật">
-                <img src="assets/clouds.png" class="cloud-right" alt="Mây phải">
-            </div>
+            <img src="assets/clouds.png" class="cloud-left" alt="Mây trái">
+            <img src="assets/cauldron.png" class="cauldron" alt="Vạc ma thuật">
+            
+            <img src="assets/clouds.png" class="cloud-right" alt="Mây phải">
+            <img src="assets/piano.png" class="piano" alt="Đàn piano ma thuật">
         </div>
 
         <div class="paper-wrapper">
@@ -395,7 +352,8 @@
                     }
                     
                     setTimeout(() => {
-                        window.location.href = "gallery.html"; 
+                        alert("Gửi thành công! Lá thư của bạn đã hòa vào dải ngân hà.");
+                        location.reload(); 
                     }, 1500);
 
                 }, 3000); 
