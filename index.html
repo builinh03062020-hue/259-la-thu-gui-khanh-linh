@@ -40,92 +40,89 @@
             z-index: 0; 
         }
 
-        /* QUẢN LÝ THỨ TỰ LỚP (Z-INDEX) VÀ VỊ TRÍ TĨNH VẬT */
-
-        /* Mây phải - Lớp 10 */
+        /* 1. MÂY PHẢI (LỚP 10) */
         .cloud-right {
             position: absolute;
-            bottom: -5vh;
-            right: -5vw;
-            width: 50vw;
-            min-width: 450px;
+            bottom: -30px;
+            right: -50px;
+            width: 600px;
             opacity: 0.8;
             transform: scaleX(-1); 
             z-index: 10;
             pointer-events: none;
         }
 
-        /* Piano - Lớp 11 (Đè lên mây phải) */
+        /* 2. PIANO (LỚP 11 - Nằm trên mây phải) */
         .piano {
             position: absolute;
-            bottom: 5vh;
-            right: 15vw;
-            width: 180px;
+            bottom: 100px; /* Đã nâng lên để không bị chìm */
+            right: 120px;
+            width: 220px;
             z-index: 11;
-            filter: drop-shadow(0 0 20px #d8b4fe); 
+            filter: drop-shadow(0 0 20px #d8b4fe); /* Hiệu ứng Glow */
             pointer-events: none;
         }
 
-        /* Tờ giấy - Lớp 20 (Đè lên piano và mây phải) */
+        /* 3. TỜ GIẤY CỔ (LỚP 20) */
         .paper-wrapper {
             position: relative;
-            width: 360px; /* Thu nhỏ chiều ngang */
-            height: 480px; /* Thu nhỏ chiều cao */
+            width: 480px; 
+            height: 650px; 
             background: url('assets/paper.png') no-repeat center center;
             background-size: 100% 100%;
-            padding: 60px 30px 80px 30px; /* Căn chỉnh lại lề */
+            padding: 80px 50px 100px 50px; 
             box-sizing: border-box;
             z-index: 20; 
             display: flex;
             flex-direction: column;
         }
 
-        /* Vạc ma thuật - Lớp 25 (Đè lên giấy nhưng dưới mây trái) */
-        .cauldron {
-            position: absolute;
-            bottom: 5vh;
-            left: 15vw;
-            width: 140px;
-            z-index: 25;
-            filter: drop-shadow(0 0 20px #d8b4fe); 
-            pointer-events: none;
-        }
-
-        /* Mây trái - Lớp 30 (Đè lên vạc và một góc giấy) */
-        .cloud-left {
-            position: absolute;
-            bottom: -5vh;
-            left: -5vw;
-            width: 50vw;
-            min-width: 450px;
-            opacity: 0.8;
-            z-index: 30;
-            pointer-events: none;
-        }
-
-        /* CĂN CHỈNH NỘI DUNG VĂN BẢN VÀ BIỂU MẪU */
+        /* Ngôi sao góc phải (Đã chỉnh to và đặt đúng vị trí) */
         .paper-wrapper::after {
             content: '';
             position: absolute;
-            top: 20px;
-            right: 25px;
-            width: 50px;
-            height: 50px;
+            top: 40px; 
+            right: 45px;
+            width: 80px;
+            height: 80px;
             background: url('assets/paper_stars.png') no-repeat center center;
             background-size: contain;
             pointer-events: none;
         }
 
+        /* 4. VẠC MA THUẬT (LỚP 25 - Nằm trên giấy, dưới mây trái) */
+        .cauldron {
+            position: absolute;
+            bottom: 80px; /* Đã nâng lên để không bị chìm */
+            left: 120px;
+            width: 160px;
+            z-index: 25;
+            filter: drop-shadow(0 0 20px #d8b4fe); /* Hiệu ứng Glow */
+            pointer-events: none;
+        }
+
+        /* 5. MÂY TRÁI (LỚP 30 - Nằm trên cùng) */
+        .cloud-left {
+            position: absolute;
+            bottom: -30px;
+            left: -50px;
+            width: 600px;
+            opacity: 0.8;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        /* CĂN CHỈNH VĂN BẢN VÀ DÒNG KẺ */
         .input-group {
             display: flex;
             align-items: center;
-            margin-bottom: 2px;
+            margin-bottom: 5px;
         }
 
         .input-group label {
             color: #3b2818;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 18px;
             margin-right: 8px;
         }
 
@@ -134,7 +131,7 @@
             border: none;
             outline: none;
             font-family: inherit;
-            font-size: 15px; /* Giảm cỡ chữ để phù hợp tỷ lệ giấy */
+            font-size: 18px; 
             color: #3b2818;
             width: 100%;
         }
@@ -146,21 +143,22 @@
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            margin-top: 5px;
-            line-height: 30px; /* Khóa khoảng cách dòng theo tỷ lệ mới */
+            /* Hướng dẫn căn chỉnh:
+               - Tăng/giảm margin-top để đẩy toàn bộ khối chữ lên hoặc xuống.
+               - Tăng/giảm line-height để làm giãn hoặc thu hẹp khoảng cách giữa các dòng. */
+            margin-top: 25px; 
+            line-height: 48px; 
         }
 
-        /* PHÙ THỦY VÀ NÚT BẤM */
+        /* NÚT BẤM VÀ PHÙ THỦY (Đã đưa vào trong tờ giấy) */
         .submit-section {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            bottom: 40px; /* Cách đáy tờ giấy 40px */
+            right: 50px;  /* Cách lề phải tờ giấy 50px */
             display: flex;
             align-items: center;
             cursor: pointer;
             z-index: 40;
-            transform: scale(0.85); /* Thu nhỏ tổng thể nút và nhân vật */
-            transform-origin: right bottom;
         }
 
         .submit-btn {
@@ -175,8 +173,8 @@
         }
 
         .witch-character {
-            width: 60px;
-            margin-left: -8px;
+            width: 75px;
+            margin-left: -5px;
             transition: transform 0.3s ease;
         }
 
@@ -196,8 +194,8 @@
 
         .galaxy-spiral {
             position: absolute;
-            width: 2000px;
-            height: 2000px;
+            width: 2500px;
+            height: 2500px;
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
@@ -205,7 +203,7 @@
 
         .flying-envelope {
             position: absolute;
-            width: 50px;
+            width: 60px;
             opacity: 0;
         }
 
@@ -225,12 +223,12 @@
 
         .hidden { opacity: 0 !important; pointer-events: none !important; }
 
-        /* ĐIỀU CHỈNH THIẾT BỊ DI ĐỘNG */
+        /* TỐI ƯU HÓA HIỂN THỊ ĐIỆN THOẠI */
         @media screen and (max-width: 768px) {
-            .paper-wrapper { width: 85vw; height: 60vh; padding: 40px 20px; }
-            .cloud-left, .cloud-right { width: 100vw; bottom: -2vh; }
-            .cauldron { left: 5vw; width: 100px; }
-            .piano { right: 5vw; width: 120px; }
+            #scene-1 { transform: scale(0.85); }
+        }
+        @media screen and (max-width: 480px) {
+            #scene-1 { transform: scale(0.7); }
         }
     </style>
 </head>
