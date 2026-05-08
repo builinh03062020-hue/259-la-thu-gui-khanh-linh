@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Thư Đến Những Vì Sao</title>
+    <style>
+        /* * THIẾT LẬP GIAO DIỆN CHUNG 
+         * Cấu hình phông nền gradient và ẩn các thanh cuộn để tối ưu hóa trải nghiệm toàn màn hình.
+         */
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #0d0722 0%, #2b1154 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #ffffff;
+        }
+
+        /* KHU VỰC CẢNH 1: GIAO DIỆN VIẾT THƯ */
+        #scene-1 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease-in-out;
+            z-index: 10;
+        }
+
+        /* Các yếu tố trang trí nền (Mây, Vạc ma thuật, Đàn Piano) */
+        .scenery-bottom {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 250px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 10%;
+            box-sizing: border-box;
+            background: url('assets/clouds.png') repeat-x bottom center;
+            background-size: auto 100px;
+            z-index: 1;
+        }
+
+        .scenery-bottom img {
+            max-height: 180px;
+            object-fit: contain;
+        }
+
+        /* Khu vực hiển thị giấy viết thư */
+        .paper-wrapper {
+            position: relative;
+            width: 500px;
+            height: 600px;
+            background: url('assets/paper.png') no-repeat center center;
+            background-size: 100% 100%;
+            padding: 80px 60px 100px 60px;
+            box-sizing: border-box;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Định dạng trường dữ liệu nhập (Input & Textarea) */
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            color: #3b2818;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .paper-input, .paper-textarea {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 18px;
+            color: #3b2818;
+            width: 100%;
+        }
+
+        .paper-input {
+            border-bottom: 2px dashed #8b6b4a;
+            padding-bottom: 5px;
+        }
+
+        /* Tạo đường kẻ ngang cho phần nội dung thư */
+        .paper-textarea {
+            resize: none;
+            flex-grow: 1;
+            line-height: 40px;
+            background-image: linear-gradient(transparent, transparent 38px, #8b6b4a 38px, #8b6b4a 40px);
+            background-size: 100% 40px;
+        }
+
+        /* Nút gửi thư và Phù thủy nhỏ */
+        .submit-section {
+            position: absolute;
+            bottom: 30px;
+            right: -20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background-color: #f7e0b5;
+            border: 2px solid #3b2818;
+            color: #3b2818;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 2px 2px 0px #3b2818;
+            transition: transform 0.1s;
+        }
+
+        .submit-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 0px 0px 0px #3b2818;
+        }
+
+        .witch-character {
+            width: 80px;
+            margin-left: -15px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Hiệu ứng Phù thủy gõ đũa phép */
+        .witch-tap-animation {
+            transform: rotate(-25deg) translateY(-10px);
+        }
+
+        /* KHU VỰC CẢNH 2: VÒNG XOÁY NGÂN HÀ */
+        #scene-2 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-in-out;
+            z-index: 5;
+        }
+
+        /* Hiệu ứng xoay tròn của nền Ngân hà */
+        .galaxy-spiral {
+            position: absolute;
+            width: 150vw;
+            height: 150vw;
+            background: url('assets/spiral.png') no-repeat center center;
+            background-size: contain;
+            animation: rotateSpiral 40s linear infinite;
+        }
+
+        /* Hiệu ứng bay của lá thư */
+        .flying-envelope {
+            position: absolute;
+            width: 60px;
+            z-index: 6;
+            opacity: 0;
+        }
+
+        .envelope-fly-animation {
+            animation: flyIntoGalaxy 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+        }
+
+        /* ĐỊNH NGHĨA KEYFRAMES (ẢNH ĐỘNG) */
+        @keyframes rotateSpiral {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes flyIntoGalaxy {
+            0% {
+                transform: rotate(0deg) translateX(300px) rotate(0deg) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(720deg) translateX(0px) rotate(-720deg) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Lớp hỗ trợ ẩn phần tử */
+        .hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="scene-1">
+        <div class="scenery-bottom">
+            <img src="assets/cauldron.png" alt="Vạc ma thuật">
+            <img src="assets/piano.png" alt="Đàn piano ma thuật">
+        </div>
+
+        <div class="paper-wrapper">
+            <div class="input-group">
+                <label for="sender">From:</label>
+                <input type="text" id="sender" class="paper-input" placeholder="Nhập tên của bạn...">
+            </div>
+            
+            <textarea id="message" class="paper-textarea" placeholder="Viết lời nhắn gửi đến người giữ những vì sao..."></textarea>
+            
+            <div class="submit-section" onclick="processSubmission()">
+                <div class="submit-btn">To the star holder</div>
+                <img src="assets/witch.png" id="witch" class="witch-character" alt="Phù thủy dẫn đường">
+            </div>
+        </div>
+    </div>
+
+    <div id="scene-2">
+        <div class="galaxy-spiral"></div>
+        <img src="assets/letter.png" id="flying-envelope" class="flying-envelope" alt="Lá thư ma thuật">
+    </div>
+
+    <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
+
+    <script>
+        /**
+         * Hàm xử lý tiến trình gửi thư và kích hoạt hiệu ứng hình ảnh/âm thanh.
+         */
+        function processSubmission() {
+            const scene1 = document.getElementById('scene-1');
+            const scene2 = document.getElementById('scene-2');
+            const witch = document.getElementById('witch');
+            const envelope = document.getElementById('flying-envelope');
+            const audio = document.getElementById('twinkle-audio');
+
+            // Bước 1: Kích hoạt hiệu ứng cô bé phù thủy gõ đũa phép
+            witch.classList.add('witch-tap-animation');
+
+            // Thiết lập thời gian chờ sau khi đũa phép gõ
+            setTimeout(() => {
+                // Khôi phục trạng thái ban đầu của đũa phép
+                witch.classList.remove('witch-tap-animation');
+
+                // Bước 2: Ẩn giao diện viết thư, hiển thị giao diện vũ trụ
+                scene1.classList.add('hidden');
+                scene2.style.opacity = '1';
+                scene2.style.pointerEvents = 'auto';
+
+                // Bước 3: Kích hoạt hiệu ứng lá thư bị cuốn vào vòng xoáy ngân hà
+                setTimeout(() => {
+                    envelope.classList.add('envelope-fly-animation');
+                }, 500); // Chờ 0.5s để giao diện 2 hiển thị rõ ràng
+
+                // Bước 4: Phát âm thanh xác nhận khi lá thư chạm đến tâm vòng xoáy
+                // Khớp thời gian với kết thúc của animation flyIntoGalaxy (3.5 giây)
+                setTimeout(() => {
+                    audio.play();
+                    
+                    // (Tùy chọn) Có thể thêm lệnh chuyển hướng đến trang Lưu trữ tại đây sau khi hoàn tất.
+                    // window.location.href = "gallery.html"; 
+                }, 4000); 
+
+            }, 600); // Thời gian chờ của hiệu ứng gõ đũa phép (0.6 giây)
+        }
+    </script>
+</body>
+</html>
