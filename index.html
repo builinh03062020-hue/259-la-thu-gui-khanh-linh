@@ -5,12 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gửi Thư Đến Những Vì Sao</title>
     <style>
-        /* 1. THIẾT LẬP CƠ SỞ VÀ NỀN GRADIENT */
+        /* THIẾT LẬP CƠ SỞ */
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            /* Phục hồi màu Gradient gốc siêu đẹp */
             background: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -30,7 +29,6 @@
             z-index: 5;
         }
 
-        /* KHẮC PHỤC LỖI MẤT NỀN OMBRE: Lọc bỏ nền đen của ảnh sao */
         .stars-layer {
             position: absolute;
             top: 0;
@@ -38,46 +36,43 @@
             width: 100%;
             height: 100%;
             background: url('assets/stars_background.png') center/cover;
-            mix-blend-mode: screen; /* Thần chú giữ lại sao sáng, xóa nền đen */
+            mix-blend-mode: screen; 
             z-index: 0; 
             opacity: 0.8;
         }
 
-        /* 2. QUẢN LÝ THỨ TỰ LỚP VÀ KÍCH THƯỚC (ĐÃ PHÓNG TO & KÉO SÁT ĐÁY) */
-
-        /* Mây phải (Lớp 10) */
+        /* 1. MÂY PHẢI (LỚP 10 - Nằm dưới cùng) - ĐÃ KÉO SÁT ĐÁY */
         .cloud-right {
             position: absolute;
-            bottom: -20px; /* Ép sát đáy màn hình */
-            right: -20px;
+            bottom: -30px; /* Ép sát rịt xuống đáy màn hình */
+            right: -50px;
             width: 55vw;
-            min-width: 500px;
+            min-width: 450px;
             opacity: 0.9;
             transform: scaleX(-1); 
             z-index: 10;
             pointer-events: none;
         }
 
-        /* Piano (Lớp 15 - Nằm trên mây phải) - ĐÃ PHÓNG TO */
+        /* 2. PIANO (LỚP 15 - Nằm trên mây phải) - Đã hạ thấp */
         .piano {
             position: absolute;
-            bottom: 60px; 
-            right: 10vw;
-            width: 280px; /* Phóng to lên */
+            bottom: 60px; /* Hạ thấp tọa độ để dính mây */
+            right: 120px;
+            width: 250px;
             z-index: 15;
             filter: drop-shadow(0 0 25px #d8b4fe); 
             pointer-events: none;
         }
 
-        /* Tờ giấy (Lớp 20 - Nằm trên piano và mây phải) */
+        /* 3. TỜ GIẤY CỔ (LỚP 20) */
         .paper-wrapper {
             position: relative;
             width: 500px; 
-            height: 650px; 
+            height: 680px; /* Tăng chiều cao để nội dung thoải mái */
             background: url('assets/paper.png') no-repeat center center;
             background-size: 100% 100%;
-            /* Tăng padding dưới để có chỗ an toàn nhét nút bấm */
-            padding: 85px 50px 100px 50px; 
+            padding: 85px 50px 120px 50px; /* Tăng padding dưới */
             box-sizing: border-box;
             z-index: 20; 
             display: flex;
@@ -85,43 +80,19 @@
             box-shadow: 0 0 40px rgba(0,0,0,0.6);
         }
 
-        /* Ngôi sao góc phải (Đã kéo lọt vào trong mép giấy) */
         .paper-wrapper::after {
             content: '';
             position: absolute;
-            top: 35px; 
-            right: 40px; 
-            width: 60px;
-            height: 60px;
+            top: 40px; 
+            right: 45px;
+            width: 70px;
+            height: 70px;
             background: url('assets/paper_stars.png') no-repeat center center;
             background-size: contain;
             pointer-events: none;
         }
 
-        /* Vạc ma thuật (Lớp 25 - Nằm trên giấy) - ĐÃ PHÓNG TO */
-        .cauldron {
-            position: absolute;
-            bottom: 60px; 
-            left: 10vw;
-            width: 200px; /* Phóng to lên */
-            z-index: 25;
-            filter: drop-shadow(0 0 25px #d8b4fe); 
-            pointer-events: none;
-        }
-
-        /* Mây trái (Lớp 30 - Nằm trên cùng, đè lên vạc) */
-        .cloud-left {
-            position: absolute;
-            bottom: -20px; /* Ép sát đáy màn hình */
-            left: -20px;
-            width: 55vw;
-            min-width: 500px;
-            opacity: 0.9;
-            z-index: 30;
-            pointer-events: none;
-        }
-
-        /* 3. CĂN CHỈNH VĂN BẢN VÀ DÒNG KẺ (KÉO CHỮ LÊN) */
+        /* CĂN CHỈNH VĂN BẢN VÀ DÒNG KẺ */
         .input-group {
             display: flex;
             align-items: center;
@@ -152,16 +123,16 @@
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            /* Xóa margin-top để dòng chữ đầu tiên không bị tuột xuống */
-            margin-top: -2px; 
+            margin-top: 10px; 
             line-height: 48px; 
         }
 
-        /* NÚT BẤM VÀ PHÙ THỦY (KHÓA CHẶT BÊN TRONG TỜ GIẤY) */
+        /* NÚT BẤM VÀ PHÙ THỦY (KHÓA CHẶT BÊN TRONG TỜ GIẤY - LỌT THỎM) */
         .submit-section {
             position: absolute;
-            bottom: 25px; /* Nằm gọn trong khoảng padding 100px của tờ giấy */
-            right: 30px;  
+            /* Đã tăng khoảng cách lề đáy và lề phải lên gấp đôi */
+            bottom: 60px; /* Cách đáy 60px - Bao lọt */
+            right: 80px;  /* Cách lề phải 80px - Bao lọt */
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -183,6 +154,29 @@
             width: 75px;
             margin-left: -5px;
             transition: transform 0.3s ease;
+        }
+
+        /* 4. VẠC MA THUẬT (LỚP 25 - Nằm trên giấy, dưới mây trái) - Đã hạ thấp */
+        .cauldron {
+            position: absolute;
+            bottom: 60px; /* Hạ thấp tọa độ để dính mây */
+            left: 120px;
+            width: 180px;
+            z-index: 25;
+            filter: drop-shadow(0 0 25px #d8b4fe); 
+            pointer-events: none;
+        }
+
+        /* 5. MÂY TRÁI (LỚP 30 - Nằm trên cùng, đè lên vạc) - ĐÃ KÉO SÁT ĐÁY */
+        .cloud-left {
+            position: absolute;
+            bottom: -30px; /* Ép sát rịt xuống đáy màn hình */
+            left: -50px;
+            width: 55vw;
+            min-width: 450px;
+            opacity: 0.9;
+            z-index: 30;
+            pointer-events: none;
         }
 
         /* HIỆU ỨNG CẢNH 2 */
@@ -232,9 +226,9 @@
 
         /* ĐẢM BẢO TỶ LỆ TRÊN ĐIỆN THOẠI KHÔNG BỊ VỠ */
         @media screen and (max-width: 768px) {
-            #scene-1 { transform: scale(0.85); }
-            .cauldron { left: 2vw; bottom: 80px; }
-            .piano { right: 2vw; bottom: 80px; }
+            #scene-1 { transform: scale(0.8); }
+            .cauldron { left: 2vw; }
+            .piano { right: 2vw; }
         }
         @media screen and (max-width: 480px) {
             #scene-1 { transform: scale(0.65); }
@@ -279,7 +273,7 @@
             const message = document.getElementById('message').value.trim();
 
             if (!sender || !message) {
-                alert("Bạn vui lòng điền đầy đủ tên và lời nhắn nhé!");
+                alert("Bạn vui lòng điền đầy đủ tên và lời nhắn nhé! ✨");
                 return; 
             }
 
