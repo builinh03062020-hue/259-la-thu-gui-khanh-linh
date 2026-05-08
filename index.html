@@ -19,7 +19,6 @@
             color: #ffffff;
         }
 
-        /* KHU VỰC CẢNH 1: GIAO DIỆN CHÍNH */
         #scene-1 {
             position: absolute;
             width: 100%;
@@ -28,11 +27,9 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.8s ease-in-out;
             z-index: 10;
         }
 
-        /* Lớp nền Ngân hà tĩnh */
         .stars-layer {
             position: absolute;
             top: 0;
@@ -44,7 +41,7 @@
             z-index: 0; 
         }
 
-        /* QUẢN LÝ BỐ CỤC ĐÁY MÀN HÌNH (MÂY - VẠC - PIANO KHỔ LỚN) */
+        /* BỐ CỤC ĐÁY MÀN HÌNH */
         .scenery-container {
             position: absolute;
             bottom: 0;
@@ -56,110 +53,75 @@
 
         .cloud-left {
             position: absolute;
-            bottom: -5vh;
+            bottom: -3vh;
             left: -5vw;
-            width: 55vw; 
-            min-width: 400px;
-            height: auto;
+            width: 50vw; 
             opacity: 0.8;
-            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
+            filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.5));
         }
 
         .cloud-right {
             position: absolute;
-            bottom: -5vh;
+            bottom: -3vh;
             right: -5vw;
-            width: 55vw; 
-            min-width: 400px;
-            height: auto;
+            width: 50vw; 
             opacity: 0.8;
             transform: scaleX(-1); 
-            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));
+            filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.5));
         }
 
         .cauldron {
             position: absolute;
-            bottom: 5vh;
-            left: 8vw; 
-            width: 18vw;
-            min-width: 140px;
-            max-width: 200px;
-        }
-
-        .cauldron::after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
-            filter: blur(5px);
-            opacity: 0.8;
-            animation: steamRise 2s ease-out infinite;
+            bottom: 6vh;
+            left: 10vw; 
+            width: 180px;
         }
 
         .piano {
             position: absolute;
-            bottom: 5vh;
-            right: 8vw; 
-            width: 22vw;
-            min-width: 160px;
-            max-width: 250px;
+            bottom: 6vh;
+            right: 10vw; 
+            width: 220px;
         }
 
-        .piano::after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 0;
-            width: 100%;
-            height: 120%;
-            background: url('assets/piano_smoke_effect.png') no-repeat center center; 
-            background-size: contain;
-            opacity: 0.9;
-        }
-
-        /* TỜ GIẤY CỔ (DÁNG DỌC, VỪA VẶN) */
+        /* TỜ GIẤY CỔ (ĐÃ PHÓNG TO VÀ CĂN CHỈNH TỶ LỆ) */
         .paper-wrapper {
             position: relative;
-            width: 420px;  /* Chiều ngang hẹp lại cho đúng dáng giấy */
-            height: 600px; 
+            width: 580px;  /* Tăng kích thước bề ngang */
+            height: 750px; /* Tăng chiều cao */
             background: url('assets/paper.png') no-repeat center center;
             background-size: 100% 100%;
-            padding: 85px 40px 100px 40px; /* Căn chỉnh khoảng trống 2 bên */
+            padding: 90px 60px 120px 60px; /* Điều chỉnh lại khoảng cách lề */
             box-sizing: border-box;
             z-index: 20; 
             display: flex;
             flex-direction: column;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); /* Tạo độ sâu cho tờ giấy */
         }
 
         .paper-wrapper::after {
             content: '';
             position: absolute;
-            top: 25px;
-            right: 25px;
-            width: 60px;
-            height: 60px;
+            top: 30px;
+            right: 40px;
+            width: 80px;
+            height: 80px;
             background: url('assets/paper_stars.png') no-repeat center center; 
             background-size: contain;
             pointer-events: none;
         }
 
-        /* CĂN CHỈNH DÒNG CHỮ (LOẠI BỎ DÒNG KẺ ẢO) */
         .input-group {
             display: flex;
             align-items: center;
-            margin-bottom: 2px;
+            margin-bottom: 5px;
         }
 
         .input-group label {
             color: #3b2818;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
             margin-right: 10px;
-            white-space: nowrap;
         }
 
         .paper-input, .paper-textarea {
@@ -167,29 +129,27 @@
             border: none;
             outline: none;
             font-family: inherit;
-            font-size: 18px;
+            font-size: 19px;
             color: #3b2818;
             width: 100%;
         }
 
         .paper-input {
-            border-bottom: 2px dashed #8b6b4a; /* Dòng kẻ cho phần Tên (nếu cần) */
-            padding-bottom: 5px;
+            border-bottom: 2px dashed #8b6b4a;
         }
 
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            margin-top: 5px; 
-            /* CẢNH BÁO: Tăng/giảm con số 42px dưới đây để căn chữ trùng với dòng kẻ có sẵn trên ảnh giấy của bạn */
-            line-height: 42px; 
+            margin-top: 10px; 
+            /* ĐIỀU CHỈNH CON SỐ DƯỚI ĐÂY ĐỂ CHỮ KHỚP VỚI DÒNG KẺ CỦA BÀ */
+            line-height: 45px; 
         }
 
-        /* NÚT BẤM VÀ NHÂN VẬT NẰM GỌN TRONG GÓC PHẢI DƯỚI TỜ GIẤY */
         .submit-section {
             position: absolute;
-            bottom: 15px; 
-            right: 15px; 
+            bottom: 40px; 
+            right: 40px; 
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -200,20 +160,19 @@
             background-color: #f7e0b5;
             border: 2px solid #3b2818;
             color: #3b2818;
-            padding: 8px 12px;
+            padding: 10px 18px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 16px;
             border-radius: 8px;
-            box-shadow: 2px 2px 0px #3b2818;
-            white-space: nowrap;
+            box-shadow: 3px 3px 0px #3b2818;
         }
 
         .witch-character {
-            width: 60px;
+            width: 75px;
             margin-left: -5px;
         }
 
-        /* KHU VỰC CẢNH 2: VÒNG XOÁY NGÂN HÀ */
+        /* HIỆU ỨNG CẢNH 2 */
         #scene-2 {
             position: absolute;
             width: 100%;
@@ -223,14 +182,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.8s ease-in-out;
             z-index: 50;
         }
 
         .galaxy-spiral {
             position: absolute;
-            width: 2000px;
-            height: 2000px;
+            width: 2500px;
+            height: 2500px;
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
@@ -238,26 +196,9 @@
 
         .flying-envelope {
             position: absolute;
-            width: 60px;
+            width: 70px;
             z-index: 55;
             opacity: 0;
-        }
-
-        /* ĐỊNH NGHĨA KEYFRAMES */
-        @keyframes steamRise {
-            0% { transform: translateX(-50%) translateY(0); opacity: 0; }
-            50% { transform: translateX(-50%) translateY(-20px); opacity: 0.8; }
-            100% { transform: translateX(-50%) translateY(-40px); opacity: 0; }
-        }
-
-        @keyframes witchTap {
-            0% { transform: rotate(0deg) translateY(0); }
-            50% { transform: rotate(-30deg) translateY(-15px); }
-            100% { transform: rotate(0deg) translateY(0); }
-        }
-
-        .witch-tap-animation {
-            animation: witchTap 0.6s ease-in-out;
         }
 
         @keyframes rotateSpiral {
@@ -267,7 +208,6 @@
 
         @keyframes flyIntoGalaxy {
             0% { transform: scale(1.5) rotate(0deg); opacity: 1; }
-            50% { transform: scale(1) rotate(360deg); opacity: 1; }
             100% { transform: scale(0) rotate(720deg); opacity: 0; }
         }
 
@@ -275,23 +215,18 @@
             animation: flyIntoGalaxy 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
 
-        .hidden {
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
+        .hidden { opacity: 0 !important; pointer-events: none !important; }
     </style>
 </head>
 <body>
 
     <div id="scene-1">
         <div class="stars-layer"></div>
-        
         <div class="scenery-container">
             <img src="assets/clouds.png" class="cloud-left" alt="Mây trái">
-            <img src="assets/cauldron.png" class="cauldron" alt="Vạc ma thuật">
-            
+            <img src="assets/cauldron.png" class="cauldron" alt="Vạc">
             <img src="assets/clouds.png" class="cloud-right" alt="Mây phải">
-            <img src="assets/piano.png" class="piano" alt="Đàn piano ma thuật">
+            <img src="assets/piano.png" class="piano" alt="Piano">
         </div>
 
         <div class="paper-wrapper">
@@ -299,66 +234,46 @@
                 <label for="sender">From:</label>
                 <input type="text" id="sender" class="paper-input" placeholder="Tên của bạn...">
             </div>
-            
             <textarea id="message" class="paper-textarea" placeholder="Viết lời nhắn..."></textarea>
-            
             <div class="submit-section" onclick="processSubmission()">
                 <div class="submit-btn">To the star holder</div>
-                <img src="assets/witch.png" id="witch" class="witch-character" alt="Phù thủy dẫn đường">
+                <img src="assets/witch.png" id="witch" class="witch-character" alt="Witch">
             </div>
         </div>
     </div>
 
     <div id="scene-2">
         <div class="galaxy-spiral"></div>
-        <img src="assets/letter.png" id="flying-envelope" class="flying-envelope" alt="Lá thư ma thuật">
+        <img src="assets/letter.png" id="flying-envelope" class="flying-envelope">
     </div>
 
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
         function processSubmission() {
-            const senderValue = document.getElementById('sender').value.trim();
-            const messageValue = document.getElementById('message').value.trim();
+            const sender = document.getElementById('sender').value.trim();
+            const message = document.getElementById('message').value.trim();
 
-            if (senderValue === "" || messageValue === "") {
-                alert("Vui lòng điền đầy đủ tên của bạn và lời nhắn trước khi gửi đến những vì sao nhé!");
+            if (!sender || !message) {
+                alert("Bà ơi điền nốt tên với lời chúc rồi mới gửi được nha!");
                 return; 
             }
 
-            const scene1 = document.getElementById('scene-1');
-            const scene2 = document.getElementById('scene-2');
             const witch = document.getElementById('witch');
-            const envelope = document.getElementById('flying-envelope');
-            const audio = document.getElementById('twinkle-audio');
-
-            witch.classList.add('witch-tap-animation');
+            witch.style.animation = "witchTap 0.6s ease-in-out";
 
             setTimeout(() => {
-                scene1.classList.add('hidden');
-                scene2.style.opacity = '1';
-                scene2.style.pointerEvents = 'auto';
+                document.getElementById('scene-1').classList.add('hidden');
+                document.getElementById('scene-2').style.opacity = '1';
+                document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
+                
+                document.getElementById('twinkle-audio').play().catch(() => {});
 
                 setTimeout(() => {
-                    envelope.classList.add('envelope-fly-animation');
-                }, 300);
-
-                setTimeout(() => {
-                    let playPromise = audio.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(error => {
-                            console.log("Audio playback prevented by browser policy.");
-                        });
-                    }
-                    
-                    setTimeout(() => {
-                        alert("Gửi thành công! Lá thư của bạn đã hòa vào dải ngân hà.");
-                        location.reload(); 
-                    }, 1500);
-
-                }, 3000); 
-
-            }, 600); 
+                    alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bà. ✨");
+                    location.reload(); 
+                }, 3500);
+            }, 600);
         }
     </script>
 </body>
