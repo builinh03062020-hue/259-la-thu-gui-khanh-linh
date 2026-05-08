@@ -44,11 +44,11 @@
         /* 1. MÂY PHẢI (LỚP 10 - Nằm dưới cùng) - ĐÃ KÉO SÁT ĐÁY */
         .cloud-right {
             position: absolute;
-            bottom: -30px; /* Ép sát rịt xuống đáy màn hình */
+            bottom: -50px; /* Ép sát rịt xuống đáy màn hình */
             right: -50px;
             width: 55vw;
             min-width: 450px;
-            opacity: 0.9;
+            opacity: 0.8;
             transform: scaleX(-1); 
             z-index: 10;
             pointer-events: none;
@@ -131,8 +131,8 @@
         .submit-section {
             position: absolute;
             /* Đã tăng khoảng cách lề đáy và lề phải lên gấp đôi */
-            bottom: 60px; /* Cách đáy 60px - Bao lọt */
-            right: 80px;  /* Cách lề phải 80px - Bao lọt */
+            bottom: 70px; /* Cách đáy 70px - Bao lọt */
+            right: 55px;  /* Cách lề phải 80px - Bao lọt */
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -170,7 +170,7 @@
         /* 5. MÂY TRÁI (LỚP 30 - Nằm trên cùng, đè lên vạc) - ĐÃ KÉO SÁT ĐÁY */
         .cloud-left {
             position: absolute;
-            bottom: -30px; /* Ép sát rịt xuống đáy màn hình */
+            bottom: -50px; /* Ép sát rịt xuống đáy màn hình */
             left: -50px;
             width: 55vw;
             min-width: 450px;
@@ -180,7 +180,7 @@
         }
 
         /* HIỆU ỨNG CẢNH 2 */
-        #scene-2 {
+       #scene-2 {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -189,10 +189,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 1s ease-in-out;
+            z-index: 5;
         }
-
+        
         .galaxy-spiral {
             position: absolute;
             width: 2500px;
@@ -202,28 +202,40 @@
             animation: rotateSpiral 30s linear infinite;
         }
 
-        .flying-envelope {
+         .flying-envelope {
             position: absolute;
             width: 60px;
+            z-index: 6;
             opacity: 0;
         }
+        
+.envelope-fly-animation {
+            animation: flyIntoGalaxy 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+        }
 
+        /* ĐỊNH NGHĨA KEYFRAMES (ẢNH ĐỘNG) */
         @keyframes rotateSpiral {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         @keyframes flyIntoGalaxy {
-            0% { transform: scale(1.5) rotate(0deg); opacity: 1; }
-            100% { transform: scale(0) rotate(720deg); opacity: 0; }
+            0% {
+                transform: rotate(0deg) translateX(300px) rotate(0deg) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(720deg) translateX(0px) rotate(-720deg) scale(0);
+                opacity: 0;
+            }
         }
 
-        .envelope-fly-animation {
-            animation: flyIntoGalaxy 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        /* Lớp hỗ trợ ẩn phần tử */
+        .hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
-
-        .hidden { opacity: 0 !important; pointer-events: none !important; }
-
+        
         /* ĐẢM BẢO TỶ LỆ TRÊN ĐIỆN THOẠI KHÔNG BỊ VỠ */
         @media screen and (max-width: 768px) {
             #scene-1 { transform: scale(0.8); }
