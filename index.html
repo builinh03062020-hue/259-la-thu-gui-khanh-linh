@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gửi Thư Đến Những Vì Sao</title>
     <style>
-        /* THIẾT LẬP CƠ SỞ */
+        /* 1. THIẾT LẬP CƠ SỞ VÀ NỀN GRADIENT */
         body {
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: linear-gradient(180deg, #0d0722 0%, #2b1154 100%); 
+            /* Phục hồi màu Gradient gốc siêu đẹp */
+            background: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -29,90 +30,98 @@
             z-index: 5;
         }
 
+        /* KHẮC PHỤC LỖI MẤT NỀN OMBRE: Lọc bỏ nền đen của ảnh sao */
         .stars-layer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('assets/stars_background.png') no-repeat center center;
-            background-size: cover;
+            background: url('assets/stars_background.png') center/cover;
+            mix-blend-mode: screen; /* Thần chú giữ lại sao sáng, xóa nền đen */
             z-index: 0; 
+            opacity: 0.8;
         }
 
-        /* 1. MÂY PHẢI (LỚP 10) */
+        /* 2. QUẢN LÝ THỨ TỰ LỚP VÀ KÍCH THƯỚC (ĐÃ PHÓNG TO & KÉO SÁT ĐÁY) */
+
+        /* Mây phải (Lớp 10) */
         .cloud-right {
             position: absolute;
-            bottom: -30px;
-            right: -50px;
-            width: 600px;
-            opacity: 0.8;
+            bottom: -20px; /* Ép sát đáy màn hình */
+            right: -20px;
+            width: 55vw;
+            min-width: 500px;
+            opacity: 0.9;
             transform: scaleX(-1); 
             z-index: 10;
             pointer-events: none;
         }
 
-        /* 2. PIANO (LỚP 11 - Nằm trên mây phải) */
+        /* Piano (Lớp 15 - Nằm trên mây phải) - ĐÃ PHÓNG TO */
         .piano {
             position: absolute;
-            bottom: 100px; /* Đã nâng lên để không bị chìm */
-            right: 120px;
-            width: 220px;
-            z-index: 11;
-            filter: drop-shadow(0 0 20px #d8b4fe); /* Hiệu ứng Glow */
+            bottom: 60px; 
+            right: 10vw;
+            width: 280px; /* Phóng to lên */
+            z-index: 15;
+            filter: drop-shadow(0 0 25px #d8b4fe); 
             pointer-events: none;
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20) */
+        /* Tờ giấy (Lớp 20 - Nằm trên piano và mây phải) */
         .paper-wrapper {
             position: relative;
-            width: 480px; 
+            width: 500px; 
             height: 650px; 
             background: url('assets/paper.png') no-repeat center center;
             background-size: 100% 100%;
-            padding: 80px 50px 100px 50px; 
+            /* Tăng padding dưới để có chỗ an toàn nhét nút bấm */
+            padding: 85px 50px 100px 50px; 
             box-sizing: border-box;
             z-index: 20; 
             display: flex;
             flex-direction: column;
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
         }
 
-        /* Ngôi sao góc phải (Đã chỉnh to và đặt đúng vị trí) */
+        /* Ngôi sao góc phải (Đã kéo lọt vào trong mép giấy) */
         .paper-wrapper::after {
             content: '';
             position: absolute;
-            top: 40px; 
-            right: 45px;
-            width: 80px;
-            height: 80px;
+            top: 35px; 
+            right: 40px; 
+            width: 60px;
+            height: 60px;
             background: url('assets/paper_stars.png') no-repeat center center;
             background-size: contain;
             pointer-events: none;
         }
 
-        /* 4. VẠC MA THUẬT (LỚP 25 - Nằm trên giấy, dưới mây trái) */
+        /* Vạc ma thuật (Lớp 25 - Nằm trên giấy) - ĐÃ PHÓNG TO */
         .cauldron {
             position: absolute;
-            bottom: 80px; /* Đã nâng lên để không bị chìm */
-            left: 120px;
-            width: 160px;
+            bottom: 60px; 
+            left: 10vw;
+            width: 200px; /* Phóng to lên */
             z-index: 25;
-            filter: drop-shadow(0 0 20px #d8b4fe); /* Hiệu ứng Glow */
+            filter: drop-shadow(0 0 25px #d8b4fe); 
             pointer-events: none;
         }
 
-        /* 5. MÂY TRÁI (LỚP 30 - Nằm trên cùng) */
+        /* Mây trái (Lớp 30 - Nằm trên cùng, đè lên vạc) */
         .cloud-left {
             position: absolute;
-            bottom: -30px;
-            left: -50px;
-            width: 600px;
-            opacity: 0.8;
+            bottom: -20px; /* Ép sát đáy màn hình */
+            left: -20px;
+            width: 55vw;
+            min-width: 500px;
+            opacity: 0.9;
             z-index: 30;
             pointer-events: none;
         }
 
-        /* CĂN CHỈNH VĂN BẢN VÀ DÒNG KẺ */
+        /* 3. CĂN CHỈNH VĂN BẢN VÀ DÒNG KẺ (KÉO CHỮ LÊN) */
         .input-group {
             display: flex;
             align-items: center;
@@ -122,7 +131,7 @@
         .input-group label {
             color: #3b2818;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 19px;
             margin-right: 8px;
         }
 
@@ -143,18 +152,16 @@
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            /* Hướng dẫn căn chỉnh:
-               - Tăng/giảm margin-top để đẩy toàn bộ khối chữ lên hoặc xuống.
-               - Tăng/giảm line-height để làm giãn hoặc thu hẹp khoảng cách giữa các dòng. */
-            margin-top: 25px; 
+            /* Xóa margin-top để dòng chữ đầu tiên không bị tuột xuống */
+            margin-top: -2px; 
             line-height: 48px; 
         }
 
-        /* NÚT BẤM VÀ PHÙ THỦY (Đã đưa vào trong tờ giấy) */
+        /* NÚT BẤM VÀ PHÙ THỦY (KHÓA CHẶT BÊN TRONG TỜ GIẤY) */
         .submit-section {
             position: absolute;
-            bottom: 40px; /* Cách đáy tờ giấy 40px */
-            right: 50px;  /* Cách lề phải tờ giấy 50px */
+            bottom: 25px; /* Nằm gọn trong khoảng padding 100px của tờ giấy */
+            right: 30px;  
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -167,7 +174,7 @@
             color: #3b2818;
             padding: 8px 15px;
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             border-radius: 8px;
             box-shadow: 2px 2px 0px #3b2818;
         }
@@ -223,12 +230,14 @@
 
         .hidden { opacity: 0 !important; pointer-events: none !important; }
 
-        /* TỐI ƯU HÓA HIỂN THỊ ĐIỆN THOẠI */
+        /* ĐẢM BẢO TỶ LỆ TRÊN ĐIỆN THOẠI KHÔNG BỊ VỠ */
         @media screen and (max-width: 768px) {
             #scene-1 { transform: scale(0.85); }
+            .cauldron { left: 2vw; bottom: 80px; }
+            .piano { right: 2vw; bottom: 80px; }
         }
         @media screen and (max-width: 480px) {
-            #scene-1 { transform: scale(0.7); }
+            #scene-1 { transform: scale(0.65); }
         }
     </style>
 </head>
@@ -246,6 +255,7 @@
                 <input type="text" id="sender" class="paper-input" placeholder="Tên của bạn...">
             </div>
             <textarea id="message" class="paper-textarea" placeholder="Viết lời nhắn gửi đến những vì sao..."></textarea>
+            
             <div class="submit-section" onclick="processSubmission()">
                 <div class="submit-btn">To the star holder</div>
                 <img src="assets/witch.png" id="witch" class="witch-character" alt="Witch">
