@@ -44,11 +44,11 @@
         /* 1. MÂY PHẢI (LỚP 10 - Nằm dưới cùng) - ĐÃ KÉO SÁT ĐÁY */
         .cloud-right {
             position: absolute;
-            bottom: -30px; /* Ép sát rịt xuống đáy màn hình */
+            bottom: -125px; /* Ép sát rịt xuống đáy màn hình */
             right: -50px;
             width: 55vw;
             min-width: 450px;
-            opacity: 0.9;
+            opacity: 0.8;
             transform: scaleX(-1); 
             z-index: 10;
             pointer-events: none;
@@ -57,9 +57,9 @@
         /* 2. PIANO (LỚP 15 - Nằm trên mây phải) - Đã hạ thấp */
         .piano {
             position: absolute;
-            bottom: 60px; /* Hạ thấp tọa độ để dính mây */
-            right: 120px;
-            width: 250px;
+            bottom: 20px; /* Hạ thấp tọa độ để dính mây */
+            right: 50px;
+            width: 350px;
             z-index: 15;
             filter: drop-shadow(0 0 25px #d8b4fe); 
             pointer-events: none;
@@ -83,7 +83,7 @@
         .paper-wrapper::after {
             content: '';
             position: absolute;
-            top: 40px; 
+            top: 60px; 
             right: 45px;
             width: 70px;
             height: 70px;
@@ -96,7 +96,7 @@
         .input-group {
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .input-group label {
@@ -117,13 +117,13 @@
         }
 
         .paper-input {
-            border-bottom: 1.5px dashed #8b6b4a;
+            border-bottom: 2.5px dashed #8b6b4a;
         }
 
         .paper-textarea {
             resize: none;
             flex-grow: 1;
-            margin-top: 10px; 
+            margin-top: 40px; 
             line-height: 48px; 
         }
 
@@ -131,8 +131,8 @@
         .submit-section {
             position: absolute;
             /* Đã tăng khoảng cách lề đáy và lề phải lên gấp đôi */
-            bottom: 60px; /* Cách đáy 60px - Bao lọt */
-            right: 80px;  /* Cách lề phải 80px - Bao lọt */
+            bottom: 70px; /* Cách đáy 70px - Bao lọt */
+            right: 7px;  /* Cách lề phải 80px - Bao lọt */
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -140,8 +140,8 @@
         }
 
         .submit-btn {
-            background-color: #f7e0b5;
-            border: 2px solid #3b2818;
+            background-color: transparent;
+            background: url('assets/border.png') no-repeat center center;
             color: #3b2818;
             padding: 8px 15px;
             font-weight: bold;
@@ -153,15 +153,15 @@
         .witch-character {
             width: 75px;
             margin-left: -5px;
-            transition: transform 0.3s ease;
+            transition: transform 1s ease;
         }
 
         /* 4. VẠC MA THUẬT (LỚP 25 - Nằm trên giấy, dưới mây trái) - Đã hạ thấp */
         .cauldron {
             position: absolute;
-            bottom: 60px; /* Hạ thấp tọa độ để dính mây */
-            left: 120px;
-            width: 180px;
+            bottom: 10px; /* Hạ thấp tọa độ để dính mây */
+            left: 55px;
+            width: 300px;
             z-index: 25;
             filter: drop-shadow(0 0 25px #d8b4fe); 
             pointer-events: none;
@@ -170,17 +170,17 @@
         /* 5. MÂY TRÁI (LỚP 30 - Nằm trên cùng, đè lên vạc) - ĐÃ KÉO SÁT ĐÁY */
         .cloud-left {
             position: absolute;
-            bottom: -30px; /* Ép sát rịt xuống đáy màn hình */
+            bottom: -125px; /* Ép sát rịt xuống đáy màn hình */
             left: -50px;
             width: 55vw;
             min-width: 450px;
-            opacity: 0.9;
+            opacity: 0.8;
             z-index: 30;
             pointer-events: none;
         }
 
         /* HIỆU ỨNG CẢNH 2 */
-        #scene-2 {
+       #scene-2 {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -189,41 +189,53 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 1s ease-in-out;
+            z-index: 5;
         }
-
+        
         .galaxy-spiral {
-            position: absolute;
-            width: 2500px;
-            height: 2500px;
+           position: absolute;
+            width: 170vw;
+            height: 170vw;
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
         }
 
-        .flying-envelope {
+         .flying-envelope {
             position: absolute;
             width: 60px;
+            z-index: 6;
             opacity: 0;
         }
+        
+.envelope-fly-animation {
+            animation: flyIntoGalaxy 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+        }
 
+        /* ĐỊNH NGHĨA KEYFRAMES (ẢNH ĐỘNG) */
         @keyframes rotateSpiral {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
         @keyframes flyIntoGalaxy {
-            0% { transform: scale(1.5) rotate(0deg); opacity: 1; }
-            100% { transform: scale(0) rotate(720deg); opacity: 0; }
+            0% {
+                transform: rotate(0deg) translateX(300px) rotate(0deg) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(720deg) translateX(0px) rotate(-720deg) scale(0);
+                opacity: 0;
+            }
         }
 
-        .envelope-fly-animation {
-            animation: flyIntoGalaxy 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        /* Lớp hỗ trợ ẩn phần tử */
+        .hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
         }
-
-        .hidden { opacity: 0 !important; pointer-events: none !important; }
-
+        
         /* ĐẢM BẢO TỶ LỆ TRÊN ĐIỆN THOẠI KHÔNG BỊ VỠ */
         @media screen and (max-width: 768px) {
             #scene-1 { transform: scale(0.8); }
