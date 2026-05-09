@@ -154,7 +154,6 @@
             border: none; 
             box-shadow: none; 
             color: #1a1a1a;
-            /* Căn lề padding phải để tránh văn bản đè lên đồ họa họa tiết trong ảnh nền */
             padding: 12px 45px 12px 15px; 
             font-weight: bold;
             font-size: 17px;
@@ -209,11 +208,20 @@
         
         .galaxy-spiral {
             position: absolute;
-            width: 170vw;
-            height: 170vw;
+            width: 100vw;          /* Đã giảm kích thước */
+            height: 100vw;         /* Đã giảm kích thước */
+            max-width: 900px;      /* Cố định giới hạn tối đa */
+            max-height: 900px;     /* Cố định giới hạn tối đa */
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
+            
+            /* TỐI ƯU HÓA HIỂN THỊ PIXEL-ART */
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
         }
 
         .flying-envelope {
@@ -224,7 +232,7 @@
         }
         
         .envelope-fly-animation {
-            animation: flyIntoGalaxy 5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+            animation: flyIntoGalaxy 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
         }
 
         /* ĐỊNH NGHĨA KEYFRAMES */
