@@ -19,20 +19,7 @@
             color: #ffffff;
         }
 
-        /* KHUNG CẢNH 1: KÍCH THƯỚC CỐ ĐỊNH CHO RESPONSIVE ĐỒNG DẠNG */
-        #scene-1 {
-            position: relative;
-            width: 1000px;
-            height: 800px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-            transition: transform 0.2s ease-out;
-            transform-origin: center;
-        }
-
-        /* LỚP NỀN SAO ĐƯỢC TỐI ƯU HÓA TRÊN MOBILE */
+        /* LỚP NỀN SAO KHÓA CHẶT TRÊN GIAO DIỆN DI ĐỘNG */
         .stars-layer {
             position: fixed;
             top: 0;
@@ -47,13 +34,25 @@
             pointer-events: none;
         }
 
-        /* 1. MÂY PHẢI (LỚP 10) */
+        /* KHUNG CẢNH 1: HỆ QUY CHIẾU CỐ ĐỊNH */
+        #scene-1 {
+            position: relative;
+            width: 1000px;
+            height: 800px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            transition: transform 0.2s ease-out;
+            transform-origin: center;
+        }
+
+        /* 1. MÂY PHẢI (LỚP 10) - Chuyển sang kích thước tuyệt đối */
         .cloud-right {
             position: absolute;
             bottom: -125px; 
             right: -50px;
-            width: 55vw;
-            min-width: 450px;
+            width: 600px; /* Cố định bằng pixel */
             opacity: 0.8;
             transform: scaleX(-1); 
             z-index: 10;
@@ -87,7 +86,6 @@
             box-shadow: 0 0 40px rgba(0,0,0,0.6);
         }
 
-        /* CỤM SAO TRÊN GIẤY */
         .paper-wrapper::after {
             content: '';
             position: absolute;
@@ -101,7 +99,7 @@
             transform: rotate(15deg); 
         }
 
-        /* CĂN CHỈNH VĂN BẢN VÀ DÒNG KẺ */
+        /* CĂN CHỈNH VĂN BẢN (KHÔNG DÒNG KẺ) */
         .input-group {
             display: flex;
             align-items: center;
@@ -147,14 +145,14 @@
             z-index: 40;
         }
 
-        /* TÁI THIẾT KẾ KHUNG NÚT BẤM VỚI ẢNH NỀN */
+        /* Khung nút bấm dùng viền ảnh có sẵn, có chữ ở trong */
         .submit-btn {
             background: url('assets/border.png') no-repeat center center;
             background-size: 100% 100%; 
             border: none; 
             box-shadow: none; 
             color: #1a1a1a;
-            padding: 12px 45px 12px 15px; 
+            padding: 12px 55px 12px 15px; /* Tăng padding phải để tránh mép phải của khung */
             font-weight: bold;
             font-size: 17px;
             display: flex;
@@ -179,13 +177,12 @@
             transform: rotate(-8deg); 
         }
 
-        /* 5. MÂY TRÁI (LỚP 30) */
+        /* 5. MÂY TRÁI (LỚP 30) - Chuyển sang kích thước tuyệt đối */
         .cloud-left {
             position: absolute;
             bottom: -125px; 
             left: -50px;
-            width: 55vw;
-            min-width: 450px;
+            width: 600px; /* Cố định bằng pixel */
             opacity: 0.8;
             z-index: 30;
             pointer-events: none;
@@ -208,15 +205,13 @@
         
         .galaxy-spiral {
             position: absolute;
-            width: 100vw;          /* Đã giảm kích thước */
-            height: 100vw;         /* Đã giảm kích thước */
-            max-width: 900px;      /* Cố định giới hạn tối đa */
-            max-height: 900px;     /* Cố định giới hạn tối đa */
+            width: 100vw;
+            height: 100vw;
+            max-width: 900px;
+            max-height: 900px;
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
-            
-            /* TỐI ƯU HÓA HIỂN THỊ PIXEL-ART */
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
@@ -235,7 +230,6 @@
             animation: flyIntoGalaxy 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
         }
 
-        /* ĐỊNH NGHĨA KEYFRAMES */
         @keyframes rotateSpiral {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -252,12 +246,9 @@
             }
         }
 
-        .hidden {
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
+        .hidden { opacity: 0 !important; pointer-events: none !important; }
         
-        /* CƠ CHẾ RESPONSIVE TỰ ĐỘNG */
+        /* CƠ CHẾ RESPONSIVE TỰ ĐỘNG THU NHỎ NGUYÊN KHỐI */
         @media (max-width: 1000px), (max-height: 800px) {
             #scene-1 {
                 transform: scale(min(calc(100vw / 1000), calc(100vh / 800)));
@@ -278,9 +269,11 @@
                 <label for="sender">From:</label>
                 <input type="text" id="sender" class="paper-input" placeholder="Tên của bạn...">
             </div>
+            <!-- Chú ý: Đã xóa hoàn toàn dòng kẻ -->
             <textarea id="message" class="paper-textarea" placeholder="Viết lời nhắn gửi đến những vì sao..."></textarea>
             
             <div class="submit-section" onclick="processSubmission()">
+                <!-- Nút bấm phục hồi chữ "To the star holder" -->
                 <div class="submit-btn">To the star holder</div>
                 <img src="assets/witch.png" id="witch" class="witch-character" alt="Witch">
             </div>
