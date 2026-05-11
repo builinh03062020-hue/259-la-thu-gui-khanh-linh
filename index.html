@@ -10,32 +10,27 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #150824; 
+            background: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             height: 100vh;
-            height: 100dvh; /* Tương thích Dynamic Viewport Mobile */
             color: #ffffff;
         }
 
-        /* LỚP NỀN SAO ĐÃ GỘP GRADIENT */
+        /* LỚP NỀN SAO ĐỒNG BỘ HIỆU ỨNG FADE-OUT */
         .stars-layer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            height: 100dvh;
-            background-image: 
-                linear-gradient(180deg, #150824 0%, #4a2574 100%), 
-                url('assets/stars_background.png');
-            background-position: center;
-            background-size: cover;
-            background-blend-mode: screen; 
+            background: url('assets/stars_background.png') center/cover;
+            mix-blend-mode: screen; 
+            -webkit-mix-blend-mode: screen;
             z-index: 0; 
             opacity: 0.8;
             pointer-events: none;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 1s ease-in-out; /* Hỗ trợ hiệu ứng mờ dần */
         }
 
         /* KHUNG CẢNH 1 */
@@ -44,14 +39,14 @@
             width: 100%;
             height: 100%;
             z-index: 5;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 1s ease-in-out;
         }
 
-        /* 1. MÂY PHẢI (LỚP 10) */
+        /* 1. MÂY PHẢI (LỚP 10) - Ép sát đáy tuyệt đối nhe cha bà! */
         .cloud-right {
             position: absolute;
-            bottom: -125px; 
-            right: -50px;
+            bottom: -15vh; /* Ép sâu xuống viền nhe cha bà! */
+            right: -5vw;
             width: 55vw;
             min-width: 450px;
             opacity: 0.8;
@@ -72,12 +67,12 @@
             transform: rotate(10deg);
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20): CĂN GIỮA BẤT TỬ */
+        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI, CHỐNG LỆCH */
         .paper-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); /* Căn giữa hoàn hảo, bất chấp zoom-out */
             width: 500px; 
             height: 680px; 
             background: url('assets/paper.png') no-repeat center center;
@@ -87,11 +82,11 @@
             z-index: 20; 
             display: flex;
             flex-direction: column;
-            /* Thay thế box-shadow bằng drop-shadow để sửa lỗi iOS Safari */
-            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
             transition: transform 0.3s ease;
         }
 
+        /* CỤM SAO TRÊN GIẤY */
         .paper-wrapper::after {
             content: '';
             position: absolute;
@@ -151,28 +146,29 @@
             z-index: 40;
         }
 
+        /* KHUNG NÚT BẤM: TỰ ĐỘNG ĐIỀU CHỈNH KÍCH THƯỚC ĐỂ KHÔNG MẤT CHỮ */
         .submit-btn {
             background: url('assets/border.png') no-repeat center center;
             background-size: 100% 100%;
             border: none;
             box-shadow: none;
             color: #1a1a1a;
-            padding: 12px 55px 12px 15px; 
+            padding: 12px 55px 12px 15px; /* Giữ lề phải để né nhân vật đồ họa */
             font-weight: bold;
             font-size: 17px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: max-content; 
-            min-width: 200px;
+            width: max-content; /* Tự co giãn theo chữ, hông bị nuốt chữ */
+            min-width: 220px;
             height: 55px;
-            white-space: nowrap; 
+            white-space: nowrap; /* Ngăn chặn ngắt dòng văn bản */
             box-sizing: border-box;
         }
 
         .witch-character {
             width: 75px;
-            margin-left: -15px;
+            margin-left: -20px; /* Thu hẹp khoảng cách với nút */
             transition: transform 1s ease;
         }
 
@@ -188,11 +184,11 @@
             transform: rotate(-8deg);
         }
 
-        /* 5. MÂY TRÁI (LỚP 30) */
+        /* 5. MÂY TRÁI (LỚP 30) - Ép sát đáy tuyệt đối */
         .cloud-left {
             position: absolute;
-            bottom: -125px; 
-            left: -50px;
+            bottom: -15vh; /* Ép sâu xuống viền nhe cha bà! */
+            left: -5vw;
             width: 55vw;
             min-width: 450px;
             opacity: 0.8;
@@ -223,6 +219,7 @@
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
+            /* Tối ưu hóa điểm ảnh (Pixel-art optimization) */
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
@@ -230,6 +227,7 @@
             image-rendering: pixelated;
         }
 
+        /* CỐ ĐỊNH TÂM LÁ THƯ TẠI TRỤC GIỮA */
         .flying-envelope {
             position: absolute;
             top: 50%;
@@ -237,6 +235,7 @@
             width: 60px;
             z-index: 6;
             opacity: 0;
+            /* Khởi tạo translate để fix lỗi zoom cảnh 2 */
             transform: translate(-50%, -50%) scale(1.5);
         }
         
@@ -265,20 +264,22 @@
             pointer-events: none !important;
         }
         
-        /* RESPONSIVE DI ĐỘNG: ẨN TĨNH VẬT & TỰ ĐỘNG THU NHỎ TỜ GIẤY THEO PHẦN TRĂM MÀN HÌNH */
+        /* QUẢN LÝ RESPONSIVE THIẾT BỊ DI ĐỘNG (LƯỢC BỎ TĨNH VẬT) THEO YÊU CẦU */
         @media screen and (max-width: 768px) {
+            /* Vô hiệu hóa lớp trang trí nhe cha bà! */
             .cloud-left, .cloud-right, .piano, .cauldron {
                 display: none !important;
             }
+            /* Giảm kích thước khối nội dung trung tâm + TỰ ĐỘNG ÉP GIẤY VỪA MÀN HÌNH CHỐNG BÉO PHÌ */
             .paper-wrapper { 
-                /* Hàm tính toán giúp tờ giấy luôn nhỏ hơn màn hình, ép vừa 95% chiều ngang */
-                transform: translate(-50%, -50%) scale(min(0.85, calc(95vw / 500))); 
+                /* Giữ nguyên tọa độ tuyệt đối, bổ sung biến đổi thu nhỏ theo % màn hình nhe cha bà! */
+                transform: translate(-50%, -50%) scale(min(0.85, calc(95vw / 500))); /* Tự động ép vừa 95% bề ngang điện thoại nhe cha bà! */
             }
         }
 
         @media screen and (max-width: 480px) {
             .paper-wrapper { 
-                /* Điện thoại nhỏ ép vừa 90% chiều ngang */
+                /* Điện thoại nhỏ ép vừa 90% bề ngang nhe cha bà! */
                 transform: translate(-50%, -50%) scale(min(0.8, calc(90vw / 500))); 
             }
         }
@@ -333,6 +334,7 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 
+                // Đồng bộ hóa hiệu ứng cảnh 2: Cho nền sao bay màu nhe cha bà!
                 document.getElementById('stars-layer').style.opacity = '0';
                 
                 document.getElementById('scene-2').style.opacity = '1';
@@ -344,7 +346,7 @@
                 setTimeout(() => {
                     alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
                     location.reload(); 
-                }, 3500); 
+                }, 3500); // Tăng thời gian chờ cho khớp animation lá thư nhe cha bà!
             }, 600);
         }
     </script>
