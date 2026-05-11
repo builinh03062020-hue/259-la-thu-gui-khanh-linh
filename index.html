@@ -13,24 +13,11 @@
             background: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
             color: #ffffff;
         }
 
-        /* KHUNG CẢNH 1: CHIẾM TOÀN BỘ MÀN HÌNH */
-        #scene-1 {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-        }
-
-        /* LỚP NỀN SAO CỐ ĐỊNH */
+        /* LỚP NỀN SAO ĐỒNG BỘ HIỆU ỨNG FADE-OUT */
         .stars-layer {
             position: fixed;
             top: 0;
@@ -43,13 +30,23 @@
             z-index: 0; 
             opacity: 0.8;
             pointer-events: none;
+            transition: opacity 1s ease-in-out; /* Hỗ trợ hiệu ứng mờ dần */
         }
 
-        /* 1. MÂY PHẢI (LỚP 10) */
+        /* KHUNG CẢNH 1 */
+        #scene-1 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            transition: opacity 1s ease-in-out;
+        }
+
+        /* 1. MÂY PHẢI (LỚP 10) - Ép sát đáy */
         .cloud-right {
             position: absolute;
-            bottom: -125px; 
-            right: -50px;
+            bottom: -15vh; /* Khóa chặt dưới viền */
+            right: -5vw;
             width: 55vw;
             min-width: 450px;
             opacity: 0.8;
@@ -70,9 +67,12 @@
             transform: rotate(-5deg); 
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20) */
+        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI */
         .paper-wrapper {
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Căn giữa hoàn hảo, chống lỗi zoom */
             width: 500px; 
             height: 680px; 
             background: url('assets/paper.png') no-repeat center center;
@@ -100,7 +100,7 @@
             transform: rotate(15deg);
         }
 
-        /* CĂN CHỈNH VĂN BẢN (KHÔNG DÒNG KẺ) */
+        /* CĂN CHỈNH VĂN BẢN */
         .input-group {
             display: flex;
             align-items: center;
@@ -146,19 +146,27 @@
             z-index: 40;
         }
 
-        /* KHUNG NÚT BẤM TRỐNG KÍCH THƯỚC CỐ ĐỊNH */
+        /* NÚT BẤM: TỰ ĐỘNG MỞ RỘNG ÔM CHỮ */
         .submit-btn {
             background: url('assets/border.png') no-repeat center center;
             background-size: 100% 100%; 
             border: none; 
             box-shadow: none; 
-            width: 220px; 
-            height: 55px;
+            color: #1a1a1a;
+            padding: 15px 60px 15px 20px; /* Nới rộng lề phải cho mèo */
+            font-weight: bold;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap; /* Chống rớt chữ xuống dòng */
+            width: auto; /* Tự động co giãn theo nội dung */
+            min-width: 150px;
         }
 
         .witch-character {
             width: 75px;
-            margin-left: -20px; /* Hiệu chỉnh thu hẹp khoảng cách nhân vật */
+            margin-left: -15px;
             transition: transform 1s ease;
         }
 
@@ -174,11 +182,11 @@
             transform: rotate(-8deg); 
         }
 
-        /* 5. MÂY TRÁI (LỚP 30) */
+        /* 5. MÂY TRÁI (LỚP 30) - Ép sát đáy */
         .cloud-left {
             position: absolute;
-            bottom: -125px; 
-            left: -50px;
+            bottom: -15vh; /* Khóa chặt dưới viền */
+            left: -5vw;
             width: 55vw;
             min-width: 450px;
             opacity: 0.8;
@@ -251,22 +259,24 @@
 
         /* ĐIỀU CHỈNH GIAO DIỆN MOBILE TỐI ƯU HÓA (ĐẨY TĨNH VẬT RA LỀ) */
         @media screen and (max-width: 768px) {
-            .paper-wrapper { transform: scale(0.75); transform-origin: center center; }
-            .cauldron { left: -20px; width: 180px; bottom: 20px; }
-            .piano { right: -20px; width: 220px; bottom: 30px; }
-            .cloud-left, .cloud-right { width: 120vw; bottom: -50px; }
+            /* Giữ nguyên tọa độ tuyệt đối, bổ sung biến đổi thu nhỏ */
+            .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); }
+            .cauldron { left: -10vw; width: 220px; bottom: 10px; }
+            .piano { right: -10vw; width: 240px; bottom: 20px; }
+            .cloud-left { width: 100vw; left: -10vw; bottom: -5vh; }
+            .cloud-right { width: 100vw; right: -10vw; bottom: -5vh; }
         }
         
         @media screen and (max-width: 480px) {
-            .paper-wrapper { transform: scale(0.65); transform-origin: center center; }
-            .cauldron { left: -30px; width: 150px; bottom: 10px; }
-            .piano { right: -30px; width: 180px; bottom: 10px; }
+            .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); }
+            .cauldron { left: -15vw; width: 180px; }
+            .piano { right: -15vw; width: 200px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="stars-layer"></div>
+    <div class="stars-layer" id="stars-layer"></div>
 
     <div id="scene-1">
         <img src="assets/clouds.png" class="cloud-right" alt="Mây phải">
@@ -281,7 +291,7 @@
             <textarea id="message" class="paper-textarea" placeholder="Viết lời nhắn gửi đến những vì sao..."></textarea>
             
             <div class="submit-section" onclick="processSubmission()">
-                <div class="submit-btn"></div>
+                <div class="submit-btn">To the star holder</div>
                 <img src="assets/witch.png" id="witch" class="witch-character" alt="Witch">
             </div>
         </div>
@@ -313,6 +323,10 @@
             setTimeout(() => {
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
+                
+                // Đồng bộ hóa trạng thái mờ dần của lớp nền sao
+                document.getElementById('stars-layer').style.opacity = '0';
+                
                 document.getElementById('scene-2').style.opacity = '1';
                 document.getElementById('scene-2').style.pointerEvents = 'auto';
                 document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
