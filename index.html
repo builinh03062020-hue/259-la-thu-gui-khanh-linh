@@ -10,25 +10,28 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
+            background-color: #150824; /* Nền tối base để làm gốc blend */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
             height: 100vh;
             color: #ffffff;
         }
 
-        /* LỚP NỀN SAO ĐỒNG BỘ HIỆU ỨNG FADE-OUT */
+        /* LỚP NỀN SAO: GỘP GRADIENT VÀ ẢNH ĐỂ KHỬ LỖI BLENDING JAGGED */
         .stars-layer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: url('assets/stars_background.png') center/cover;
-            mix-blend-mode: screen; 
-            -webkit-mix-blend-mode: screen;
+            /* Phép thuật gộp nền: Gradient + Ảnh stars */
+            background-image: 
+                linear-gradient(180deg, #150824 0%, #4a2574 100%), 
+                url('assets/stars_background.png');
+            background-position: center;
+            background-size: cover;
+            /* Blend mode nội bộ để ảnh sao hiện trên gradient, không bị lỗi artifacts tím */
+            background-blend-mode: screen; 
             z-index: 0; 
             opacity: 0.8;
             pointer-events: none;
@@ -40,11 +43,9 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             z-index: 5;
             transition: opacity 0.8s ease-in-out;
+            /* Bỏ Flexbox căn giữa để đổi sang Absolute Centering */
         }
 
         /* 1. MÂY PHẢI (LỚP 10) - Ép sát đáy tuyệt đối */
@@ -72,9 +73,12 @@
             transform: rotate(10deg);
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20) */
+        /* 3. TỜ GIẤY CỔ (LỚP 20): CĂN GIỮA BẤT TỬ, CHỐNG LỆCH KHI ZOOM OUT */
         .paper-wrapper {
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Căn giữa hoàn hảo, bất chấp zoom-out */
             width: 500px; 
             height: 680px; 
             background: url('assets/paper.png') no-repeat center center;
@@ -148,7 +152,7 @@
             z-index: 40;
         }
 
-        /* KHUNG NÚT BẤM: TỰ ĐỘNG ĐIỀU CHỈNH KÍCH THƯỚC */
+        /* KHUNG NÚT BẤM: PHỤC HỒI CHỮ VÀ BORDER.PNG THEO TURN 4.2 */
         .submit-btn {
             background: url('assets/border.png') no-repeat center center;
             background-size: 100% 100%;
@@ -161,7 +165,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 220px;
+            width: max-content; /* Tự co giãn theo chữ, hông bị nuốt chữ */
+            min-width: 200px;
             height: 55px;
             white-space: nowrap; /* Ngăn chặn ngắt dòng văn bản */
             box-sizing: border-box;
@@ -169,7 +174,7 @@
 
         .witch-character {
             width: 75px;
-            margin-left: -20px; /* Thu hẹp khoảng cách với nút */
+            margin-left: -15px;
             transition: transform 1s ease;
         }
 
@@ -236,10 +241,12 @@
             width: 60px;
             z-index: 6;
             opacity: 0;
+            /* Khởi tạo translate để fix lỗi zoom cảnh 2 */
+            transform: translate(-50%, -50%) scale(1.5);
         }
         
         .envelope-fly-animation {
-            animation: flyIntoGalaxy 5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+            animation: flyIntoGalaxy 3.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
         }
 
         @keyframes rotateSpiral {
@@ -263,21 +270,21 @@
             pointer-events: none !important;
         }
         
-        /* QUẢN LÝ RESPONSIVE THIẾT BỊ DI ĐỘNG (LƯỢC BỎ TĨNH VẬT) */
+        /* QUẢN LÝ RESPONSIVE THIẾT BỊ DI ĐỘNG THEO YÊU CẦU */
         @media screen and (max-width: 768px) {
-            /* Vô hiệu hóa lớp trang trí để ưu tiên không gian hiển thị */
+            /* Vô hiệu hóa lớp trang trí mobile theo design Turn 4.1 */
             .cloud-left, .cloud-right, .piano, .cauldron {
                 display: none !important;
             }
             /* Giảm kích thước khối nội dung trung tâm */
             .paper-wrapper { 
-                transform: scale(0.85); 
+                transform: translate(-50%, -50%) scale(0.85); /* Căn giữa bất tử + thu nhỏ */
             }
         }
 
         @media screen and (max-width: 480px) {
             .paper-wrapper { 
-                transform: scale(0.7); 
+                transform: translate(-50%, -50%) scale(0.7); /* Căn giữa bất tử + thu nhỏ */
             }
         }
     </style>
@@ -331,7 +338,7 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 
-                // Kích hoạt hiệu ứng mờ dần đối với lớp nền sao
+                // Đồng bộ hiệu ứng cảnh 2: Cho nền sao bay màu
                 document.getElementById('stars-layer').style.opacity = '0';
                 
                 document.getElementById('scene-2').style.opacity = '1';
@@ -343,7 +350,7 @@
                 setTimeout(() => {
                     alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
                     location.reload(); 
-                }, 4500); // Tăng thời gian chờ tương ứng với animation 5s
+                }, 3500); // Tăng thời gian chờ cho khớp animation lá thư
             }, 600);
         }
     </script>
