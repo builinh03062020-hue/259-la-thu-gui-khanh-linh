@@ -5,32 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gửi Thư Đến Những Vì Sao</title>
     <style>
-        /* THIẾT LẬP CƠ SỞ */
-        body {
+        /* THIẾT LẬP CƠ SỞ VÀ KHẮC PHỤC LỖI VIEWPORT SAFARI */
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh; /* Tương thích hoàn toàn với iOS Safari */
+            background-color: #4a2574; /* Màu fallback khử lỗi dải tím đáy màn hình */
+            background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
             overflow: hidden;
-            background: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            height: 100vh;
             color: #ffffff;
         }
 
-        /* LỚP NỀN SAO ĐỒNG BỘ HIỆU ỨNG FADE-OUT */
+        /* LỚP NỀN SAO ĐỘC LẬP CHỐNG LỖI BLENDING */
         .stars-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: url('assets/stars_background.png') center/cover;
             mix-blend-mode: screen; 
-            -webkit-mix-blend-mode: screen;
             z-index: 0; 
             opacity: 0.8;
             pointer-events: none;
-            transition: opacity 1s ease-in-out; /* Hỗ trợ hiệu ứng mờ dần */
+            transition: opacity 0.8s ease-in-out;
         }
 
         /* KHUNG CẢNH 1 */
@@ -39,13 +38,13 @@
             width: 100%;
             height: 100%;
             z-index: 5;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 0.8s ease-in-out;
         }
 
-        /* 1. MÂY PHẢI (LỚP 10) - Ép sát đáy tuyệt đối nhe cha bà! */
+        /* 1. MÂY PHẢI (LỚP 10) */
         .cloud-right {
             position: absolute;
-            bottom: -15vh; /* Ép sâu xuống viền nhe cha bà! */
+            bottom: -15vh; 
             right: -5vw;
             width: 55vw;
             min-width: 450px;
@@ -67,12 +66,12 @@
             transform: rotate(10deg);
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI, CHỐNG LỆCH */
+        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI */
         .paper-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Căn giữa hoàn hảo, bất chấp zoom-out */
+            transform: translate(-50%, -50%);
             width: 500px; 
             height: 680px; 
             background: url('assets/paper.png') no-repeat center center;
@@ -86,7 +85,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* CỤM SAO TRÊN GIẤY */
         .paper-wrapper::after {
             content: '';
             position: absolute;
@@ -146,29 +144,27 @@
             z-index: 40;
         }
 
-        /* KHUNG NÚT BẤM: TỰ ĐỘNG ĐIỀU CHỈNH KÍCH THƯỚC ĐỂ KHÔNG MẤT CHỮ */
         .submit-btn {
             background: url('assets/border.png') no-repeat center center;
             background-size: 100% 100%;
             border: none;
-            box-shadow: none;
             color: #1a1a1a;
-            padding: 12px 55px 12px 15px; /* Giữ lề phải để né nhân vật đồ họa */
+            padding: 12px 55px 12px 15px; 
             font-weight: bold;
             font-size: 17px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: max-content; /* Tự co giãn theo chữ, hông bị nuốt chữ */
-            min-width: 220px;
+            width: max-content; 
+            min-width: 200px;
             height: 55px;
-            white-space: nowrap; /* Ngăn chặn ngắt dòng văn bản */
+            white-space: nowrap; 
             box-sizing: border-box;
         }
 
         .witch-character {
             width: 75px;
-            margin-left: -20px; /* Thu hẹp khoảng cách với nút */
+            margin-left: -15px;
             transition: transform 1s ease;
         }
 
@@ -184,10 +180,10 @@
             transform: rotate(-8deg);
         }
 
-        /* 5. MÂY TRÁI (LỚP 30) - Ép sát đáy tuyệt đối */
+        /* 5. MÂY TRÁI (LỚP 30) */
         .cloud-left {
             position: absolute;
-            bottom: -15vh; /* Ép sâu xuống viền nhe cha bà! */
+            bottom: -15vh; 
             left: -5vw;
             width: 55vw;
             min-width: 450px;
@@ -219,7 +215,6 @@
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
-            /* Tối ưu hóa điểm ảnh (Pixel-art optimization) */
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
@@ -227,7 +222,6 @@
             image-rendering: pixelated;
         }
 
-        /* CỐ ĐỊNH TÂM LÁ THƯ TẠI TRỤC GIỮA */
         .flying-envelope {
             position: absolute;
             top: 50%;
@@ -235,7 +229,6 @@
             width: 60px;
             z-index: 6;
             opacity: 0;
-            /* Khởi tạo translate để fix lỗi zoom cảnh 2 */
             transform: translate(-50%, -50%) scale(1.5);
         }
         
@@ -264,23 +257,17 @@
             pointer-events: none !important;
         }
         
-        /* QUẢN LÝ RESPONSIVE THIẾT BỊ DI ĐỘNG (LƯỢC BỎ TĨNH VẬT) THEO YÊU CẦU */
+        /* RESPONSIVE DI ĐỘNG: TỐI ƯU HÓA TUYỆT ĐỐI CHO SAFARI */
         @media screen and (max-width: 768px) {
-            /* Vô hiệu hóa lớp trang trí nhe cha bà! */
             .cloud-left, .cloud-right, .piano, .cauldron {
                 display: none !important;
             }
-            /* Giảm kích thước khối nội dung trung tâm + TỰ ĐỘNG ÉP GIẤY VỪA MÀN HÌNH CHỐNG BÉO PHÌ */
             .paper-wrapper { 
-                /* Giữ nguyên tọa độ tuyệt đối, bổ sung biến đổi thu nhỏ theo % màn hình nhe cha bà! */
-                transform: translate(-50%, -50%) scale(min(0.85, calc(95vw / 500))); /* Tự động ép vừa 95% bề ngang điện thoại nhe cha bà! */
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            .paper-wrapper { 
-                /* Điện thoại nhỏ ép vừa 90% bề ngang nhe cha bà! */
-                transform: translate(-50%, -50%) scale(min(0.8, calc(90vw / 500))); 
+                /* Loại bỏ bóng đổ để khử nhiễu đồ họa trên iOS */
+                box-shadow: none !important;
+                filter: none !important;
+                /* Thuật toán tính tỷ lệ tự động: 500px thu nhỏ bằng đúng 90% chiều rộng thiết bị */
+                transform: translate(-50%, -50%) scale(calc(90vw / 500)); 
             }
         }
     </style>
@@ -334,7 +321,6 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 
-                // Đồng bộ hóa hiệu ứng cảnh 2: Cho nền sao bay màu nhe cha bà!
                 document.getElementById('stars-layer').style.opacity = '0';
                 
                 document.getElementById('scene-2').style.opacity = '1';
@@ -346,7 +332,7 @@
                 setTimeout(() => {
                     alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
                     location.reload(); 
-                }, 3500); // Tăng thời gian chờ cho khớp animation lá thư nhe cha bà!
+                }, 3500); 
             }, 600);
         }
     </script>
