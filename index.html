@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gửi Thư Đến Những Vì Sao</title>
     <style>
-        /* THIẾT LẬP CƠ SỞ VÀ KHÓA TƯƠNG TÁC VIEWPORT CHỐNG LỆCH */
+        /* THIẾT LẬP CƠ SỞ VÀ KHÓA TƯƠNG TÁC VIEWPORT */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            height: 100dvh; /* Tương thích hoàn toàn với iOS Safari */
+            height: 100dvh; 
             overflow: hidden;
             background-color: #150824; 
             touch-action: none; 
@@ -20,7 +20,7 @@
             color: #ffffff;
         }
 
-        /* LỚP NỀN SAO ĐỘC LẬP TỐI ƯU HÓA KẾT XUẤT GRADIENT */
+        /* LỚP NỀN SAO ĐỘC LẬP TỐI ƯU HÓA KẾT XUẤT */
         .stars-layer {
             position: fixed;
             top: 0;
@@ -28,7 +28,6 @@
             width: 100vw;
             height: 100vh;
             height: 100dvh;
-            /* Gộp Gradient và Hình ảnh để tối ưu hóa kết xuất */
             background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%), url('assets/stars_background.png');
             background-position: center center;
             background-size: cover, cover;
@@ -46,7 +45,7 @@
             transition: opacity 1s ease-in-out;
         }
 
-        /* 1. MÂY PHẢI (LỚP 10) */
+        /* TĨNH VẬT TRANG TRÍ */
         .cloud-right {
             position: absolute;
             bottom: -125px; 
@@ -59,7 +58,6 @@
             pointer-events: none;
         }
 
-        /* 2. PIANO (LỚP 15) */
         .piano {
             position: absolute;
             bottom: 20px; 
@@ -71,7 +69,29 @@
             transform: rotate(10deg);
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI */
+        .cauldron {
+            position: absolute;
+            bottom: 10px; 
+            left: 55px;
+            width: 300px;
+            z-index: 25;
+            filter: drop-shadow(0 0 25px #d8b4fe); 
+            pointer-events: none;
+            transform: rotate(-8deg);
+        }
+
+        .cloud-left {
+            position: absolute;
+            bottom: -125px; 
+            left: -50px;
+            width: 55vw;
+            min-width: 450px;
+            opacity: 0.8;
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        /* TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI */
         .paper-wrapper {
             position: absolute;
             top: 50%;
@@ -169,31 +189,7 @@
             transition: transform 1s ease;
         }
 
-        /* 4. VẠC MA THUẬT (LỚP 25) */
-        .cauldron {
-            position: absolute;
-            bottom: 10px; 
-            left: 55px;
-            width: 300px;
-            z-index: 25;
-            filter: drop-shadow(0 0 25px #d8b4fe); 
-            pointer-events: none;
-            transform: rotate(-8deg);
-        }
-
-        /* 5. MÂY TRÁI (LỚP 30) */
-        .cloud-left {
-            position: absolute;
-            bottom: -125px; 
-            left: -50px;
-            width: 55vw;
-            min-width: 450px;
-            opacity: 0.8;
-            z-index: 30;
-            pointer-events: none;
-        }
-
-        /* HIỆU ỨNG CẢNH 2 */
+        /* HIỆU ỨNG CẢNH 2 - VÒNG XOÁY VÀ PHONG THƯ */
         #scene-2 {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -229,7 +225,6 @@
             width: 60px;
             z-index: 6;
             opacity: 0;
-            /* Khởi tạo tỷ lệ biến đổi cho Keyframes xoắn ốc */
             transform: translate(-50%, -50%) scale(1.5);
         }
         
@@ -242,7 +237,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* THUẬT TOÁN ĐIỀU HƯỚNG QUỸ ĐẠO XOẮN ỐC ĐỒNG TÂM */
         @keyframes flyIntoGalaxy {
             0% {
                 transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5);
@@ -259,21 +253,31 @@
             pointer-events: none !important;
         }
         
-        /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE TRÊN THIẾT BỊ DI ĐỘNG */
-        @media screen and (max-width: 768px) {
-            /* Lược bỏ tĩnh vật mobile theo design Turn 4.1 */
-            .cloud-left, .cloud-right, .piano, .cauldron {
-                display: none !important;
-            }
-            /* Cố định tỷ lệ giấy luôn chiếm 70% chiều rộng thiết bị hiện tại, thu nhỏ trực tiếp từ tâm */
+        /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE TRÊN THIẾT BỊ DI ĐỘNG BẰNG GIÁ TRỊ VÔ HƯỚNG CỐ ĐỊNH */
+        @media screen and (max-width: 900px) {
+            .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; }
             .paper-wrapper { 
-                /* Khử bóng đổ để tối ưu hiệu suất Mobile WebKit */
-                box-shadow: none !important;
-                filter: none !important;
-                /* Giữ nguyên tọa độ tuyệt đối, thực hiện thu nhỏ tại tâm khối nội dung đạt 70% vw */
-                transform: translate(-50%, -50%) scale(calc(70vw / 500)); 
+                box-shadow: none !important; filter: none !important;
+                transform: translate(-50%, -50%) scale(0.8); 
                 transform-origin: center center;
             }
+        }
+
+        @media screen and (max-width: 768px) {
+            .paper-wrapper { transform: translate(-50%, -50%) scale(0.7); }
+        }
+
+        @media screen and (max-width: 480px) {
+            .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); }
+        }
+
+        @media screen and (max-width: 390px) {
+            /* Tương thích cho dòng iPhone màn hình nhỏ (ví dụ: iPhone 12/13/14 mini, SE) */
+            .paper-wrapper { transform: translate(-50%, -50%) scale(0.6); }
+        }
+        
+        @media screen and (max-width: 350px) {
+            .paper-wrapper { transform: translate(-50%, -50%) scale(0.55); }
         }
     </style>
 </head>
@@ -326,7 +330,6 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 
-                // Đồng bộ hiệu ứng cảnh 2: Cho nền sao bay màu
                 document.getElementById('stars-layer').style.opacity = '0';
                 
                 document.getElementById('scene-2').style.opacity = '1';
@@ -338,7 +341,7 @@
                 setTimeout(() => {
                     alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
                     location.reload(); 
-                }, 4500); 
+                }, 4000); 
             }, 600);
         }
     </script>
