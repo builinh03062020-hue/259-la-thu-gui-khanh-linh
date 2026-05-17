@@ -11,7 +11,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            height: 100dvh; 
+            height: 100dvh; /* Tương thích hoàn toàn với iOS Safari */
             overflow: hidden;
             background-color: #150824; 
             touch-action: none; 
@@ -20,7 +20,7 @@
             color: #ffffff;
         }
 
-        /* LỚP NỀN ĐỘC LẬP TỐI ƯU HÓA KẾT XUẤT GRADIENT VÀ SAO TĨNH */
+        /* LỚP NỀN SAO ĐỘC LẬP TỐI ƯU HÓA KẾT XUẤT GRADIENT */
         .stars-layer {
             position: fixed;
             top: 0;
@@ -28,6 +28,7 @@
             width: 100vw;
             height: 100vh;
             height: 100dvh;
+            /* Gộp Gradient và Hình ảnh để tối ưu hóa kết xuất */
             background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%), url('assets/stars_background.png');
             background-position: center center;
             background-size: cover, cover;
@@ -75,7 +76,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); 
+            transform: translate(-50%, -50%); /* Neo trọng tâm bất biến */
             width: 500px; 
             height: 680px; 
             background: url('assets/paper.png') no-repeat center center;
@@ -85,7 +86,7 @@
             z-index: 20; 
             display: flex;
             flex-direction: column;
-            box-shadow: none !important; /* Loại bỏ bóng đổ tránh lỗi phần cứng hiển thị */
+            box-shadow: 0 0 40px rgba(0,0,0,0.6);
             transition: transform 0.3s ease;
         }
 
@@ -214,7 +215,6 @@
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
-            /* Tối ưu hóa điểm ảnh xử lý Pixel-art */
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
@@ -222,7 +222,6 @@
             image-rendering: pixelated;
         }
 
-        /* NEO PHONG THƯ TẠI TÂM KHUNG HÌNH TRƯỚC KHI KÍCH HOẠT HOẠT ẢNH */
         .flying-envelope {
             position: absolute;
             top: 50%;
@@ -230,6 +229,7 @@
             width: 60px;
             z-index: 6;
             opacity: 0;
+            /* Khởi tạo tỷ lệ biến đổi cho Keyframes xoắn ốc */
             transform: translate(-50%, -50%) scale(1.5);
         }
         
@@ -261,11 +261,16 @@
         
         /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE TRÊN THIẾT BỊ DI ĐỘNG */
         @media screen and (max-width: 768px) {
+            /* Lược bỏ tĩnh vật mobile theo design Turn 4.1 */
             .cloud-left, .cloud-right, .piano, .cauldron {
                 display: none !important;
             }
-            /* Ép kích thước biểu mẫu đạt chuẩn xác 70% bề ngang không gian hiển thị */
+            /* Cố định tỷ lệ giấy luôn chiếm 70% chiều rộng thiết bị hiện tại, thu nhỏ trực tiếp từ tâm */
             .paper-wrapper { 
+                /* Khử bóng đổ để tối ưu hiệu suất Mobile WebKit */
+                box-shadow: none !important;
+                filter: none !important;
+                /* Giữ nguyên tọa độ tuyệt đối, thực hiện thu nhỏ tại tâm khối nội dung đạt 70% vw */
                 transform: translate(-50%, -50%) scale(calc(70vw / 500)); 
                 transform-origin: center center;
             }
@@ -321,6 +326,7 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 
+                // Đồng bộ hiệu ứng cảnh 2: Cho nền sao bay màu
                 document.getElementById('stars-layer').style.opacity = '0';
                 
                 document.getElementById('scene-2').style.opacity = '1';
@@ -332,7 +338,7 @@
                 setTimeout(() => {
                     alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
                     location.reload(); 
-                }, 4000); // Điều chỉnh thời gian chờ tương thích với thời lượng hoạt ảnh xoắn ốc
+                }, 4500); 
             }, 600);
         }
     </script>
