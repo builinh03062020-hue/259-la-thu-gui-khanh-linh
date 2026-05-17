@@ -5,42 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gửi Thư Đến Những Vì Sao</title>
     <style>
-        /* THIẾT LẬP CƠ SỞ VÀ KHẮC PHỤC LỖI VIEWPORT SAFARI */
+        /* THIẾT LẬP CƠ SỞ VÀ KHÓA TƯƠNG TÁC VIEWPORT CHỐNG LỆCH */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            height: 100dvh; /* Tương thích hoàn toàn với iOS Safari */
-            background-color: #4a2574; /* Màu dự phòng cho đáy màn hình */
-            background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%); 
+            height: 100dvh; 
             overflow: hidden;
+            background-color: #150824; 
+            touch-action: none; 
+            overscroll-behavior: none; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
             color: #ffffff;
         }
 
-        /* LỚP NỀN SAO TĨNH */
+        /* LỚP NỀN ĐỘC LẬP (ĐÃ ĐƯỢC TÁCH KHỎI SCENE-1 ĐỂ CHỐNG LỖI HIỂN THỊ) */
         .stars-layer {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
             height: 100dvh;
-            background: url('assets/stars_background.png') center/cover;
-            mix-blend-mode: screen; 
+            /* Gộp Gradient và Hình ảnh để tối ưu hóa kết xuất */
+            background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%), url('assets/stars_background.png');
+            background-position: center center;
+            background-size: cover, cover;
+            background-blend-mode: screen; 
             z-index: 0; 
-            opacity: 0.8;
             pointer-events: none;
             transition: opacity 1s ease-in-out;
         }
 
-        /* KHUNG CẢNH 1 */
+        /* KHUNG CẢNH 1 - CHỈ ĐÓNG VAI TRÒ CONTAINER CHỨA TĨNH VẬT */
         #scene-1 {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             z-index: 5;
             transition: opacity 1s ease-in-out;
         }
@@ -70,12 +71,12 @@
             transform: rotate(10deg);
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI */
+        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI CHỐNG Messenger LÀM LỆCH */
         .paper-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); /* Neo trọng tâm bất biến */
             width: 500px; 
             height: 680px; 
             background: url('assets/paper.png') no-repeat center center;
@@ -85,7 +86,8 @@
             z-index: 20; 
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            /* Đã loại bỏ hoàn toàn box-shadow theo yêu cầu */
+            box-shadow: none !important;
             transition: transform 0.3s ease;
         }
 
@@ -154,7 +156,7 @@
             border: none;
             box-shadow: none;
             color: #1a1a1a;
-            padding: 12px 55px 12px 15px; 
+            padding: 12px 55px 12px 15px;
             font-weight: bold;
             font-size: 14px;
             display: flex;
@@ -194,9 +196,8 @@
 
         /* HIỆU ỨNG CẢNH 2 */
         #scene-2 {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             opacity: 0;
             pointer-events: none;
             display: flex;
@@ -215,7 +216,7 @@
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
-            /* Khử mờ (Anti-aliasing) trên hình ảnh dạng Pixel-art */
+            /* Tối ưu hóa điểm ảnh (Pixel-art optimization) */
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
@@ -225,12 +226,11 @@
 
         .flying-envelope {
             position: absolute;
-            top: 50%;
-            left: 50%;
             width: 60px;
             z-index: 6;
             opacity: 0;
-            transform: translate(-50%, -50%) scale(1.5);
+            /* Khởi tạo translate để fix lỗi zoom cảnh 2 */
+            transform: scale(1.5);
         }
         
         .envelope-fly-animation {
@@ -244,11 +244,11 @@
 
         @keyframes flyIntoGalaxy {
             0% {
-                transform: translate(-50%, -50%) rotate(0deg) translateX(300px) rotate(0deg) scale(1.5);
+                transform: translateX(300px) rotate(0deg) scale(1.5);
                 opacity: 1;
             }
             100% {
-                transform: translate(-50%, -50%) rotate(720deg) translateX(0px) rotate(-720deg) scale(0);
+                transform: translateX(0px) rotate(-720deg) scale(0);
                 opacity: 0;
             }
         }
@@ -260,27 +260,21 @@
         
         /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE TRÊN THIẾT BỊ DI ĐỘNG */
         @media screen and (max-width: 768px) {
-            /* Lược bỏ các phần tử trang trí để tối ưu không gian */
+            /* Lược bỏ tĩnh vật mobile theo design Turn 4.1 */
             .cloud-left, .cloud-right, .piano, .cauldron {
                 display: none !important;
             }
-            /* Cố định tỷ lệ biểu mẫu đạt 80% không gian hiển thị dọc */
+            /* Cố định tỷ lệ giấy luôn chiếm 70% chiều rộng thiết bị hiện tại, thu nhỏ trực tiếp từ tâm */
             .paper-wrapper { 
-                transform: translate(-50%, -50%) scale(calc(80vw / 500)); 
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            /* Tùy chỉnh chi tiết cho thiết bị màn hình rất nhỏ nếu cần thiết */
-            .paper-wrapper { 
-                transform: translate(-50%, -50%) scale(calc(80vw / 500)); 
+                /* Giữ nguyên tọa độ tuyệt đối, thực hiện thu nhỏ tại tâm khối nội dung */
+                transform: translate(-50%, -50%) scale(calc(70vw / 500)); 
+                transform-origin: center center;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Khai báo lớp nền sao với thuộc tính đồng bộ sự kiện -->
     <div class="stars-layer" id="stars-layer"></div>
 
     <div id="scene-1">
@@ -328,7 +322,7 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 
-                // Đồng bộ hóa trạng thái vô hiệu hóa nền sao
+                // Đồng bộ hiệu ứng cảnh 2: Cho nền sao bay màu
                 document.getElementById('stars-layer').style.opacity = '0';
                 
                 document.getElementById('scene-2').style.opacity = '1';
@@ -340,7 +334,7 @@
                 setTimeout(() => {
                     alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
                     location.reload(); 
-                }, 4500); // Điều chỉnh độ trễ tương thích với thời lượng hoạt ảnh
+                }, 4500); // Tăng thời gian chờ cho khớp animation lá thư
             }, 600);
         }
     </script>
