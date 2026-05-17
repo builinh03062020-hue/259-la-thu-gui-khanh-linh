@@ -20,7 +20,7 @@
             color: #ffffff;
         }
 
-        /* LỚP NỀN ĐỘC LẬP (ĐÃ ĐƯỢC TÁCH KHỎI SCENE-1 ĐỂ CHỐNG LỖI HIỂN THỊ) */
+        /* LỚP NỀN ĐỘC LẬP TỐI ƯU HÓA KẾT XUẤT GRADIENT VÀ SAO TĨNH */
         .stars-layer {
             position: fixed;
             top: 0;
@@ -28,7 +28,6 @@
             width: 100vw;
             height: 100vh;
             height: 100dvh;
-            /* Gộp Gradient và Hình ảnh để tối ưu hóa kết xuất */
             background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%), url('assets/stars_background.png');
             background-position: center center;
             background-size: cover, cover;
@@ -38,7 +37,7 @@
             transition: opacity 1s ease-in-out;
         }
 
-        /* KHUNG CẢNH 1 - CHỈ ĐÓNG VAI TRÒ CONTAINER CHỨA TĨNH VẬT */
+        /* KHUNG CẢNH 1 */
         #scene-1 {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -71,12 +70,12 @@
             transform: rotate(10deg);
         }
 
-        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI CHỐNG Messenger LÀM LỆCH */
+        /* 3. TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI */
         .paper-wrapper {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); /* Neo trọng tâm bất biến */
+            transform: translate(-50%, -50%); 
             width: 500px; 
             height: 680px; 
             background: url('assets/paper.png') no-repeat center center;
@@ -86,8 +85,7 @@
             z-index: 20; 
             display: flex;
             flex-direction: column;
-            /* Đã loại bỏ hoàn toàn box-shadow theo yêu cầu */
-            box-shadow: none !important;
+            box-shadow: none !important; /* Loại bỏ bóng đổ tránh lỗi phần cứng hiển thị */
             transition: transform 0.3s ease;
         }
 
@@ -216,7 +214,7 @@
             background: url('assets/spiral.png') no-repeat center center;
             background-size: contain;
             animation: rotateSpiral 30s linear infinite;
-            /* Tối ưu hóa điểm ảnh (Pixel-art optimization) */
+            /* Tối ưu hóa điểm ảnh xử lý Pixel-art */
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
@@ -224,17 +222,19 @@
             image-rendering: pixelated;
         }
 
+        /* NEO PHONG THƯ TẠI TÂM KHUNG HÌNH TRƯỚC KHI KÍCH HOẠT HOẠT ẢNH */
         .flying-envelope {
             position: absolute;
+            top: 50%;
+            left: 50%;
             width: 60px;
             z-index: 6;
             opacity: 0;
-            /* Khởi tạo translate để fix lỗi zoom cảnh 2 */
-            transform: scale(1.5);
+            transform: translate(-50%, -50%) scale(1.5);
         }
         
         .envelope-fly-animation {
-            animation: flyIntoGalaxy 5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+            animation: flyIntoGalaxy 4.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
         }
 
         @keyframes rotateSpiral {
@@ -242,13 +242,14 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* THUẬT TOÁN ĐIỀU HƯỚNG QUỸ ĐẠO XOẮN ỐC ĐỒNG TÂM */
         @keyframes flyIntoGalaxy {
             0% {
-                transform: translateX(300px) rotate(0deg) scale(1.5);
+                transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5);
                 opacity: 1;
             }
             100% {
-                transform: translateX(0px) rotate(-720deg) scale(0);
+                transform: translate(-50%, -50%) rotate(1080deg) translateX(0px) rotate(-1080deg) scale(0);
                 opacity: 0;
             }
         }
@@ -260,13 +261,11 @@
         
         /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE TRÊN THIẾT BỊ DI ĐỘNG */
         @media screen and (max-width: 768px) {
-            /* Lược bỏ tĩnh vật mobile theo design Turn 4.1 */
             .cloud-left, .cloud-right, .piano, .cauldron {
                 display: none !important;
             }
-            /* Cố định tỷ lệ giấy luôn chiếm 70% chiều rộng thiết bị hiện tại, thu nhỏ trực tiếp từ tâm */
+            /* Ép kích thước biểu mẫu đạt chuẩn xác 70% bề ngang không gian hiển thị */
             .paper-wrapper { 
-                /* Giữ nguyên tọa độ tuyệt đối, thực hiện thu nhỏ tại tâm khối nội dung */
                 transform: translate(-50%, -50%) scale(calc(70vw / 500)); 
                 transform-origin: center center;
             }
@@ -322,7 +321,6 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 
-                // Đồng bộ hiệu ứng cảnh 2: Cho nền sao bay màu
                 document.getElementById('stars-layer').style.opacity = '0';
                 
                 document.getElementById('scene-2').style.opacity = '1';
@@ -334,7 +332,7 @@
                 setTimeout(() => {
                     alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
                     location.reload(); 
-                }, 4500); // Tăng thời gian chờ cho khớp animation lá thư
+                }, 4000); // Điều chỉnh thời gian chờ tương thích với thời lượng hoạt ảnh xoắn ốc
             }, 600);
         }
     </script>
