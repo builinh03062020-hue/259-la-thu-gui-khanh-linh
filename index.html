@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gửi Thư Đến Những Vì Sao</title>
+    <!-- TÍCH HỢP GOOGLE FONTS: CORMORANT GARAMOND -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
     <style>
         /* THIẾT LẬP CƠ SỞ VÀ KHÓA TƯƠNG TÁC VIEWPORT */
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
             overflow: hidden; background-color: #150824; touch-action: none; 
-            overscroll-behavior: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overscroll-behavior: none; 
+            font-family: 'Cormorant Garamond', serif; /* Cập nhật Font toàn cục */
             color: #ffffff;
         }
 
@@ -47,14 +53,23 @@
 
         /* CĂN CHỈNH VĂN BẢN VÀ BIỂU MẪU */
         .input-group { display: flex; align-items: center; margin-bottom: 6px; }
-        .input-group label { color: #3b2818; font-weight: bold; font-size: 19px; margin-right: 8px; }
-        .paper-input, .paper-textarea { background: transparent; border: none; outline: none; font-family: inherit; font-size: 18px; color: #3b2818; width: 100%; }
+        .input-group label { color: #3b2818; font-weight: 700; font-size: 22px; margin-right: 8px; }
+        .paper-input, .paper-textarea { 
+            background: transparent; border: none; outline: none; 
+            font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; 
+            color: #3b2818; width: 100%; 
+        }
         .paper-input { border-bottom: 2.5px dashed #8b6b4a; }
-        .paper-textarea { resize: none; flex-grow: 1; margin-top: 40px; line-height: 48px; }
+        .paper-textarea { resize: none; flex-grow: 1; margin-top: 40px; line-height: 40px; }
 
         /* NÚT BẤM VÀ PHÙ THỦY */
         .submit-section { position: absolute; bottom: 70px; right: 5px; display: flex; align-items: center; cursor: pointer; z-index: 40; }
-        .submit-btn { background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; font-weight: bold; font-size: 14px; display: flex; align-items: center; white-space: nowrap; }
+        .submit-btn { 
+            background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; 
+            border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; 
+            font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 16px; 
+            display: flex; align-items: center; white-space: nowrap; 
+        }
         .witch-character { width: 95px; margin-left: -23px; transition: transform 1s ease; }
 
         /* HIỆU ỨNG CẢNH 2 */
@@ -66,34 +81,73 @@
         @keyframes flyIntoGalaxy { 0% { transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5); opacity: 1; } 100% { transform: translate(-50%, -50%) rotate(1080deg) translateX(0px) rotate(-1080deg) scale(0); opacity: 0; } }
 
         /* CẢNH 3: HÒM THƯ VÀ PHÂN TÁN */
-        #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease-in-out; z-index: 110; }
-        .mailbox-container { position: relative; transform: scale(0); transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; flex-direction: column; align-items: center; z-index: 115; }
-        .mailbox-img { width: 150px; image-rendering: pixelated; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
-        .letter-counter { font-family: monospace; font-size: 20px; font-weight: bold; color: #facc15; background: rgba(46, 16, 101, 0.8); padding: 5px 15px; border-radius: 20px; border: 2px solid #d8b4fe; margin-bottom: -15px; z-index: 2; opacity: 0; transition: opacity 0.5s ease; }
-        .spilled-letter { position: absolute; width: 60px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.2s ease, filter 0.2s ease; image-rendering: pixelated; }
-        .spilled-letter:hover { transform: scale(1.1) !important; filter: drop-shadow(0 0 10px #facc15); }
-        @keyframes spillOut { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 100% { opacity: 1; } }
+        #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; z-index: 110; }
+        
+        .mailbox-container { 
+            position: relative; transform: scale(0); 
+            /* Chuyển động mượt mà và chậm hơn */
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); 
+            display: flex; flex-direction: column; align-items: center; z-index: 115; 
+        }
+        
+        .mailbox-img { 
+            width: 150px; image-rendering: pixelated; 
+            /* Buff hào quang phát sáng để không bị chìm */
+            filter: drop-shadow(0 0 30px rgba(216, 180, 254, 0.8)) drop-shadow(0 0 60px rgba(147, 51, 234, 0.6)); 
+        }
+        
+        .letter-counter { 
+            font-size: 24px; font-weight: 700; color: #ffffff; 
+            background: rgba(46, 16, 101, 0.6); backdrop-filter: blur(4px);
+            padding: 8px 25px; border-radius: 30px; border: 1px solid rgba(216, 180, 254, 0.5); 
+            margin-bottom: -15px; z-index: 2; opacity: 0; transition: opacity 1s ease; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            letter-spacing: 1px;
+        }
+
+        .spilled-letter { 
+            position: absolute; width: 60px; cursor: pointer; opacity: 0; z-index: 111; 
+            transition: transform 0.4s ease, filter 0.4s ease; /* Hover mượt hơn */
+            image-rendering: pixelated; 
+        }
+        .spilled-letter:hover { transform: scale(1.15) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.8)); z-index: 112; }
+        
+        /* Hiệu ứng nổ thư chậm hơn */
+        @keyframes spillOut { 
+            0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
+            40% { opacity: 1; } 
+            100% { opacity: 1; } 
+        }
 
         /* MODAL BẢO MẬT & BẺ KHÓA */
         #password-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 200; }
-        .security-box { display: flex; flex-direction: column; align-items: center; background: rgba(46, 16, 101, 0.95); border: 3px dashed #d8b4fe; padding: 30px; border-radius: 15px; box-shadow: 0 0 30px rgba(0,0,0,0.8); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .security-box { display: flex; flex-direction: column; align-items: center; background: rgba(46, 16, 101, 0.95); border: 3px dashed #d8b4fe; padding: 30px; border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .lock-animation-area { position: relative; width: 120px; height: 120px; margin-bottom: 20px; }
         .lock-img { width: 100px; position: absolute; left: 10px; bottom: 0; image-rendering: pixelated; }
         .key-img { width: 80px; position: absolute; right: -80px; top: 15px; opacity: 0; image-rendering: pixelated; transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .key-insert { right: -15px; opacity: 1; transform: rotateZ(0deg); }
         .key-turn { right: -15px; opacity: 1; transform: rotateZ(-90deg); }
-        .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-size: 20px; text-align: center; width: 180px; outline: none; font-family: monospace; letter-spacing: 3px; margin-bottom: 15px; }
-        .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 10px 25px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 16px; }
+        .pass-input { 
+            background: transparent; border: none; border-bottom: 2px solid #facc15; 
+            color: #facc15; font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 700; 
+            text-align: center; width: 180px; outline: none; letter-spacing: 3px; margin-bottom: 15px; 
+        }
+        .pass-submit-btn { 
+            background: #d8b4fe; color: #150824; border: none; padding: 10px 30px; 
+            font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; 
+            cursor: pointer; font-size: 18px; letter-spacing: 1px;
+        }
 
         /* GIAO DIỆN CUỘN THÁNH CHỈ */
-        #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; z-index: 250; }
+        #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; z-index: 250; }
         .scroll-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 450px; }
         .scroll-top, .scroll-bottom { width: 100%; display: block; image-rendering: pixelated; z-index: 2; }
         .scroll-middle { width: 92%; background: url('assets/scroll-bg.png') repeat-y top center; background-size: 100% auto; height: 0px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; transition: height 1.5s cubic-bezier(0.25, 1, 0.5, 1); position: relative; margin-top: -2px; margin-bottom: -2px; z-index: 1; }
         .scroll-middle.open { height: 60vh; max-height: 600px; padding: 30px 20px; }
-        .scroll-content-text { color: #3b2818; font-family: serif; font-size: 18px; line-height: 1.6; text-align: center; opacity: 0; transition: opacity 0.8s ease 1s; }
+        .scroll-content-text { color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; line-height: 1.6; text-align: center; opacity: 0; transition: opacity 0.8s ease 1s; }
         .scroll-middle.open .scroll-content-text { opacity: 1; }
-        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); color: #fff; border: 2px solid #fff; border-radius: 50%; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 260; }
+        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 260; transition: background 0.3s ease; }
+        .close-scroll-btn:hover { background: rgba(0,0,0,0.8); }
         .hidden { opacity: 0 !important; pointer-events: none !important; }
 
         /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE */
@@ -188,6 +242,10 @@
             setTimeout(() => {
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
+                
+                // KHẮC PHỤC: Ẩn dải nền sao cũ để không đè lên vòng xoáy
+                document.getElementById('stars-layer').style.opacity = '0';
+                
                 document.getElementById('scene-2').style.opacity = '1';
                 document.getElementById('scene-2').style.pointerEvents = 'auto';
                 document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
@@ -208,31 +266,51 @@
             scene3.style.opacity = '1';
             scene3.style.pointerEvents = 'auto';
 
+            // Hoạt ảnh chậm và mượt hơn
             setTimeout(() => {
                 document.getElementById('mailbox-container').style.transform = 'scale(1)';
                 setTimeout(() => {
                     document.getElementById('letter-counter').style.opacity = '1';
                     document.getElementById('letter-counter').innerText = '99+ Thư';
-                    setTimeout(spillLetters, 1000);
-                }, 800);
+                    setTimeout(spillLetters, 1200); // Tăng độ trễ trước khi phun thư
+                }, 1200);
             }, 100);
         }
 
         function spillLetters() {
             const area = document.getElementById('spilled-letters-area');
             const numLetters = 20; 
+            
+            // THUẬT TOÁN GRID-BASED SCATTER (Chống díu thư)
+            // Chia màn hình khả dụng thành lưới 4 hàng x 5 cột = 20 ô
+            let positions = [];
+            for(let r = 0; r < 4; r++) {
+                for(let c = 0; c < 5; c++) {
+                    positions.push({r, c});
+                }
+            }
+            // Trộn ngẫu nhiên thứ tự các ô lưới
+            positions.sort(() => Math.random() - 0.5);
 
             for (let i = 0; i < numLetters; i++) {
                 let letter = document.createElement('img');
                 letter.src = 'assets/letter.png';
                 letter.className = 'spilled-letter';
                 
-                let randomX = Math.floor(Math.random() * 80) + 10;
-                let randomY = Math.floor(Math.random() * 70) + 15;
+                let pos = positions[i];
+                // Tính toán Base-tọa độ dựa trên vị trí cột và hàng (Padding biên để không lọt ra ngoài)
+                let baseX = 12 + (pos.c * 15); // Chiếm dải từ 12vw đến ~87vw
+                let baseY = 18 + (pos.r * 16); // Chiếm dải từ 18vh đến ~82vh
+                
+                // Thêm độ nhiễu nhỏ (Random offset) trong phạm vi an toàn của ô lưới
+                let randomX = baseX + (Math.random() * 6 - 3);
+                let randomY = baseY + (Math.random() * 6 - 3);
+                
                 let randomRotation = Math.floor(Math.random() * 360);
-                let animationDelay = Math.random() * 0.5;
+                let animationDelay = Math.random() * 0.8; // Các thư bay ra tuần tự
 
-                letter.style.animation = `spillOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
+                // Kéo dài thời lượng bay ra lên 1.5s
+                letter.style.animation = `spillOut 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards ${animationDelay}s`;
                 letter.style.top = `${randomY}vh`;
                 letter.style.left = `${randomX}vw`;
                 letter.style.transform = `translate(-50%, -50%) rotate(${randomRotation}deg)`;
