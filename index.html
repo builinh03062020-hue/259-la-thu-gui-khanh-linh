@@ -4,15 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gửi Thư Đến Những Vì Sao</title>
-    <!-- TÍCH HỢP GOOGLE FONTS: CORMORANT GARAMOND -->
+    <!-- TÍCH HỢP GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
         /* THIẾT LẬP CƠ SỞ VÀ KHÓA TƯƠNG TÁC VIEWPORT */
-        html, body { margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; overflow: hidden; background-color: #150824; touch-action: none; overscroll-behavior: none; font-family: 'Cormorant Garamond', serif; color: #ffffff; }
-        .stars-layer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%), url('assets/stars_background.png'); background-position: center center; background-size: cover, cover; background-blend-mode: screen; z-index: 0; pointer-events: none; transition: opacity 1s ease-in-out; }
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
+            overflow: hidden; background-color: #150824; touch-action: none; 
+            overscroll-behavior: none; font-family: 'Cormorant Garamond', serif; color: #ffffff;
+        }
+
+        /* LỚP NỀN SAO ĐỘC LẬP */
+        .stars-layer {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
+            background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%), url('assets/stars_background.png');
+            background-position: center center; background-size: cover, cover;
+            background-blend-mode: screen; z-index: 0; pointer-events: none; transition: opacity 1s ease-in-out;
+        }
+
+        /* KHUNG CẢNH 1 */
         #scene-1 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 5; transition: opacity 1s ease-in-out; }
         .cloud-right { position: absolute; bottom: -125px; right: -50px; width: 55vw; min-width: 450px; opacity: 0.8; transform: scaleX(-1); z-index: 10; pointer-events: none; }
         .piano { position: absolute; bottom: 20px; right: 50px; width: 350px; z-index: 15; filter: drop-shadow(0 0 25px #d8b4fe); pointer-events: none; transform: rotate(10deg); }
@@ -28,19 +41,51 @@
         .submit-section { position: absolute; bottom: 70px; right: 5px; display: flex; align-items: center; cursor: pointer; z-index: 40; }
         .submit-btn { background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; white-space: nowrap; }
         .witch-character { width: 95px; margin-left: -23px; transition: transform 1s ease; }
+
+        /* HIỆU ỨNG CẢNH 2 */
         #scene-2 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; transition: opacity 1s ease-in-out; z-index: 100; }
         .galaxy-spiral { position: absolute; width: 170vw; height: 170vw; max-width: 900px; max-height: 900px; background: url('assets/spiral.png') no-repeat center center; background-size: contain; animation: rotateSpiral 30s linear infinite; image-rendering: pixelated; }
         .flying-envelope { position: absolute; top: 50%; left: 50%; width: 60px; z-index: 6; opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
-        .envelope-fly-animation { animation: flyIntoGalaxy 4.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards; }
+        .envelope-fly-animation { animation: flyIntoGalaxy 4s cubic-bezier(0.36, 0, 0.66, -0.56) forwards; }
         @keyframes rotateSpiral { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes flyIntoGalaxy { 0% { transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5); opacity: 1; } 100% { transform: translate(-50%, -50%) rotate(1080deg) translateX(0px) rotate(-1080deg) scale(0); opacity: 0; } }
+
+        /* CẢNH 3: HÒM THƯ, BẢNG THÔNG BÁO VÀ PHÂN TÁN */
         #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; z-index: 110; }
-        .mailbox-container { position: relative; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; align-items: center; z-index: 115; }
+        
+        /* BẢNG THÔNG BÁO TÙY CHỈNH */
+        .custom-alert-box {
+            position: absolute; top: 15%; width: 85vw; max-width: 500px;
+            background: rgba(46, 16, 101, 0.7); backdrop-filter: blur(8px);
+            border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px;
+            padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 120;
+        }
+        .custom-alert-box.show { opacity: 1; transform: translateY(0); }
+        .custom-alert-title { font-size: 26px; font-weight: 700; color: #facc15; margin-bottom: 8px; letter-spacing: 1px; }
+        .custom-alert-desc { font-size: 20px; color: #e9d5ff; line-height: 1.4; white-space: pre-line; }
+
+        .mailbox-container { position: relative; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; align-items: center; z-index: 115; margin-top: 40px; }
         .mailbox-img { width: 150px; image-rendering: pixelated; filter: drop-shadow(0 0 30px rgba(216, 180, 254, 0.8)) drop-shadow(0 0 60px rgba(147, 51, 234, 0.6)); }
+        
+        /* HOẠT ẢNH THƯ BAY VÀO HÒM */
+        .incoming-letter {
+            position: absolute; width: 70px; top: 40%; left: 50%; opacity: 0; z-index: 118;
+            transform: translate(-50%, 50vh) scale(2); image-rendering: pixelated; pointer-events: none;
+        }
+        .animate-incoming { animation: letterSucksIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        @keyframes letterSucksIn {
+            0% { transform: translate(-50%, 50vh) scale(2); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(-50%, -20px) scale(0); opacity: 0; } 
+        }
+
         .letter-counter { font-size: 24px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.6); backdrop-filter: blur(4px); padding: 8px 25px; border-radius: 30px; border: 1px solid rgba(216, 180, 254, 0.5); margin-bottom: -15px; z-index: 2; opacity: 0; transition: opacity 1s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.5); letter-spacing: 1px; }
         .spilled-letter { position: absolute; width: 60px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.4s ease, filter 0.4s ease; image-rendering: pixelated; }
         .spilled-letter:hover { transform: scale(1.15) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.8)); z-index: 112; }
         @keyframes spillOut { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 40% { opacity: 1; } 100% { opacity: 1; } }
+
+        /* MODAL BẢO MẬT & BẺ KHÓA */
         #password-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 200; }
         .security-box { display: flex; flex-direction: column; align-items: center; background: rgba(46, 16, 101, 0.95); border: 3px dashed #d8b4fe; padding: 30px; border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .lock-animation-area { position: relative; width: 120px; height: 120px; margin-bottom: 20px; }
@@ -50,6 +95,8 @@
         .key-turn { right: -15px; opacity: 1; transform: rotateZ(-90deg); }
         .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 700; text-align: center; width: 180px; outline: none; letter-spacing: 3px; margin-bottom: 15px; }
         .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 10px 30px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 18px; letter-spacing: 1px; }
+
+        /* GIAO DIỆN CUỘN THÁNH CHỈ */
         #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; z-index: 250; }
         .scroll-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 450px; }
         .scroll-top, .scroll-bottom { width: 100%; display: block; image-rendering: pixelated; z-index: 2; }
@@ -60,6 +107,8 @@
         .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 260; transition: background 0.3s ease; }
         .close-scroll-btn:hover { background: rgba(0,0,0,0.8); }
         .hidden { opacity: 0 !important; pointer-events: none !important; }
+
+        /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE */
         @media screen and (max-width: 900px) { .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; } .paper-wrapper { box-shadow: none !important; filter: none !important; transform: translate(-50%, -50%) scale(0.8); transform-origin: center center; } }
         @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.7); } }
         @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } }
@@ -98,10 +147,19 @@
     </div>
 
     <div id="scene-3">
+        <!-- Bảng thông báo xịn xò (Custom Notification) -->
+        <div class="custom-alert-box" id="custom-notification">
+            <div class="custom-alert-title" id="notif-title">Gửi Thành Công! ✨</div>
+            <div class="custom-alert-desc" id="sequence-message">Bạn là người thứ... gửi thư đến dải ngân hà.</div>
+        </div>
+
         <div class="mailbox-container" id="mailbox-container">
             <div class="letter-counter" id="letter-counter">0 Thư</div>
             <img src="assets/mailbox.png" class="mailbox-img" alt="Hòm Thư">
         </div>
+        
+        <img src="assets/letter.png" class="incoming-letter" id="incoming-letter" alt="Thư tới">
+        
         <div id="spilled-letters-area"></div>
     </div>
 
@@ -133,25 +191,23 @@
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
+        // Khai báo biến toàn cục để lưu trạng thái
+        let isStarPrincess = false;
+
         function processSubmission() {
             const sender = document.getElementById('sender').value.trim();
             const message = document.getElementById('message').value.trim();
-            
-            // CẤU HÌNH MẬT DANH QUẢN TRỊ 
-            const SECRET_ADMIN_CODE = "BichPhuong20";
 
-            // KIỂM TRA ĐẶC QUYỀN TRUY CẬP (ADMIN BYPASS)
-            if (sender === SECRET_ADMIN_CODE) {
-                document.getElementById('scene-1').classList.add('hidden');
-                document.getElementById('stars-layer').style.opacity = '0';
-                initPhaseTwo();
-                return; // Kết thúc thực thi luồng User
-            }
-
-            // QUY TRÌNH DÀNH CHO USER THÔNG THƯỜNG
             if (!sender || !message) {
                 alert("Bạn vui lòng điền đầy đủ tên và lời nhắn nhé! ✨");
                 return; 
+            }
+
+            // KIỂM TRA MẬT DANH QUẢN TRỊ VIÊN
+            if (sender.toLowerCase() === 'starprincess') {
+                isStarPrincess = true;
+            } else {
+                isStarPrincess = false;
             }
 
             document.getElementById('display-sender').innerText = sender;
@@ -164,22 +220,20 @@
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
                 document.getElementById('stars-layer').style.opacity = '0';
-                
                 document.getElementById('scene-2').style.opacity = '1';
                 document.getElementById('scene-2').style.pointerEvents = 'auto';
                 document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
                 document.getElementById('twinkle-audio').play().catch(() => {});
 
-                // Không kích hoạt Scene 3 đối với luồng User thông thường
                 setTimeout(() => {
+                    // Số lượng giả định khi test (Giai đoạn sau sẽ móc nối từ Sheet)
                     const sequenceNumber = Math.floor(Math.random() * (259 - 50 + 1)) + 50;
-                    alert(`Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn.\nBạn là người thứ ${sequenceNumber} gửi thư đến dải ngân hà. 🌌`);
-                    location.reload(); // Tải lại trang sau khi gửi thành công
+                    initPhaseTwo(sequenceNumber);
                 }, 4000); 
             }, 600);
         }
 
-        function initPhaseTwo() {
+        function initPhaseTwo(sequenceNumber) {
             document.getElementById('scene-2').classList.add('hidden');
             const scene3 = document.getElementById('scene-3');
             scene3.style.opacity = '1';
@@ -187,11 +241,57 @@
 
             setTimeout(() => {
                 document.getElementById('mailbox-container').style.transform = 'scale(1)';
+                
                 setTimeout(() => {
-                    document.getElementById('letter-counter').style.opacity = '1';
-                    document.getElementById('letter-counter').innerText = '99+ Thư';
-                    setTimeout(spillLetters, 1200); 
-                }, 1200);
+                    const incomingLetter = document.getElementById('incoming-letter');
+                    incomingLetter.classList.add('animate-incoming');
+                    
+                    setTimeout(() => {
+                        const notif = document.getElementById('custom-notification');
+                        const titleEl = document.getElementById('notif-title');
+                        const descEl = document.getElementById('sequence-message');
+                        
+                        // MỐC THỜI GIAN KỶ LUẬT THÉP (25/09/2026)
+                        const unlockDate = new Date('2026-09-25T00:00:00');
+                        const currentDate = new Date();
+                        const isTimeUnlocked = currentDate >= unlockDate;
+
+                        if (!isStarPrincess) {
+                            // 1. DÀNH CHO KHÁCH BÌNH THƯỜNG
+                            titleEl.innerText = "Gửi Thành Công! ✨";
+                            descEl.innerText = `Bạn là người thứ ${sequenceNumber} gửi thư đến dải ngân hà.`;
+                            notif.classList.add('show');
+                            // Kết thúc luồng, không nổ thư, không đếm số.
+                            
+                        } else {
+                            // 2. DÀNH CHO STAR PRINCESS
+                            if (!isTimeUnlocked) {
+                                // 2A. Nếu đăng nhập trước ngày 25/09/2026
+                                titleEl.innerText = "Hòm Thư Đang Khóa 🔒";
+                                descEl.innerText = "Chào mừng Star Princess!\nChưa tới ngày 25/09/2026, thư chưa thể nở ra đâu nha. Ráng đợi thêm xíu nữa!";
+                                notif.classList.add('show');
+                                // Kết thúc luồng, không nổ thư, không đếm số.
+                                
+                            } else {
+                                // 2B. Nếu đăng nhập đúng hoặc sau ngày 25/09/2026
+                                titleEl.innerText = "Kén Thời Gian Đã Mở! ✨";
+                                descEl.innerText = `Chào mừng Star Princess trở lại!\nBạn đã nhận được tổng cộng ${sequenceNumber} lá thư.`;
+                                notif.classList.add('show');
+                                
+                                // Hiển thị số đếm tổng
+                                document.getElementById('letter-counter').style.opacity = '1';
+                                document.getElementById('letter-counter').innerText = `${sequenceNumber} Thư`;
+                                
+                                // Bắt đầu bung thư sau khi đọc thông báo
+                                setTimeout(() => {
+                                    notif.classList.remove('show'); // Ẩn thông báo đi cho màn hình sạch sẽ
+                                    spillLetters();
+                                }, 3000);
+                            }
+                        }
+
+                    }, 1200); 
+                }, 1000); 
             }, 100);
         }
 
@@ -214,11 +314,10 @@
                 
                 let pos = positions[i];
                 let baseX = 12 + (pos.c * 15); 
-                let baseY = 18 + (pos.r * 16); 
+                let baseY = 25 + (pos.r * 15); 
                 
                 let randomX = baseX + (Math.random() * 6 - 3);
                 let randomY = baseY + (Math.random() * 6 - 3);
-                
                 let randomRotation = Math.floor(Math.random() * 360);
                 let animationDelay = Math.random() * 0.8; 
 
@@ -247,15 +346,7 @@
         function verifyPassword() {
             const pass = document.getElementById('letter-pass').value.trim();
             if (pass === "") {
-                alert("Vui lòng nhập mật chú!");
-                return;
-            }
-
-            const unlockDate = new Date('2026-09-25T00:00:00');
-            const currentDate = new Date();
-
-            if (currentDate < unlockDate) {
-                alert("Kén thời gian chưa được mở! Xin vui lòng quay lại vào ngày 25/09/2026.");
+                alert("Vui lòng nhập mật chú!"); 
                 return;
             }
 
