@@ -53,14 +53,7 @@
         /* CẢNH 3: HÒM THƯ, BẢNG THÔNG BÁO VÀ PHÂN TÁN */
         #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; z-index: 110; }
         
-        /* BẢNG THÔNG BÁO TÙY CHỈNH */
-        .custom-alert-box {
-            position: absolute; top: 15%; width: 85vw; max-width: 500px;
-            background: rgba(46, 16, 101, 0.7); backdrop-filter: blur(8px);
-            border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px;
-            padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 120;
-        }
+        .custom-alert-box { position: absolute; top: 15%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.7); backdrop-filter: blur(8px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.6); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 120; }
         .custom-alert-box.show { opacity: 1; transform: translateY(0); }
         .custom-alert-title { font-size: 26px; font-weight: 700; color: #facc15; margin-bottom: 8px; letter-spacing: 1px; }
         .custom-alert-desc { font-size: 20px; color: #e9d5ff; line-height: 1.4; white-space: pre-line; }
@@ -68,17 +61,9 @@
         .mailbox-container { position: relative; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; align-items: center; z-index: 115; margin-top: 40px; }
         .mailbox-img { width: 150px; image-rendering: pixelated; filter: drop-shadow(0 0 30px rgba(216, 180, 254, 0.8)) drop-shadow(0 0 60px rgba(147, 51, 234, 0.6)); }
         
-        /* HOẠT ẢNH THƯ BAY VÀO HÒM */
-        .incoming-letter {
-            position: absolute; width: 70px; top: 40%; left: 50%; opacity: 0; z-index: 118;
-            transform: translate(-50%, 50vh) scale(2); image-rendering: pixelated; pointer-events: none;
-        }
+        .incoming-letter { position: absolute; width: 70px; top: 40%; left: 50%; opacity: 0; z-index: 118; transform: translate(-50%, 50vh) scale(2); image-rendering: pixelated; pointer-events: none; }
         .animate-incoming { animation: letterSucksIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        @keyframes letterSucksIn {
-            0% { transform: translate(-50%, 50vh) scale(2); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translate(-50%, -20px) scale(0); opacity: 0; } 
-        }
+        @keyframes letterSucksIn { 0% { transform: translate(-50%, 50vh) scale(2); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(-50%, -20px) scale(0); opacity: 0; } }
 
         .letter-counter { font-size: 24px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.6); backdrop-filter: blur(4px); padding: 8px 25px; border-radius: 30px; border: 1px solid rgba(216, 180, 254, 0.5); margin-bottom: -15px; z-index: 2; opacity: 0; transition: opacity 1s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.5); letter-spacing: 1px; }
         .spilled-letter { position: absolute; width: 60px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.4s ease, filter 0.4s ease; image-rendering: pixelated; }
@@ -87,7 +72,25 @@
 
         /* MODAL BẢO MẬT & BẺ KHÓA */
         #password-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 200; }
-        .security-box { display: flex; flex-direction: column; align-items: center; background: rgba(46, 16, 101, 0.95); border: 3px dashed #d8b4fe; padding: 30px; border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        .security-box { 
+            position: relative; /* Đặt relative để neo nút X */
+            display: flex; flex-direction: column; align-items: center; background: rgba(46, 16, 101, 0.95); 
+            border: 3px dashed #d8b4fe; padding: 30px; border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,0.9); 
+            transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        /* Nút thoát hiểm (Close Button) cho Khung Mật Khẩu */
+        .close-pass-btn {
+            position: absolute; top: -15px; right: -15px; width: 35px; height: 35px;
+            background: #facc15; color: #150824; border-radius: 50%;
+            font-family: sans-serif; font-size: 18px; font-weight: bold;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #3b0764;
+            transition: transform 0.2s ease;
+        }
+        .close-pass-btn:hover { transform: scale(1.1); }
+
         .lock-animation-area { position: relative; width: 120px; height: 120px; margin-bottom: 20px; }
         .lock-img { width: 100px; position: absolute; left: 10px; bottom: 0; image-rendering: pixelated; }
         .key-img { width: 80px; position: absolute; right: -80px; top: 15px; opacity: 0; image-rendering: pixelated; transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -147,7 +150,6 @@
     </div>
 
     <div id="scene-3">
-        <!-- Bảng thông báo xịn xò (Custom Notification) -->
         <div class="custom-alert-box" id="custom-notification">
             <div class="custom-alert-title" id="notif-title">Gửi Thành Công! ✨</div>
             <div class="custom-alert-desc" id="sequence-message">Bạn là người thứ... gửi thư đến dải ngân hà.</div>
@@ -165,6 +167,9 @@
 
     <div id="password-modal">
         <div class="security-box" id="security-box">
+            <!-- Nút đóng (Thoát hiểm) -->
+            <div class="close-pass-btn" onclick="closePasswordModal()">X</div>
+            
             <div class="lock-animation-area">
                 <img src="assets/lock.png" class="lock-img" alt="Ổ Khóa">
                 <img src="assets/key.png" class="key-img" id="auth-key" alt="Chìa Khóa">
@@ -191,7 +196,6 @@
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
-        // Khai báo biến toàn cục để lưu trạng thái
         let isStarPrincess = false;
 
         function processSubmission() {
@@ -203,7 +207,6 @@
                 return; 
             }
 
-            // KIỂM TRA MẬT DANH QUẢN TRỊ VIÊN
             if (sender.toLowerCase() === 'starprincess') {
                 isStarPrincess = true;
             } else {
@@ -226,7 +229,6 @@
                 document.getElementById('twinkle-audio').play().catch(() => {});
 
                 setTimeout(() => {
-                    // Số lượng giả định khi test (Giai đoạn sau sẽ móc nối từ Sheet)
                     const sequenceNumber = Math.floor(Math.random() * (259 - 50 + 1)) + 50;
                     initPhaseTwo(sequenceNumber);
                 }, 4000); 
@@ -251,40 +253,31 @@
                         const titleEl = document.getElementById('notif-title');
                         const descEl = document.getElementById('sequence-message');
                         
-                        // MỐC THỜI GIAN KỶ LUẬT THÉP (25/09/2026)
-                        const unlockDate = new Date('2026-09-25T00:00:00');
+                        // CHÚ Ý: ĐÃ SỬA THÀNH 01/09/2026 ĐỂ TEST HOẠT ẢNH. 
+                        // KHI ĐƯA VÀO SỬ DỤNG THẬT TẾ, HÃY SỬA SỐ '01' THÀNH '25'
+                        const unlockDate = new Date('2026-09-01T00:00:00'); 
                         const currentDate = new Date();
                         const isTimeUnlocked = currentDate >= unlockDate;
 
                         if (!isStarPrincess) {
-                            // 1. DÀNH CHO KHÁCH BÌNH THƯỜNG
                             titleEl.innerText = "Gửi Thành Công! ✨";
                             descEl.innerText = `Bạn là người thứ ${sequenceNumber} gửi thư đến dải ngân hà.`;
                             notif.classList.add('show');
-                            // Kết thúc luồng, không nổ thư, không đếm số.
-                            
                         } else {
-                            // 2. DÀNH CHO STAR PRINCESS
                             if (!isTimeUnlocked) {
-                                // 2A. Nếu đăng nhập trước ngày 25/09/2026
                                 titleEl.innerText = "Hòm Thư Đang Khóa 🔒";
                                 descEl.innerText = "Chào mừng Star Princess!\nChưa tới ngày 25/09/2026, thư chưa thể nở ra đâu nha. Ráng đợi thêm xíu nữa!";
                                 notif.classList.add('show');
-                                // Kết thúc luồng, không nổ thư, không đếm số.
-                                
                             } else {
-                                // 2B. Nếu đăng nhập đúng hoặc sau ngày 25/09/2026
                                 titleEl.innerText = "Kén Thời Gian Đã Mở! ✨";
                                 descEl.innerText = `Chào mừng Star Princess trở lại!\nBạn đã nhận được tổng cộng ${sequenceNumber} lá thư.`;
                                 notif.classList.add('show');
                                 
-                                // Hiển thị số đếm tổng
                                 document.getElementById('letter-counter').style.opacity = '1';
                                 document.getElementById('letter-counter').innerText = `${sequenceNumber} Thư`;
                                 
-                                // Bắt đầu bung thư sau khi đọc thông báo
                                 setTimeout(() => {
-                                    notif.classList.remove('show'); // Ẩn thông báo đi cho màn hình sạch sẽ
+                                    notif.classList.remove('show'); 
                                     spillLetters();
                                 }, 3000);
                             }
@@ -343,10 +336,28 @@
             key.classList.remove('key-insert', 'key-turn');
         }
 
+        // HÀM ĐÓNG MODAL PASSWORD
+        function closePasswordModal() {
+            const modal = document.getElementById('password-modal');
+            const box = document.getElementById('security-box');
+            modal.style.opacity = '0';
+            modal.style.pointerEvents = 'none';
+            box.style.transform = 'scale(0.8)';
+        }
+
         function verifyPassword() {
             const pass = document.getElementById('letter-pass').value.trim();
             if (pass === "") {
                 alert("Vui lòng nhập mật chú!"); 
+                return;
+            }
+
+            // CHÚ Ý: CŨNG CẦN SỬA SỐ '01' THÀNH '25' TẠI ĐÂY KHI TRIỂN KHAI THỰC TẾ
+            const unlockDate = new Date('2026-09-01T00:00:00');
+            const currentDate = new Date();
+
+            if (currentDate < unlockDate) {
+                alert("Kén thời gian chưa được mở! Xin vui lòng quay lại vào ngày 25/09/2026.");
                 return;
             }
 
@@ -357,9 +368,7 @@
                 key.classList.add('key-turn');
                 
                 setTimeout(() => {
-                    document.getElementById('password-modal').style.opacity = '0';
-                    document.getElementById('password-modal').style.pointerEvents = 'none';
-                    document.getElementById('security-box').style.transform = 'scale(0.8)';
+                    closePasswordModal(); // Dùng lại hàm tắt Modal cho gọn
                     openMagicScroll();
                 }, 800);
             }, 800);
