@@ -7,278 +7,101 @@
     <style>
         /* THIẾT LẬP CƠ SỞ VÀ KHÓA TƯƠNG TÁC VIEWPORT */
         html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            height: 100dvh; 
-            overflow: hidden;
-            background-color: #150824; 
-            touch-action: none; 
-            overscroll-behavior: none; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
+            overflow: hidden; background-color: #150824; touch-action: none; 
+            overscroll-behavior: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #ffffff;
         }
 
-        /* LỚP NỀN SAO ĐỘC LẬP TỐI ƯU HÓA KẾT XUẤT */
+        /* LỚP NỀN SAO ĐỘC LẬP */
         .stars-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh;
             background-image: linear-gradient(180deg, #150824 0%, #4a2574 100%), url('assets/stars_background.png');
-            background-position: center center;
-            background-size: cover, cover;
-            background-blend-mode: screen; 
-            z-index: 0; 
-            pointer-events: none;
+            background-position: center center; background-size: cover, cover;
+            background-blend-mode: screen; z-index: 0; pointer-events: none;
             transition: opacity 1s ease-in-out;
         }
 
         /* KHUNG CẢNH 1 */
-        #scene-1 {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 5;
-            transition: opacity 1s ease-in-out;
-        }
+        #scene-1 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 5; transition: opacity 1s ease-in-out; }
 
-        /* TĨNH VẬT TRANG TRÍ */
-        .cloud-right {
-            position: absolute;
-            bottom: -125px; 
-            right: -50px;
-            width: 55vw;
-            min-width: 450px;
-            opacity: 0.8;
-            transform: scaleX(-1); 
-            z-index: 10;
-            pointer-events: none;
-        }
+        /* TĨNH VẬT TRANG TRÍ SCENE 1 */
+        .cloud-right { position: absolute; bottom: -125px; right: -50px; width: 55vw; min-width: 450px; opacity: 0.8; transform: scaleX(-1); z-index: 10; pointer-events: none; }
+        .piano { position: absolute; bottom: 20px; right: 50px; width: 350px; z-index: 15; filter: drop-shadow(0 0 25px #d8b4fe); pointer-events: none; transform: rotate(10deg); }
+        .cauldron { position: absolute; bottom: 10px; left: 55px; width: 300px; z-index: 25; filter: drop-shadow(0 0 25px #d8b4fe); pointer-events: none; transform: rotate(-8deg); }
+        .cloud-left { position: absolute; bottom: -125px; left: -50px; width: 55vw; min-width: 450px; opacity: 0.8; z-index: 30; pointer-events: none; }
 
-        .piano {
-            position: absolute;
-            bottom: 20px; 
-            right: 50px;
-            width: 350px;
-            z-index: 15;
-            filter: drop-shadow(0 0 25px #d8b4fe); 
-            pointer-events: none;
-            transform: rotate(10deg);
-        }
-
-        .cauldron {
-            position: absolute;
-            bottom: 10px; 
-            left: 55px;
-            width: 300px;
-            z-index: 25;
-            filter: drop-shadow(0 0 25px #d8b4fe); 
-            pointer-events: none;
-            transform: rotate(-8deg);
-        }
-
-        .cloud-left {
-            position: absolute;
-            bottom: -125px; 
-            left: -50px;
-            width: 55vw;
-            min-width: 450px;
-            opacity: 0.8;
-            z-index: 30;
-            pointer-events: none;
-        }
-
-        /* TỜ GIẤY CỔ (LỚP 20) - CĂN GIỮA TUYỆT ĐỐI */
+        /* TỜ GIẤY CỔ SCENE 1 */
         .paper-wrapper {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Neo trọng tâm bất biến */
-            width: 500px; 
-            height: 680px; 
-            background: url('assets/paper.png') no-repeat center center;
-            background-size: 100% 100%;
-            padding: 115px 50px 120px 50px; 
-            box-sizing: border-box;
-            z-index: 20; 
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 40px rgba(0,0,0,0.6);
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 500px; height: 680px; background: url('assets/paper.png') no-repeat center center;
+            background-size: 100% 100%; padding: 115px 50px 120px 50px; box-sizing: border-box;
+            z-index: 20; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.6);
             transition: transform 0.3s ease;
         }
 
         .paper-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 80px; 
-            right: 45px;
-            width: 90px;
-            height: 90px;
-            background: url('assets/paper_stars.png') no-repeat center center;
-            background-size: contain;
-            pointer-events: none;
-            transform: rotate(8deg);
+            content: ''; position: absolute; top: 80px; right: 45px; width: 90px; height: 90px;
+            background: url('assets/paper_stars.png') no-repeat center center; background-size: contain; pointer-events: none; transform: rotate(8deg);
         }
 
         /* CĂN CHỈNH VĂN BẢN VÀ BIỂU MẪU */
-        .input-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 6px;
-        }
-
-        .input-group label {
-            color: #3b2818;
-            font-weight: bold;
-            font-size: 19px;
-            margin-right: 8px;
-        }
-
-        .paper-input, .paper-textarea {
-            background: transparent;
-            border: none;
-            outline: none;
-            font-family: inherit;
-            font-size: 18px; 
-            color: #3b2818;
-            width: 100%;
-        }
-
-        .paper-input {
-            border-bottom: 2.5px dashed #8b6b4a;
-        }
-
-        .paper-textarea {
-            resize: none;
-            flex-grow: 1;
-            margin-top: 40px; 
-            line-height: 48px; 
-        }
+        .input-group { display: flex; align-items: center; margin-bottom: 6px; }
+        .input-group label { color: #3b2818; font-weight: bold; font-size: 19px; margin-right: 8px; }
+        .paper-input, .paper-textarea { background: transparent; border: none; outline: none; font-family: inherit; font-size: 18px; color: #3b2818; width: 100%; }
+        .paper-input { border-bottom: 2.5px dashed #8b6b4a; }
+        .paper-textarea { resize: none; flex-grow: 1; margin-top: 40px; line-height: 48px; }
 
         /* NÚT BẤM VÀ PHÙ THỦY */
-        .submit-section {
-            position: absolute;
-            bottom: 70px; 
-            right: 5px;  
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            z-index: 40;
-        }
+        .submit-section { position: absolute; bottom: 70px; right: 5px; display: flex; align-items: center; cursor: pointer; z-index: 40; }
+        .submit-btn { background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; font-weight: bold; font-size: 14px; display: flex; align-items: center; white-space: nowrap; }
+        .witch-character { width: 95px; margin-left: -23px; transition: transform 1s ease; }
 
-        .submit-btn {
-            background: url('assets/border.png') no-repeat center center;
-            background-size: 100% 100%;
-            border: none;
-            box-shadow: none;
-            color: #1a1a1a;
-            padding: 12px 55px 12px 15px;
-            font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-        }
+        /* HIỆU ỨNG CẢNH 2 */
+        #scene-2 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; transition: opacity 1s ease-in-out; z-index: 100; }
+        .galaxy-spiral { position: absolute; width: 170vw; height: 170vw; max-width: 900px; max-height: 900px; background: url('assets/spiral.png') no-repeat center center; background-size: contain; animation: rotateSpiral 30s linear infinite; image-rendering: pixelated; }
+        .flying-envelope { position: absolute; top: 50%; left: 50%; width: 60px; z-index: 6; opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        .envelope-fly-animation { animation: flyIntoGalaxy 4.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards; }
+        @keyframes rotateSpiral { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes flyIntoGalaxy { 0% { transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5); opacity: 1; } 100% { transform: translate(-50%, -50%) rotate(1080deg) translateX(0px) rotate(-1080deg) scale(0); opacity: 0; } }
 
-        .witch-character {
-            width: 95px;
-            margin-left: -23px;
-            transition: transform 1s ease;
-        }
+        /* CẢNH 3: HÒM THƯ VÀ PHÂN TÁN */
+        #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s ease-in-out; z-index: 110; }
+        .mailbox-container { position: relative; transform: scale(0); transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; flex-direction: column; align-items: center; z-index: 115; }
+        .mailbox-img { width: 150px; image-rendering: pixelated; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+        .letter-counter { font-family: monospace; font-size: 20px; font-weight: bold; color: #facc15; background: rgba(46, 16, 101, 0.8); padding: 5px 15px; border-radius: 20px; border: 2px solid #d8b4fe; margin-bottom: -15px; z-index: 2; opacity: 0; transition: opacity 0.5s ease; }
+        .spilled-letter { position: absolute; width: 60px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.2s ease, filter 0.2s ease; image-rendering: pixelated; }
+        .spilled-letter:hover { transform: scale(1.1) !important; filter: drop-shadow(0 0 10px #facc15); }
+        @keyframes spillOut { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 20% { opacity: 1; } 100% { opacity: 1; } }
 
-        /* HIỆU ỨNG CẢNH 2 - VÒNG XOÁY VÀ PHONG THƯ */
-        #scene-2 {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            opacity: 0;
-            pointer-events: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1s ease-in-out;
-            z-index: 100;
-        }
-        
-        .galaxy-spiral {
-            position: absolute;
-            width: 170vw;
-            height: 170vw;
-            max-width: 900px;
-            max-height: 900px;
-            background: url('assets/spiral.png') no-repeat center center;
-            background-size: contain;
-            animation: rotateSpiral 30s linear infinite;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: -o-crisp-edges;
-            image-rendering: -webkit-optimize-contrast;
-            image-rendering: crisp-edges;
-            image-rendering: pixelated;
-        }
+        /* MODAL BẢO MẬT & BẺ KHÓA */
+        #password-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 200; }
+        .security-box { display: flex; flex-direction: column; align-items: center; background: rgba(46, 16, 101, 0.95); border: 3px dashed #d8b4fe; padding: 30px; border-radius: 15px; box-shadow: 0 0 30px rgba(0,0,0,0.8); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .lock-animation-area { position: relative; width: 120px; height: 120px; margin-bottom: 20px; }
+        .lock-img { width: 100px; position: absolute; left: 10px; bottom: 0; image-rendering: pixelated; }
+        .key-img { width: 80px; position: absolute; right: -80px; top: 15px; opacity: 0; image-rendering: pixelated; transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .key-insert { right: -15px; opacity: 1; transform: rotateZ(0deg); }
+        .key-turn { right: -15px; opacity: 1; transform: rotateZ(-90deg); }
+        .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-size: 20px; text-align: center; width: 180px; outline: none; font-family: monospace; letter-spacing: 3px; margin-bottom: 15px; }
+        .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 10px 25px; font-weight: bold; border-radius: 8px; cursor: pointer; font-size: 16px; }
 
-        .flying-envelope {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 60px;
-            z-index: 6;
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(1.5);
-        }
-        
-        .envelope-fly-animation {
-            animation: flyIntoGalaxy 4.5s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
-        }
+        /* GIAO DIỆN CUỘN THÁNH CHỈ */
+        #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; z-index: 250; }
+        .scroll-container { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 450px; }
+        .scroll-top, .scroll-bottom { width: 100%; display: block; image-rendering: pixelated; z-index: 2; }
+        .scroll-middle { width: 92%; background: url('assets/scroll-bg.png') repeat-y top center; background-size: 100% auto; height: 0px; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; transition: height 1.5s cubic-bezier(0.25, 1, 0.5, 1); position: relative; margin-top: -2px; margin-bottom: -2px; z-index: 1; }
+        .scroll-middle.open { height: 60vh; max-height: 600px; padding: 30px 20px; }
+        .scroll-content-text { color: #3b2818; font-family: serif; font-size: 18px; line-height: 1.6; text-align: center; opacity: 0; transition: opacity 0.8s ease 1s; }
+        .scroll-middle.open .scroll-content-text { opacity: 1; }
+        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: rgba(0,0,0,0.5); color: #fff; border: 2px solid #fff; border-radius: 50%; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 260; }
+        .hidden { opacity: 0 !important; pointer-events: none !important; }
 
-        @keyframes rotateSpiral {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes flyIntoGalaxy {
-            0% {
-                transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) rotate(1080deg) translateX(0px) rotate(-1080deg) scale(0);
-                opacity: 0;
-            }
-        }
-
-        .hidden {
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-        
-        /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE TRÊN THIẾT BỊ DI ĐỘNG BẰNG GIÁ TRỊ VÔ HƯỚNG CỐ ĐỊNH */
-        @media screen and (max-width: 900px) {
-            .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; }
-            .paper-wrapper { 
-                box-shadow: none !important; filter: none !important;
-                transform: translate(-50%, -50%) scale(0.8); 
-                transform-origin: center center;
-            }
-        }
-
-        @media screen and (max-width: 768px) {
-            .paper-wrapper { transform: translate(-50%, -50%) scale(0.7); }
-        }
-
-        @media screen and (max-width: 480px) {
-            .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); }
-        }
-
-        @media screen and (max-width: 390px) {
-            /* Tương thích cho dòng iPhone màn hình nhỏ (ví dụ: iPhone 12/13/14 mini, SE) */
-            .paper-wrapper { transform: translate(-50%, -50%) scale(0.6); }
-        }
-        
-        @media screen and (max-width: 350px) {
-            .paper-wrapper { transform: translate(-50%, -50%) scale(0.55); }
-        }
+        /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE */
+        @media screen and (max-width: 900px) { .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; } .paper-wrapper { box-shadow: none !important; filter: none !important; transform: translate(-50%, -50%) scale(0.8); transform-origin: center center; } }
+        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.7); } }
+        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } }
+        @media screen and (max-width: 390px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.6); } }
+        @media screen and (max-width: 350px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.55); } }
     </style>
 </head>
 <body>
@@ -311,6 +134,39 @@
         <img src="assets/letter.png" id="flying-envelope" class="flying-envelope">
     </div>
 
+    <div id="scene-3">
+        <div class="mailbox-container" id="mailbox-container">
+            <div class="letter-counter" id="letter-counter">0 Thư</div>
+            <img src="assets/mailbox.png" class="mailbox-img" alt="Hòm Thư">
+        </div>
+        <div id="spilled-letters-area"></div>
+    </div>
+
+    <div id="password-modal">
+        <div class="security-box" id="security-box">
+            <div class="lock-animation-area">
+                <img src="assets/lock.png" class="lock-img" alt="Ổ Khóa">
+                <img src="assets/key.png" class="key-img" id="auth-key" alt="Chìa Khóa">
+            </div>
+            <input type="password" id="letter-pass" class="pass-input" placeholder="MẬT CHÚ">
+            <button class="pass-submit-btn" onclick="verifyPassword()">MỞ KHÓA</button>
+        </div>
+    </div>
+
+    <div id="scroll-modal">
+        <div class="close-scroll-btn" onclick="closeScroll()">X</div>
+        <div class="scroll-container">
+            <img src="assets/scroll-top.png" class="scroll-top" alt="Trục trên">
+            <div class="scroll-middle" id="magic-scroll">
+                <div class="scroll-content-text">
+                    <strong>Gửi từ: <span id="display-sender">...</span></strong><br><br>
+                    <span id="display-message">Nội dung thư...</span>
+                </div>
+            </div>
+            <img src="assets/scroll-bottom.png" class="scroll-bottom" alt="Trục dưới">
+        </div>
+    </div>
+
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
@@ -323,26 +179,128 @@
                 return; 
             }
 
+            document.getElementById('display-sender').innerText = sender;
+            document.getElementById('display-message').innerText = message;
+
             const witch = document.getElementById('witch');
             witch.style.transform = "rotate(-30deg) translateY(-20px)";
 
             setTimeout(() => {
                 witch.style.transform = "rotate(0deg) translateY(0)";
                 document.getElementById('scene-1').classList.add('hidden');
-                
-                document.getElementById('stars-layer').style.opacity = '0';
-                
                 document.getElementById('scene-2').style.opacity = '1';
                 document.getElementById('scene-2').style.pointerEvents = 'auto';
                 document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
-                
                 document.getElementById('twinkle-audio').play().catch(() => {});
 
                 setTimeout(() => {
-                    alert("Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn. 🌌");
-                    location.reload(); 
+                    const sequenceNumber = Math.floor(Math.random() * (259 - 50 + 1)) + 50;
+                    alert(`Gửi thành công! Những vì sao đã nhận được lời nhắn của bạn.\nBạn là người thứ ${sequenceNumber} gửi thư đến dải ngân hà. 🌌`);
+                    
+                    initPhaseTwo();
                 }, 4000); 
             }, 600);
+        }
+
+        function initPhaseTwo() {
+            document.getElementById('scene-2').classList.add('hidden');
+            const scene3 = document.getElementById('scene-3');
+            scene3.style.opacity = '1';
+            scene3.style.pointerEvents = 'auto';
+
+            setTimeout(() => {
+                document.getElementById('mailbox-container').style.transform = 'scale(1)';
+                setTimeout(() => {
+                    document.getElementById('letter-counter').style.opacity = '1';
+                    document.getElementById('letter-counter').innerText = '99+ Thư';
+                    setTimeout(spillLetters, 1000);
+                }, 800);
+            }, 100);
+        }
+
+        function spillLetters() {
+            const area = document.getElementById('spilled-letters-area');
+            const numLetters = 20; 
+
+            for (let i = 0; i < numLetters; i++) {
+                let letter = document.createElement('img');
+                letter.src = 'assets/letter.png';
+                letter.className = 'spilled-letter';
+                
+                let randomX = Math.floor(Math.random() * 80) + 10;
+                let randomY = Math.floor(Math.random() * 70) + 15;
+                let randomRotation = Math.floor(Math.random() * 360);
+                let animationDelay = Math.random() * 0.5;
+
+                letter.style.animation = `spillOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
+                letter.style.top = `${randomY}vh`;
+                letter.style.left = `${randomX}vw`;
+                letter.style.transform = `translate(-50%, -50%) rotate(${randomRotation}deg)`;
+
+                letter.onclick = openPasswordModal;
+                area.appendChild(letter);
+            }
+        }
+
+        function openPasswordModal() {
+            const modal = document.getElementById('password-modal');
+            const box = document.getElementById('security-box');
+            modal.style.opacity = '1';
+            modal.style.pointerEvents = 'auto';
+            setTimeout(() => { box.style.transform = 'scale(1)'; }, 50);
+            
+            document.getElementById('letter-pass').value = '';
+            const key = document.getElementById('auth-key');
+            key.classList.remove('key-insert', 'key-turn');
+        }
+
+        function verifyPassword() {
+            const pass = document.getElementById('letter-pass').value.trim();
+            if (pass === "") {
+                alert("Vui lòng nhập mật chú!");
+                return;
+            }
+
+            // KIỂM TRA ĐIỀU KIỆN MỞ KHÓA THỜI GIAN NGHIÊM NGẶT
+            const unlockDate = new Date('2026-09-25T00:00:00');
+            const currentDate = new Date();
+
+            if (currentDate < unlockDate) {
+                alert("Kén thời gian chưa được mở! Xin vui lòng quay lại vào ngày 25/09/2026.");
+                return;
+            }
+
+            const key = document.getElementById('auth-key');
+            key.classList.add('key-insert');
+            
+            setTimeout(() => {
+                key.classList.add('key-turn');
+                
+                setTimeout(() => {
+                    document.getElementById('password-modal').style.opacity = '0';
+                    document.getElementById('password-modal').style.pointerEvents = 'none';
+                    document.getElementById('security-box').style.transform = 'scale(0.8)';
+                    openMagicScroll();
+                }, 800);
+            }, 800);
+        }
+
+        function openMagicScroll() {
+            const scrollModal = document.getElementById('scroll-modal');
+            const scrollPaper = document.getElementById('magic-scroll');
+            scrollModal.style.opacity = '1';
+            scrollModal.style.pointerEvents = 'auto';
+            setTimeout(() => { scrollPaper.classList.add('open'); }, 300); 
+        }
+
+        function closeScroll() {
+            const scrollModal = document.getElementById('scroll-modal');
+            const scrollPaper = document.getElementById('magic-scroll');
+            scrollPaper.classList.remove('open');
+            setTimeout(() => {
+                scrollModal.style.opacity = '0';
+                scrollModal.style.pointerEvents = 'none';
+            }, 1000);
         }
     </script>
 </body>
