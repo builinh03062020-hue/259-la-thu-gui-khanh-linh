@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* THIẾT LẬP CƠ SỞ VÀ KHÓA TƯƠNG TÁC VIEWPORT */
+        /* THIẾT LẬP CƠ SỞ & KHÓA VIEWPORT */
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
             overflow: hidden; background-color: #150824; touch-action: none; 
@@ -24,14 +24,14 @@
             background-blend-mode: screen; z-index: 0; pointer-events: none; transition: opacity 1s ease-in-out;
         }
 
-        /* KHUNG CẢNH 1 */
+        /* ---------------- SCENE 1: GIAO DIỆN GỬI THƯ ---------------- */
         #scene-1 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 5; transition: opacity 1s ease-in-out; }
         .cloud-right { position: absolute; bottom: -125px; right: -50px; width: 55vw; min-width: 450px; opacity: 0.8; transform: scaleX(-1); z-index: 10; pointer-events: none; }
         .piano { position: absolute; bottom: 20px; right: 50px; width: 350px; z-index: 15; filter: drop-shadow(0 0 25px #d8b4fe); pointer-events: none; transform: rotate(10deg); }
         .cauldron { position: absolute; bottom: 10px; left: 55px; width: 300px; z-index: 25; filter: drop-shadow(0 0 25px #d8b4fe); pointer-events: none; transform: rotate(-8deg); }
         .cloud-left { position: absolute; bottom: -125px; left: -50px; width: 55vw; min-width: 450px; opacity: 0.8; z-index: 30; pointer-events: none; }
         
-        .paper-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 680px; background: url('assets/paper.png') no-repeat center center; background-size: 100% 100%; padding: 115px 50px 120px 50px; box-sizing: border-box; z-index: 20; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.6); transition: transform 0.3s ease; }
+        .paper-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 680px; background: url('assets/paper.png') no-repeat center center; background-size: 100% 100%; padding: 115px 60px 120px 60px; box-sizing: border-box; z-index: 20; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.6); transition: transform 0.3s ease; }
         .paper-wrapper::after { content: ''; position: absolute; top: 80px; right: 45px; width: 90px; height: 90px; background: url('assets/paper_stars.png') no-repeat center center; background-size: contain; pointer-events: none; transform: rotate(8deg); }
         .input-group { display: flex; align-items: center; margin-bottom: 6px; }
         .input-group label { color: #3b2818; font-weight: 700; font-size: 22px; margin-right: 8px; }
@@ -39,11 +39,11 @@
         .paper-input { border-bottom: 2.5px dashed #8b6b4a; }
         .paper-textarea { resize: none; flex-grow: 1; margin-top: 40px; line-height: 40px; }
         
-        .submit-section { position: absolute; bottom: 70px; right: 5px; display: flex; align-items: center; cursor: pointer; z-index: 40; }
+        .submit-section { position: absolute; bottom: 85px; right: 40px; display: flex; align-items: center; cursor: pointer; z-index: 40; }
         .submit-btn { background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; white-space: nowrap; }
         .witch-character { width: 95px; margin-left: -23px; transition: transform 1s ease; }
 
-        /* HIỆU ỨNG CẢNH 2 (Vòng Xoáy) */
+        /* ---------------- SCENE 2: HỐ ĐEN VŨ TRỤ ---------------- */
         #scene-2 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; transition: opacity 1s ease-in-out; z-index: 100; }
         .galaxy-spiral { position: absolute; width: 170vw; height: 170vw; max-width: 900px; max-height: 900px; background: url('assets/spiral.png') no-repeat center center; background-size: contain; animation: rotateSpiral 30s linear infinite; image-rendering: pixelated; }
         .flying-envelope { position: absolute; top: 50%; left: 50%; width: 60px; z-index: 6; opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
@@ -51,89 +51,87 @@
         @keyframes rotateSpiral { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes flyIntoGalaxy { 0% { transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5); opacity: 1; } 100% { transform: translate(-50%, -50%) rotate(1080deg) translateX(0px) rotate(-1080deg) scale(0); opacity: 0; } }
 
-        /* CẢNH 3: HÒM THƯ VÀ THÔNG BÁO */
+        /* ---------------- SCENE 3: HÒM THƯ & HOẠT ẢNH ---------------- */
         #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; z-index: 110; }
         
-        .custom-alert-box { position: absolute; top: 12%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(10px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 120; }
+        .custom-alert-box { position: absolute; top: 8%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(10px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 120; }
         .custom-alert-box.show { opacity: 1; transform: translateY(0); }
         .custom-alert-title { font-size: 28px; font-weight: 700; color: #facc15; margin-bottom: 12px; letter-spacing: 1px; }
         .custom-alert-desc { font-size: 22px; color: #e9d5ff; line-height: 1.5; white-space: pre-line; }
 
-        .mailbox-container { position: relative; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); display: flex; flex-direction: column; align-items: center; z-index: 115; margin-top: 50px; }
-        .mailbox-img { width: 180px; image-rendering: pixelated; filter: drop-shadow(0 0 35px rgba(216, 180, 254, 0.9)) drop-shadow(0 0 70px rgba(147, 51, 234, 0.7)); z-index: 115; position: relative; }
+        .mailbox-wrapper { position: relative; display: flex; justify-content: center; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 50px; z-index: 115; }
+        .mailbox-img { width: 180px; image-rendering: pixelated; filter: drop-shadow(0 0 35px rgba(216, 180, 254, 0.9)) drop-shadow(0 0 70px rgba(147, 51, 234, 0.7)); position: relative; z-index: 2; }
         
-        /* HOẠT ẢNH THƯ CHUI LỌT HÒM (Z-index ảo giác) */
-        .incoming-letter { position: absolute; width: 60px; top: 10%; left: 50%; opacity: 0; z-index: 110; /* Z-index thấp hơn hòm thư để chui ra sau */ transform: translate(-50%, -50px) scale(1.5); image-rendering: pixelated; pointer-events: none; }
-        .animate-incoming { animation: letterSucksIn 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
-        @keyframes letterSucksIn { 
-            0% { transform: translate(-50%, -25vh) scale(1.5); opacity: 0; } 
+        /* Mặt nạ vật lý (Masking) mô phỏng rãnh hòm thư */
+        .slit-mask { position: absolute; top: -50vh; left: 0; width: 100%; height: calc(50vh + 25px); overflow: hidden; z-index: 1; }
+        .incoming-letter { position: absolute; top: 0; left: 50%; width: 55px; opacity: 0; transform: translate(-50%, -100px) scale(1.5); image-rendering: pixelated; }
+        .animate-incoming { animation: physicalInsert 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        @keyframes physicalInsert { 
+            0% { transform: translate(-50%, -50px) scale(1.5); opacity: 0; } 
             20% { opacity: 1; } 
-            100% { transform: translate(-50%, 15vh) scale(0.6); opacity: 0; } /* Trượt thẳng xuống phía sau hòm */
+            100% { transform: translate(-50%, calc(50vh + 50px)) scale(0.8); opacity: 1; } 
         }
 
-        .letter-counter { font-size: 26px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.8); backdrop-filter: blur(6px); padding: 8px 30px; border-radius: 30px; border: 2px solid rgba(216, 180, 254, 0.6); margin-bottom: -15px; z-index: 116; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
+        .letter-counter { position: absolute; bottom: -30px; font-size: 26px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.8); backdrop-filter: blur(6px); padding: 8px 30px; border-radius: 30px; border: 2px solid rgba(216, 180, 254, 0.6); z-index: 116; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
         
-        .spilled-letter { position: absolute; width: 65px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.4s ease, filter 0.4s ease; image-rendering: pixelated; }
-        .spilled-letter:hover { transform: scale(1.2) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
-        @keyframes spillOut { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 40% { opacity: 1; } 100% { opacity: 1; } }
+        /* Hiệu ứng 259 lá thư phân tán */
+        .spilled-letter { position: absolute; width: 50px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
+        .spilled-letter:hover { transform: scale(1.3) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
+        @keyframes massSpillOut { 
+            0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
+            30% { opacity: 1; } 
+            100% { opacity: 1; } 
+        }
 
-        /* MODAL KHÓA XÁC THỰC ADMIN */
+        /* ---------------- MODAL BẢO MẬT ADMIN ---------------- */
         #password-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 300; }
         .security-box { position: relative; display: flex; flex-direction: column; align-items: center; background: rgba(30, 10, 70, 0.95); border: 3px dashed #d8b4fe; padding: 40px; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .close-pass-btn { position: absolute; top: -15px; right: -15px; width: 35px; height: 35px; background: #facc15; color: #150824; border-radius: 50%; font-family: sans-serif; font-size: 18px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #3b0764; transition: transform 0.2s ease; }
         .close-pass-btn:hover { transform: scale(1.1); }
         
-        .lock-animation-area { display: flex; justify-content: center; align-items: center; position: relative; width: 160px; height: 140px; margin-bottom: 25px; }
-        .lock-img { width: 120px; z-index: 2; image-rendering: pixelated; position: relative; }
+        .lock-animation-area { display: flex; justify-content: center; align-items: center; position: relative; width: 180px; height: 140px; margin-bottom: 25px; overflow: hidden; /* Che mũi chìa khóa */ }
+        .lock-img { width: 120px; z-index: 3; image-rendering: pixelated; position: relative; }
         
-        /* Chìa khóa neo tâm xoay tại mũi chìa */
-        .key-img { width: 80px; position: absolute; right: -80px; top: 50px; z-index: 3; opacity: 0; image-rendering: pixelated; transform-origin: 10% 50%; transition: transform 0.5s ease-out, opacity 0.3s ease; }
-        .key-insert { opacity: 1; transform: translateX(-90px) rotate(0deg); }
-        .key-turn { opacity: 1; transform: translateX(-90px) rotate(90deg); }
+        /* Chìa khóa cắm vật lý */
+        .key-img { width: 85px; position: absolute; right: -90px; top: 40px; z-index: 2; opacity: 0; image-rendering: pixelated; transform-origin: 10% 50%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; }
+        .key-insert { opacity: 1; transform: translateX(-95px) rotate(0deg); }
+        .key-turn { opacity: 1; transform: translateX(-95px) rotate(90deg); }
         
         .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; text-align: center; width: 200px; outline: none; letter-spacing: 4px; margin-bottom: 25px; }
         .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 35px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; }
         .pass-submit-btn:hover { background: #c084fc; }
 
-        /* GIAO DIỆN CUỘN THÁNH CHỈ CHUẨN MỰC */
-        #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; z-index: 250; }
+        /* ---------------- GIAO DIỆN CUỘN THÁNH CHỈ ---------------- */
+        #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; z-index: 350; }
         
-        /* Flexbox neo cứng 3 phần */
-        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 450px; }
+        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 500px; }
         .scroll-top { width: 100%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         .scroll-bottom { width: 100%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         
         .scroll-middle { 
-            width: 88%; /* Khớp với lõi giấy của hình cuộn */
-            background: url('assets/scroll-bg.png') repeat-y top center; background-size: 100% auto; 
-            max-height: 0px; overflow: hidden; 
-            display: flex; flex-direction: column; align-items: center; 
-            transition: max-height 2.5s cubic-bezier(0.4, 0, 0.2, 1); /* Chậm rãi, điện ảnh */
-            margin: -6px 0; /* Khắc phục kẽ hở giữa các mảnh */
-            z-index: 2; 
+            width: 89%; background: url('assets/scroll-bg.png') repeat-y top center; background-size: 100% auto; 
+            max-height: 0px; overflow: hidden; display: flex; flex-direction: column; align-items: center; 
+            transition: max-height 2.5s cubic-bezier(0.34, 1.56, 0.64, 1); margin: -4px 0; z-index: 2; 
         }
-        .scroll-middle.open { max-height: 60vh; }
+        .scroll-middle.open { max-height: 65vh; }
         
-        /* Căn lề chuẩn mực */
+        /* Căn lề chuẩn bản gốc */
         .scroll-content-text { 
             color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; 
-            line-height: 1.7; text-align: center; opacity: 0; 
-            transition: opacity 1s ease 1.5s; /* Chờ giấy cuộn hờ hờ rồi mới hiện chữ */
-            padding: 40px 30px; /* Cách lề tuyệt đối gọn gàng */
-            box-sizing: border-box; width: 100%;
+            line-height: 1.7; text-align: left; opacity: 0; transition: opacity 1s ease 1.8s; 
+            padding: 50px 60px; box-sizing: border-box; width: 100%; 
         }
         .scroll-middle.open .scroll-content-text { opacity: 1; }
         
-        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(0,0,0,0.6); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 22px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 260; transition: background 0.3s ease, transform 0.2s ease; }
+        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(0,0,0,0.6); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 22px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 360; transition: background 0.3s ease, transform 0.2s ease; }
         .close-scroll-btn:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
         .hidden { opacity: 0 !important; pointer-events: none !important; }
 
         /* ĐIỀU CHỈNH GIAO DIỆN RESPONSIVE */
-        @media screen and (max-width: 900px) { .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; } .paper-wrapper { box-shadow: none !important; filter: none !important; transform: translate(-50%, -50%) scale(0.8); transform-origin: center center; } }
-        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.7); } }
-        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } }
+        @media screen and (max-width: 900px) { .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; } .paper-wrapper { box-shadow: none !important; filter: none !important; transform: translate(-50%, -50%) scale(0.85); transform-origin: center center; } }
+        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); } .scroll-content-text { padding: 40px 40px; font-size: 20px; } }
+        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } .scroll-content-text { padding: 30px 30px; font-size: 18px; } }
         @media screen and (max-width: 390px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.6); } }
-        @media screen and (max-width: 350px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.55); } }
     </style>
 </head>
 <body>
@@ -172,17 +170,19 @@
             <div class="custom-alert-desc" id="sequence-message">Bạn là người thứ... gửi thư đến dải ngân hà.</div>
         </div>
 
-        <div class="mailbox-container" id="mailbox-container">
-            <div class="letter-counter" id="letter-counter">0 Thư</div>
+        <div class="mailbox-wrapper" id="mailbox-container">
+            <!-- Mặt nạ cắt thư -->
+            <div class="slit-mask">
+                <img src="assets/letter.png" class="incoming-letter" id="incoming-letter" alt="Thư tới">
+            </div>
             <img src="assets/mailbox.png" class="mailbox-img" alt="Hòm Thư">
+            <div class="letter-counter" id="letter-counter">0 Thư</div>
         </div>
-        
-        <img src="assets/letter.png" class="incoming-letter" id="incoming-letter" alt="Thư tới">
         
         <div id="spilled-letters-area"></div>
     </div>
 
-    <!-- MODAL KHÓA XÁC THỰC ADMIN (CHỈ KIỂM TRA 1 LẦN) -->
+    <!-- MODAL KHÓA XÁC THỰC ADMIN -->
     <div id="password-modal">
         <div class="security-box" id="security-box">
             <div class="close-pass-btn" onclick="closePasswordModal()">X</div>
@@ -196,7 +196,7 @@
         </div>
     </div>
 
-    <!-- MODAL ĐỌC THƯ (KHÔNG PASS) -->
+    <!-- MODAL ĐỌC THƯ THÁNH CHỈ -->
     <div id="scroll-modal">
         <div class="close-scroll-btn" onclick="closeScroll()">X</div>
         <div class="scroll-wrapper">
@@ -218,13 +218,11 @@
             const sender = document.getElementById('sender').value.trim();
             const message = document.getElementById('message').value.trim();
 
-            // KIỂM TRA MẬT DANH STAR PRINCESS -> NHẢY THẲNG CỔNG ADMIN
             if (sender.toLowerCase() === 'starprincess') {
                 openPasswordModal();
                 return;
             }
 
-            // KIỂM TRA KHÁCH VÃNG LAI
             if (!sender || !message) {
                 alert("Bạn vui lòng điền đầy đủ tên và lời nhắn nhé! ✨");
                 return; 
@@ -232,7 +230,7 @@
             runGuestFlow(sender, message);
         }
 
-        /* ----- QUY TRÌNH DÀNH CHO KHÁCH (GUEST FLOW) ----- */
+        /* ---------------- QUY TRÌNH GUEST ---------------- */
         function runGuestFlow(sender, message) {
             const witch = document.getElementById('witch');
             witch.style.transform = "rotate(-30deg) translateY(-20px)";
@@ -271,13 +269,12 @@
                         document.getElementById('notif-title').innerText = "Gửi Thành Công! ✨";
                         document.getElementById('sequence-message').innerText = `Bạn là người thứ ${sequenceNumber} gửi thư đến dải ngân hà.`;
                         notif.classList.add('show');
-                        // Kết thúc luồng khách.
-                    }, 1500); 
-                }, 1000); 
+                    }, 1800); 
+                }, 1200); 
             }, 100);
         }
 
-        /* ----- QUY TRÌNH BẢO MẬT ADMIN ----- */
+        /* ---------------- QUY TRÌNH ADMIN ---------------- */
         function openPasswordModal() {
             const modal = document.getElementById('password-modal');
             const box = document.getElementById('security-box');
@@ -307,28 +304,26 @@
 
             const key = document.getElementById('auth-key');
             
-            // Bước 1: Cắm chìa tịnh tiến
+            // Xử lý đâm xuyên và xoay
             key.classList.add('key-insert');
             
-            // Bước 2: Chờ nửa giây để lấy thế, vặn cạch 90 độ
             setTimeout(() => {
                 key.classList.add('key-turn');
                 
-                // Bước 3: Đợi mở khóa xong, dọn dẹp và nhảy cảnh
                 setTimeout(() => {
                     closePasswordModal(); 
                     deployAdminScene();
                 }, 800);
-            }, 500);
+            }, 600); // Khựng lại 0.6s
         }
 
         function deployAdminScene() {
-            // LƯU Ý: SỬA THÀNH '2026-09-25T00:00:00' KHI DEPLOY THỰC TẾ
+            // MỐC THỜI GIAN KIỂM THỬ TẠM THỜI
             const unlockDate = new Date('2026-09-01T00:00:00'); 
             const currentDate = new Date();
             
             document.getElementById('scene-1').classList.add('hidden');
-            document.getElementById('scene-2').classList.add('hidden'); // Tránh lỗi hiển thị hố đen
+            document.getElementById('scene-2').classList.add('hidden');
             document.getElementById('stars-layer').style.opacity = '0';
             
             const scene3 = document.getElementById('scene-3');
@@ -343,72 +338,67 @@
                 document.getElementById('mailbox-container').style.transform = 'scale(1)';
 
                 if (currentDate < unlockDate) {
-                    // CHƯA ĐẾN NGÀY
                     setTimeout(() => {
                         titleEl.innerText = "Hòm Thư Đang Khóa 🔒";
                         descEl.innerText = "Chào mừng Star Princess!\nChưa tới ngày 25/09/2026, thư chưa thể nở ra đâu nha. Ráng đợi thêm xíu nữa!";
                         notif.classList.add('show');
                     }, 1000);
                 } else {
-                    // ĐÃ TỚI NGÀY
-                    const sequenceNumber = 259; 
+                    const totalLetters = 259; // Tổng số thư kích hoạt
                     setTimeout(() => {
                         titleEl.innerText = "Kén Thời Gian Đã Mở! ✨";
-                        descEl.innerText = `Chào mừng Star Princess trở lại!\nBạn đã nhận được tổng cộng ${sequenceNumber} lá thư.`;
+                        descEl.innerText = `Chào mừng Star Princess trở lại!\nBạn đã nhận được tổng cộng ${totalLetters} lá thư.`;
                         notif.classList.add('show');
                         
                         document.getElementById('letter-counter').style.opacity = '1';
-                        document.getElementById('letter-counter').innerText = `${sequenceNumber} Thư`;
+                        document.getElementById('letter-counter').innerText = `${totalLetters} Thư`;
                         
                         setTimeout(() => {
                             notif.classList.remove('show'); 
-                            spillLettersForAdmin();
+                            massSpillLetters(totalLetters);
                         }, 3500);
                     }, 1000);
                 }
             }, 100);
         }
 
-        function spillLettersForAdmin() {
+        function massSpillLetters(total) {
             const area = document.getElementById('spilled-letters-area');
-            const numLetters = 20; 
             
-            let positions = [];
-            for(let r = 0; r < 4; r++) {
-                for(let c = 0; c < 5; c++) {
-                    positions.push({r, c});
-                }
-            }
-            positions.sort(() => Math.random() - 0.5);
+            // Tối ưu hóa DOM Rendering cho 259 Node
+            const fragment = document.createDocumentFragment();
 
-            for (let i = 0; i < numLetters; i++) {
+            for (let i = 0; i < total; i++) {
                 let letter = document.createElement('img');
                 letter.src = 'assets/letter.png';
                 letter.className = 'spilled-letter';
                 
-                let pos = positions[i];
-                let baseX = 12 + (pos.c * 15); 
-                let baseY = 25 + (pos.r * 15); 
-                
-                let randomX = baseX + (Math.random() * 6 - 3);
-                let randomY = baseY + (Math.random() * 6 - 3);
+                // Phân bổ ngẫu nhiên toàn màn hình (Viewport)
+                let randomX = Math.floor(Math.random() * 90) + 5; 
+                let randomY = Math.floor(Math.random() * 85) + 10; 
                 let randomRotation = Math.floor(Math.random() * 360);
-                let animationDelay = Math.random() * 0.8; 
+                
+                // Thay đổi kích thước (Scale) tạo chiều sâu 3D (0.6x đến 1.2x)
+                let randomScale = (Math.random() * 0.6) + 0.6;
+                
+                // Trì hoãn hoạt ảnh để tạo hiệu ứng nổ dây chuyền (Tối đa 3 giây)
+                let animationDelay = Math.random() * 3; 
 
-                letter.style.animation = `spillOut 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards ${animationDelay}s`;
+                letter.style.animation = `massSpillOut 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
                 letter.style.top = `${randomY}vh`;
                 letter.style.left = `${randomX}vw`;
-                letter.style.transform = `translate(-50%, -50%) rotate(${randomRotation}deg)`;
+                letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${randomRotation}deg)`;
 
-                // Gọi thẳng Thánh Chỉ, BỎ QUA KHUNG MẬT KHẨU
                 letter.onclick = function() {
-                    openMagicScroll("Một Người Bạn", "Chúc Star Princess sinh nhật 20 tuổi rực rỡ và luôn hạnh phúc nhé! Đây là nội dung test, sau này sẽ móc từ Google Sheets ra.");
+                    openMagicScroll("Đồng bọn số " + (i+1), "Chúc Star Princess sinh nhật 20 tuổi rực rỡ và luôn hạnh phúc nhé! Đây là nội dung test, sau này sẽ móc từ Google Sheets ra.");
                 };
-                area.appendChild(letter);
+                fragment.appendChild(letter);
             }
+            
+            area.appendChild(fragment);
         }
 
-        /* ----- HIỆU ỨNG THÁNH CHỈ ----- */
+        /* ---------------- GIAO DIỆN THÁNH CHỈ ---------------- */
         function openMagicScroll(senderName, messageContent) {
             document.getElementById('display-sender').innerText = senderName;
             document.getElementById('display-message').innerText = messageContent;
@@ -419,7 +409,7 @@
             scrollModal.style.opacity = '1';
             scrollModal.style.pointerEvents = 'auto';
             
-            setTimeout(() => { scrollPaper.classList.add('open'); }, 300); 
+            setTimeout(() => { scrollPaper.classList.add('open'); }, 200); 
         }
 
         function closeScroll() {
