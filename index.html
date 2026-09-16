@@ -242,7 +242,6 @@
             const messageInput = document.getElementById('message');
             const passInput = document.getElementById('letter-pass');
 
-            // Bấm Enter ở ô Tên hoặc Textarea sẽ thực thi gửi thư
             [senderInput, messageInput].forEach(element => {
                 element.addEventListener('keydown', function(event) {
                     if (event.key === 'Enter' && !event.shiftKey) {
@@ -252,7 +251,6 @@
                 });
             });
 
-            // Bấm Enter ở ô mật chú sẽ thực thi mở khóa Admin
             passInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter') {
                     event.preventDefault();
@@ -316,7 +314,6 @@
             const lock = document.getElementById('auth-lock');
             lock.classList.remove('magic-unlock');
             
-            // Tự động focus vào ô nhập pass
             setTimeout(() => { document.getElementById('letter-pass').focus(); }, 100);
         }
 
@@ -381,7 +378,7 @@
                         document.getElementById('letter-counter').innerText = `${totalLettersCount} Thư`;
                         
                         setTimeout(() => {
-                            notif.classList.remove('show'); 
+                            notif.classList.remove('start'); 
                             massSpillLetters(totalLettersCount);
                         }, 3500);
                     }, 1000);
@@ -389,45 +386,51 @@
             }, 100);
         }
 
-        // THUẬT TOÁN QUỸ ĐẠO XOẮN ỐC KẾT HỢP HAI DẤU NGOẶC ĐƠN ÔM SÁT HỒM THƯ
+        // THUẬT TOÁN XOẮN ỐC TRÒN ĐỒNG TÂM KẾT HỢP CUNG TRÒN NGOẶC ĐƠN ĐỨT QUÃNG NGOÀI BIÊN
         function massSpillLetters(totalCount) {
             const area = document.getElementById('spilled-letters-area');
             const fragment = document.createDocumentFragment();
 
             document.getElementById('letter-counter').style.opacity = '0';
 
-            const centerX = 50; // Tâm màn hình X (%)
-            const centerY = 50; // Tâm màn hình Y (%)
+            const centerX = 50; // Tâm X (%)
+            const centerY = 50; // Tâm Y (%)
 
             for (let i = 0; i < totalCount; i++) {
                 let letter = document.createElement('img');
                 letter.src = 'assets/letter.png';
                 letter.className = 'spilled-letter';
                 
-                // Phân bổ theo hình xoắn ốc (Spiral Coordinates) kết hợp 2 dấu ngoặc đơn ôm 2 bên
-                let angle = 0.2 * i; // Góc xoay lan tỏa
-                let radius = 5 + (1.8 * Math.sqrt(i)); // Bán kính vòng xoắn dịch chuyển đều ra xa tâm
+                // Tọa độ cực (Polar Coordinates) chuẩn hình tròn đồng tâm
+                let angle = 0.22 * i; // Góc xoay lan tỏa vòng tròn
+                let radius = 6 + (1.6 * Math.sqrt(i)); // Khoảng cách ly tâm đều đặn
                 
-                let randomX = centerX + radius * Math.cos(angle) * 1.4; // Nhân hệ số màn hình ngang
-                let randomY = centerY + radius * Math.sin(angle) * 0.9; // Tỷ lệ chiều dọc
+                // Đồng bộ tỷ lệ màn hình (giúp vòng xoắn giữ nguyên hình tròn, không bị dẹt thành oval)
+                let scaleFactorX = 1.0; 
+                let scaleFactorY = 1.0;
 
-                // Mô phỏng 2 dấu ngoặc đơn ôm 2 bên hông (Bẻ hướng dòng thư nếu lẹm vào vùng trung tâm)
-                if (randomX > 38 && randomX < 62 && randomY > 30 && randomY < 70) {
-                    // Đẩy dạt sang trái hoặc phải tạo hình vòng cung '()' ôm lấy hòm thư
-                    if (i % 2 === 0) {
-                        randomX = 35 - (i % 15);
-                    } else {
-                        randomX = 65 + (i % 15);
-                    }
+                let randomX = centerX + radius * Math.cos(angle) * scaleFactorX;
+                let randomY = centerY + radius * Math.sin(angle) * scaleFactorY;
+
+                // Né vùng trung tâm (Aura của hòm thư)
+                if (randomX > 42 && randomX < 58 && randomY > 38 && randomY < 62) {
+                    radius += 12; // Đẩy phình ra vòng ngoài
+                    randomX = centerX + radius * Math.cos(angle);
+                    randomY = centerY + radius * Math.sin(angle);
                 }
 
-                // Đảm bảo không vượt quá khung màn hình
-                randomX = Math.max(3, Math.min(97, randomX));
-                randomY = Math.max(5, Math.min(95, randomY));
+                // Xử lý các vòng ngoài cùng vượt quá biên độ khung hình -> Chuyển thành dạng cung tròn / ngoặc đơn đứt quãng xếp hàng lối
+                if (randomX < 6 || randomX > 94 || randomY < 8 || randomY > 92) {
+                    // Xếp thành các cụm cung tròn đứt quãng ở 2 bên biên trái/phải
+                    let side = (i % 2 === 0) ? 1 : -1;
+                    randomX = (side > 0) ? (82 + (i % 12)) : (18 - (i % 12));
+                    randomY = 10 + ((i * 7) % 80); // Trải đều từ trên xuống dưới theo hàng lối
+                }
 
-                let orderedRotation = (angle * (180 / Math.PI)) % 360; // Góc xoay nương theo chiều xoắn ốc
-                let randomScale = (Math.random() * 0.3) + 0.6; // Kích thước thư vừa vặn
-                let animationDelay = (i % 60) * 0.03; // Hiệu ứng lan tỏa theo đợt mượt mà
+                // Góc xoay nương theo quỹ đạo đường tròn kết hợp độ nghiêng sinh động ngẫu nhiên
+                let orderedRotation = (angle * (180 / Math.PI) + 45) % 360; 
+                let randomScale = (Math.random() * 0.25) + 0.65; // Kích thước thư vừa vặn, sắc nét
+                let animationDelay = (i % 55) * 0.025; // Lan tỏa mượt mà theo đợt
 
                 letter.style.animation = `massSpillOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
                 letter.style.top = `${randomY}vh`;
