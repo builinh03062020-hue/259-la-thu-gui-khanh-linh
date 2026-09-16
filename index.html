@@ -53,7 +53,7 @@
         /* SCENE 3: LƯU TRỮ VÀ PHÂN TÁN */
         #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; z-index: 110; }
         
-        .custom-alert-box { position: absolute; top: 3%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.9); backdrop-filter: blur(10px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 300; }
+        .custom-alert-box { position: absolute; top: 4%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.9); backdrop-filter: blur(10px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 300; }
         .custom-alert-box.show { opacity: 1; transform: translateY(0); }
         .custom-alert-title { font-size: 26px; font-weight: 700; color: #facc15; margin-bottom: 8px; letter-spacing: 1px; }
         .custom-alert-desc { font-size: 20px; color: #e9d5ff; line-height: 1.4; white-space: pre-line; }
@@ -72,7 +72,7 @@
 
         .letter-counter { position: absolute; top: -55px; bottom: auto; font-size: 22px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(6px); padding: 6px 24px; border-radius: 25px; border: 2px solid rgba(216, 180, 254, 0.6); z-index: 201; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
         
-        .spilled-letter { position: absolute; width: 45px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
+        .spilled-letter { position: absolute; width: 50px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
         .spilled-letter:hover { transform: scale(1.4) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
         @keyframes massSpillOut { 
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
@@ -377,7 +377,6 @@
                         document.getElementById('letter-counter').innerText = `${totalLettersCount} Thư`;
                         
                         setTimeout(() => {
-                            // ẨN ĐỒNG THỜI BẢNG THÔNG BÁO VÀ CỤC ĐẾM SỐ KHI THƯ BẮT ĐẦU NỔ
                             notif.classList.remove('show'); 
                             document.getElementById('letter-counter').style.opacity = '0';
                             
@@ -388,44 +387,80 @@
             }, 100);
         }
 
+        // THUẬT TOÁN TỌA ĐỘ CỰC: XOẮN ỐC TRÒN TUYỆT ĐỐI & CẮT CUNG NGOẶC ĐƠN TỰ ĐỘNG
         function massSpillLetters(totalCount) {
             const area = document.getElementById('spilled-letters-area');
             const fragment = document.createDocumentFragment();
 
-            const centerX = 50; 
-            const centerY = 50; 
+            let cx = window.innerWidth / 2;
+            let cy = window.innerHeight / 2;
+            let auraRadius = 150; // Vùng cấm bay tuyệt đối tính bằng Pixels (Ôm vừa khít hộp thư)
+            let gapBetweenRings = Math.max(65, Math.min(window.innerWidth, window.innerHeight) * 0.12); // Khoảng cách giãn cách rộng rãi
+            let rStepPerRadian = gapBetweenRings / (2 * Math.PI);
+            
+            let bestPoints = [];
+            
+            // Thuật toán dò tìm mật độ tối ưu để rải đủ thư vào màn hình
+            for (let spacing = 90; spacing >= 10; spacing -= 1) {
+                let tempPoints = [];
+                let theta = 0;
+                let r = auraRadius;
+                let attempts = 0;
+                
+                while (tempPoints.length < totalCount && attempts < 5000) {
+                    attempts++;
+                    // Đo bằng Pixel tuyệt đối để xoắn ốc tròn vành vạnh, không bị bóp méo thành Elip
+                    let x = cx + r * Math.cos(theta);
+                    let y = cy + r * Math.sin(theta);
+                    
+                    // Thuật toán "Ngoặc đơn": Các lá thư lọt ra ngoài mép trên/dưới sẽ bị loại bỏ. 
+                    // Những phần sót lại ở 2 bên mép dọc tự động hình thành các cung tròn (Ngoặc đơn) đứt quãng.
+                    let inBoundsX = x > 25 && x < window.innerWidth - 25;
+                    let inBoundsY = y > 25 && y < window.innerHeight - 25;
+                    
+                    if (inBoundsX && inBoundsY) {
+                        tempPoints.push({x, y, theta});
+                    }
+                    
+                    // Chống lặp vô hạn khi màn hình đã phủ kín
+                    if (x < -cx || x > cx * 3) break;
+                    
+                    let dTheta = spacing / r;
+                    theta += dTheta;
+                    r += rStepPerRadian * dTheta;
+                }
+                
+                if (tempPoints.length >= totalCount) {
+                    bestPoints = tempPoints.slice(0, totalCount);
+                    break;
+                }
+            }
+
+            // Phương án dự phòng: Nối mảng nếu thiết bị có tỷ lệ màn hình quá đặc thù
+            if (bestPoints.length < totalCount) {
+                bestPoints = bestPoints.concat(bestPoints.slice(0, totalCount - bestPoints.length)); 
+            }
 
             for (let i = 0; i < totalCount; i++) {
                 let letter = document.createElement('img');
                 letter.src = 'assets/letter.png';
                 letter.className = 'spilled-letter';
                 
-                let angle = 0.18 * i; 
-                let radius = 8 + (2.4 * Math.sqrt(i)); 
+                let pt = bestPoints[i];
                 
-                let randomX = centerX + radius * Math.cos(angle);
-                let randomY = centerY + radius * Math.sin(angle);
-
-                if (randomX > 40 && randomX < 60 && randomY > 35 && randomY < 65) {
-                    radius += 18; 
-                    randomX = centerX + radius * Math.cos(angle);
-                    randomY = centerY + radius * Math.sin(angle);
-                }
-
-                if (randomX < 4 || randomX > 96 || randomY < 5 || randomY > 95) {
-                    let side = (i % 2 === 0) ? 1 : -1;
-                    randomX = (side > 0) ? (88 + (i % 8)) : (12 - (i % 8));
-                    randomY = 6 + ((i * 5) % 88); 
-                }
-
-                let orderedRotation = (angle * (180 / Math.PI) + 30) % 360; 
+                // Hướng xoay: Nương theo cung tròn quỹ đạo kết hợp góc lệch ngẫu nhiên +-25 độ tạo nét tự nhiên
+                let baseRotation = (pt.theta * (180 / Math.PI)) + 90; 
+                let randomWiggle = (Math.random() * 50) - 25; 
+                let finalRotation = baseRotation + randomWiggle;
+                
                 let randomScale = (Math.random() * 0.25) + 0.65; 
-                let animationDelay = (i % 50) * 0.02; 
+                let animationDelay = (i % 60) * 0.025; 
 
                 letter.style.animation = `massSpillOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
-                letter.style.top = `${randomY}vh`;
-                letter.style.left = `${randomX}vw`;
-                letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${orderedRotation}deg)`;
+                // Đặt tọa độ bằng px tĩnh để giữ vững cấu trúc hình học
+                letter.style.top = `${pt.y}px`;
+                letter.style.left = `${pt.x}px`;
+                letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${finalRotation}deg)`;
 
                 letter.onclick = function() {
                     const dataRecord = databaseLetters[i];
