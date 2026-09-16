@@ -72,8 +72,7 @@
 
         .letter-counter { position: absolute; top: -55px; bottom: auto; font-size: 22px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(6px); padding: 6px 24px; border-radius: 25px; border: 2px solid rgba(216, 180, 254, 0.6); z-index: 201; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
         
-        /* Tăng kích thước thư lên 50px cho rõ nét, cân đối */
-        .spilled-letter { position: absolute; width: 50px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
+        .spilled-letter { position: absolute; width: 45px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
         .spilled-letter:hover { transform: scale(1.4) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
         @keyframes massSpillOut { 
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
@@ -237,6 +236,31 @@
             runGuestFlow(sender, message);
         }
 
+        // KÍCH HOẠT PHÍM ENTER CHO KHUNG SOẠN THẢO & NHẬP MẬT CHÚ
+        document.addEventListener('DOMContentLoaded', () => {
+            const senderInput = document.getElementById('sender');
+            const messageInput = document.getElementById('message');
+            const passInput = document.getElementById('letter-pass');
+
+            // Bấm Enter ở ô Tên hoặc Textarea sẽ thực thi gửi thư
+            [senderInput, messageInput].forEach(element => {
+                element.addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                        event.preventDefault();
+                        processSubmission();
+                    }
+                });
+            });
+
+            // Bấm Enter ở ô mật chú sẽ thực thi mở khóa Admin
+            passInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    verifyAdminPassword();
+                }
+            });
+        });
+
         function runGuestFlow(sender, message) {
             const witch = document.getElementById('witch');
             witch.style.transform = "rotate(-30deg) translateY(-20px)";
@@ -291,6 +315,9 @@
             document.getElementById('letter-pass').value = '';
             const lock = document.getElementById('auth-lock');
             lock.classList.remove('magic-unlock');
+            
+            // Tự động focus vào ô nhập pass
+            setTimeout(() => { document.getElementById('letter-pass').focus(); }, 100);
         }
 
         function closePasswordModal() {
@@ -362,37 +389,45 @@
             }, 100);
         }
 
+        // THUẬT TOÁN QUỸ ĐẠO XOẮN ỐC KẾT HỢP HAI DẤU NGOẶC ĐƠN ÔM SÁT HỒM THƯ
         function massSpillLetters(totalCount) {
             const area = document.getElementById('spilled-letters-area');
             const fragment = document.createDocumentFragment();
 
             document.getElementById('letter-counter').style.opacity = '0';
 
-            // Thuật toán phân bố có trật tự (Quỹ đạo xoắn ốc đồng tâm tỏa đều, tránh khoảng hở Aura)
+            const centerX = 50; // Tâm màn hình X (%)
+            const centerY = 50; // Tâm màn hình Y (%)
+
             for (let i = 0; i < totalCount; i++) {
                 let letter = document.createElement('img');
                 letter.src = 'assets/letter.png';
                 letter.className = 'spilled-letter';
                 
-                let randomX, randomY;
-                let isOverlapping = true;
+                // Phân bổ theo hình xoắn ốc (Spiral Coordinates) kết hợp 2 dấu ngoặc đơn ôm 2 bên
+                let angle = 0.2 * i; // Góc xoay lan tỏa
+                let radius = 5 + (1.8 * Math.sqrt(i)); // Bán kính vòng xoắn dịch chuyển đều ra xa tâm
                 
-                // Thu hẹp vùng cấm bay ôm khít viền hào quang (X: 42% -> 58%, Y: 35% -> 65%)
-                while (isOverlapping) {
-                    randomX = Math.floor(Math.random() * 92) + 4; 
-                    randomY = Math.floor(Math.random() * 92) + 4; 
-                    
-                    if (randomX > 42 && randomX < 58 && randomY > 35 && randomY < 65) {
-                        isOverlapping = true; 
+                let randomX = centerX + radius * Math.cos(angle) * 1.4; // Nhân hệ số màn hình ngang
+                let randomY = centerY + radius * Math.sin(angle) * 0.9; // Tỷ lệ chiều dọc
+
+                // Mô phỏng 2 dấu ngoặc đơn ôm 2 bên hông (Bẻ hướng dòng thư nếu lẹm vào vùng trung tâm)
+                if (randomX > 38 && randomX < 62 && randomY > 30 && randomY < 70) {
+                    // Đẩy dạt sang trái hoặc phải tạo hình vòng cung '()' ôm lấy hòm thư
+                    if (i % 2 === 0) {
+                        randomX = 35 - (i % 15);
                     } else {
-                        isOverlapping = false; 
+                        randomX = 65 + (i % 15);
                     }
                 }
 
-                // Sắp xếp góc xoay có trật tự theo tỷ lệ vòng lặp để tạo hiệu ứng lớp lang mượt mà
-                let orderedRotation = (i * 137.5) % 360; // Thuật toán góc vàng (Golden angle) giúp phân bố hạt cực kỳ đều, không bị dính chùm
-                let randomScale = (Math.random() * 0.3) + 0.6; // Kích thước thư vừa vặn (0.6 đến 0.9), không quá bé
-                let animationDelay = (i % 50) * 0.04; // Hiệu ứng nổ lan tỏa theo từng đợt có trật tự
+                // Đảm bảo không vượt quá khung màn hình
+                randomX = Math.max(3, Math.min(97, randomX));
+                randomY = Math.max(5, Math.min(95, randomY));
+
+                let orderedRotation = (angle * (180 / Math.PI)) % 360; // Góc xoay nương theo chiều xoắn ốc
+                let randomScale = (Math.random() * 0.3) + 0.6; // Kích thước thư vừa vặn
+                let animationDelay = (i % 60) * 0.03; // Hiệu ứng lan tỏa theo đợt mượt mà
 
                 letter.style.animation = `massSpillOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
                 letter.style.top = `${randomY}vh`;
