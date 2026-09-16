@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* ---------------- THIẾT LẬP CƠ SỞ ---------------- */
+        /* THIẾT LẬP CƠ SỞ */
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
             overflow: hidden; background-color: #150824; touch-action: none; 
@@ -23,7 +23,7 @@
             background-blend-mode: screen; z-index: 0; pointer-events: none; transition: opacity 1s ease-in-out;
         }
 
-        /* ---------------- SCENE 1: GIAO DIỆN GỬI THƯ ---------------- */
+        /* SCENE 1: GIAO DIỆN NHẬP LIỆU */
         #scene-1 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 5; transition: opacity 1s ease-in-out; }
         .cloud-right { position: absolute; bottom: -125px; right: -50px; width: 55vw; min-width: 450px; opacity: 0.8; transform: scaleX(-1); z-index: 10; pointer-events: none; }
         .piano { position: absolute; bottom: 20px; right: 50px; width: 350px; z-index: 15; filter: drop-shadow(0 0 25px #d8b4fe); pointer-events: none; transform: rotate(10deg); }
@@ -42,7 +42,7 @@
         .submit-btn { background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; white-space: nowrap; }
         .witch-character { width: 95px; margin-left: -23px; transition: transform 1s ease; }
 
-        /* ---------------- SCENE 2: VŨ TRỤ ---------------- */
+        /* SCENE 2: HOẠT ẢNH CHUYỂN TIẾP */
         #scene-2 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; justify-content: center; align-items: center; transition: opacity 1s ease-in-out; z-index: 100; }
         .galaxy-spiral { position: absolute; width: 170vw; height: 170vw; max-width: 900px; max-height: 900px; background: url('assets/spiral.png') no-repeat center center; background-size: contain; animation: rotateSpiral 30s linear infinite; image-rendering: pixelated; }
         .flying-envelope { position: absolute; top: 50%; left: 50%; width: 60px; z-index: 6; opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
@@ -50,7 +50,7 @@
         @keyframes rotateSpiral { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes flyIntoGalaxy { 0% { transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg) scale(1.5); opacity: 1; } 100% { transform: translate(-50%, -50%) rotate(1080deg) translateX(0px) rotate(-1080deg) scale(0); opacity: 0; } }
 
-        /* ---------------- SCENE 3: HÒM THƯ ---------------- */
+        /* SCENE 3: LƯU TRỮ VÀ PHÂN TÁN */
         #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; z-index: 110; }
         
         .custom-alert-box { position: absolute; top: 8%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(10px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 120; }
@@ -58,91 +58,74 @@
         .custom-alert-title { font-size: 28px; font-weight: 700; color: #facc15; margin-bottom: 12px; letter-spacing: 1px; }
         .custom-alert-desc { font-size: 22px; color: #e9d5ff; line-height: 1.5; white-space: pre-line; }
 
-        .mailbox-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 50px; z-index: 115; }
-        .mailbox-img { width: 180px; image-rendering: pixelated; filter: drop-shadow(0 0 35px rgba(216, 180, 254, 0.9)); position: relative; z-index: 2; }
+        .mailbox-wrapper { position: relative; display: flex; justify-content: center; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 50px; z-index: 115; }
+        .mailbox-img { width: 180px; image-rendering: pixelated; filter: drop-shadow(0 0 35px rgba(216, 180, 254, 0.9)) drop-shadow(0 0 70px rgba(147, 51, 234, 0.7)); position: relative; z-index: 2; }
         
-        /* HOẠT ẢNH THƯ RƠI CHÍNH XÁC VÀO HÒM (Kích thước lớn hơn, vị trí tuyệt đối) */
-        .incoming-letter { position: absolute; top: -150px; left: 50%; width: 90px; /* Thư to rõ ràng */ margin-left: -45px; opacity: 0; z-index: 1; /* Nằm sau mặt hòm thư */ image-rendering: pixelated; }
-        .animate-incoming { animation: physicalInsert 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .slit-mask { position: absolute; top: -50vh; left: 0; width: 100%; height: calc(50vh + 25px); overflow: hidden; z-index: 1; }
+        .incoming-letter { position: absolute; top: 0; left: 50%; width: 55px; opacity: 0; transform: translate(-50%, -100px) scale(1.5); image-rendering: pixelated; }
+        .animate-incoming { animation: physicalInsert 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         @keyframes physicalInsert { 
-            0% { transform: translateY(-100px) scale(1.2); opacity: 0; } 
+            0% { transform: translate(-50%, -50px) scale(1.5); opacity: 0; } 
             20% { opacity: 1; } 
-            100% { transform: translateY(40px) scale(0.9); opacity: 0; /* Trượt hoàn toàn vào trong hòm */ } 
+            100% { transform: translate(-50%, calc(50vh + 50px)) scale(0.8); opacity: 1; } 
         }
 
-        .letter-counter { font-size: 26px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.9); padding: 8px 30px; border-radius: 30px; border: 2px solid #d8b4fe; margin-top: -20px; z-index: 3; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+        .letter-counter { position: absolute; bottom: -30px; font-size: 26px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.8); backdrop-filter: blur(6px); padding: 8px 30px; border-radius: 30px; border: 2px solid rgba(216, 180, 254, 0.6); z-index: 116; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
         
-        .spilled-letter { position: absolute; width: 60px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
-        .spilled-letter:hover { transform: scale(1.2) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
-        @keyframes massSpillOut { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 30% { opacity: 1; } 100% { opacity: 1; } }
+        .spilled-letter { position: absolute; width: 50px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
+        .spilled-letter:hover { transform: scale(1.3) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
+        @keyframes massSpillOut { 
+            0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
+            30% { opacity: 1; } 
+            100% { opacity: 1; } 
+        }
 
-        /* ---------------- GIAO DIỆN XÁC THỰC ADMIN ---------------- */
+        /* GIAO DIỆN XÁC THỰC QUẢN TRỊ */
         #password-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 300; }
-        .security-box { position: relative; display: flex; flex-direction: column; align-items: center; background: rgba(30, 10, 70, 0.95); border: 3px dashed #d8b4fe; padding: 40px 60px; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .security-box { position: relative; display: flex; flex-direction: column; align-items: center; background: rgba(30, 10, 70, 0.95); border: 3px dashed #d8b4fe; padding: 40px; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .close-pass-btn { position: absolute; top: -15px; right: -15px; width: 35px; height: 35px; background: #facc15; color: #150824; border-radius: 50%; font-family: sans-serif; font-size: 18px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #3b0764; transition: transform 0.2s ease; }
         .close-pass-btn:hover { transform: scale(1.1); }
         
-        .lock-animation-area { display: flex; justify-content: center; align-items: center; position: relative; width: 200px; height: 160px; margin-bottom: 25px; }
+        .lock-animation-area { display: flex; justify-content: center; align-items: center; position: relative; width: 180px; height: 140px; margin-bottom: 25px; overflow: hidden; }
+        .lock-img { width: 120px; z-index: 3; image-rendering: pixelated; position: relative; }
         
-        /* VẼ Ổ KHÓA BẰNG CSS THUẦN (PURE CSS LOCK) */
-        .css-lock { position: relative; width: 100px; height: 130px; display: flex; flex-direction: column; align-items: center; z-index: 3; }
-        .css-lock-shackle { width: 50px; height: 40px; border: 14px solid #bba0e8; border-bottom: none; border-radius: 35px 35px 0 0; }
-        .css-lock-body { width: 100%; height: 75px; background: #d4bfff; border-radius: 20px; border: 4px solid #9c73e8; box-shadow: inset -5px -5px 0 rgba(0,0,0,0.15), 0 10px 20px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; position: relative; }
-        .css-lock-hole { width: 12px; height: 30px; background: #2a1b42; border-radius: 6px; position: relative; }
-        .css-lock-hole::after { content: ''; position: absolute; top: 22px; left: -4px; width: 20px; height: 20px; background: #2a1b42; border-radius: 50%; }
-
-        /* VẼ CHÌA KHÓA BẰNG CSS THUẦN (PURE CSS KEY) */
-        .css-key { position: absolute; right: -120px; top: 60px; width: 100px; height: 35px; display: flex; align-items: center; z-index: 4; opacity: 0; transform-origin: 10px center; /* Tâm xoay tại mũi chìa */ transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; }
-        .css-key-shaft { width: 60px; height: 12px; background: #ffd700; border-top: 2px solid #b8860b; border-bottom: 2px solid #b8860b; position: relative; border-radius: 5px 0 0 5px; }
-        .css-key-teeth { position: absolute; left: 10px; bottom: -14px; width: 16px; height: 14px; background: #ffd700; border: 2px solid #b8860b; border-top: none; border-radius: 0 0 4px 4px; }
-        .css-key-teeth::after { content: ''; position: absolute; left: 20px; bottom: 0; width: 12px; height: 10px; background: #ffd700; border: 2px solid #b8860b; border-top: none; border-radius: 0 0 4px 4px; }
-        .css-key-head { width: 40px; height: 40px; background: #ffd700; border: 3px solid #b8860b; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-left: -5px; box-shadow: inset -3px -3px 0 rgba(0,0,0,0.1); }
-        .css-key-gem { width: 18px; height: 24px; background: #800080; border-radius: 50%; border: 2px solid #4b004b; box-shadow: inset -2px -2px 0 rgba(255,255,255,0.4); }
-
-        /* Trạng thái đâm xuyên và xoay */
-        .key-insert { opacity: 1; transform: translateX(-155px) rotate(0deg); }
-        .key-turn { opacity: 1; transform: translateX(-155px) rotate(90deg); }
+        .key-img { width: 85px; position: absolute; right: -90px; top: 40px; z-index: 4; opacity: 0; image-rendering: pixelated; transform-origin: 10% 50%; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; }
+        .key-insert { opacity: 1; transform: translateX(-95px) rotate(0deg); }
+        .key-turn { opacity: 1; transform: translateX(-95px) rotate(90deg); }
         
-        .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; text-align: center; width: 220px; outline: none; letter-spacing: 4px; margin-bottom: 25px; }
-        .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 40px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; }
+        .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; text-align: center; width: 200px; outline: none; letter-spacing: 4px; margin-bottom: 25px; }
+        .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 35px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; }
         .pass-submit-btn:hover { background: #c084fc; }
 
-        /* ---------------- GIAO DIỆN CUỘN THÁNH CHỈ CSS THUẦN ---------------- */
+        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN */
         #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; z-index: 350; }
         
         .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 500px; }
+        .scroll-top { width: 100%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
+        .scroll-bottom { width: 100%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         
-        /* Trục gỗ bằng CSS */
-        .css-scroll-roller { width: 100%; height: 35px; background: linear-gradient(to bottom, #a05a2c 0%, #6b3e1b 100%); border: 3px solid #3d210b; border-radius: 15px; position: relative; z-index: 3; flex-shrink: 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .css-scroll-roller::before, .css-scroll-roller::after { content: ''; position: absolute; top: 50%; transform: translateY(-50%); width: 15px; height: 25px; background: #824721; border: 2px solid #3d210b; border-radius: 4px; }
-        .css-scroll-roller::before { left: -10px; } 
-        .css-scroll-roller::after { right: -10px; }
-
-        /* Giấy cuộn bằng CSS */
         .scroll-middle { 
-            width: 90%; background: #ebd5ab; /* Mã màu giấy da */
-            border-left: 4px solid #c9a370; border-right: 4px solid #c9a370;
+            width: 89%; background: url('assets/scroll-bg.png') repeat-y top center; background-size: 100% auto; 
             max-height: 0px; overflow: hidden; display: flex; flex-direction: column; align-items: center; 
-            transition: max-height 2.5s cubic-bezier(0.34, 1.56, 0.64, 1); margin: -5px 0; z-index: 2; 
+            transition: max-height 2.5s cubic-bezier(0.34, 1.56, 0.64, 1); margin: -4px 0; z-index: 2; 
         }
         .scroll-middle.open { max-height: 65vh; }
         
-        /* Căn lề chuẩn bản gốc */
         .scroll-content-text { 
             color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; 
             line-height: 1.7; text-align: left; opacity: 0; transition: opacity 1s ease 1.8s; 
-            padding: 50px 40px; box-sizing: border-box; width: 100%; 
+            padding: 50px 60px; box-sizing: border-box; width: 100%; 
         }
         .scroll-middle.open .scroll-content-text { opacity: 1; }
         
-        .close-scroll-btn { position: absolute; top: -30px; right: -20px; width: 45px; height: 45px; background: rgba(0,0,0,0.8); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 22px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 360; transition: background 0.3s ease, transform 0.2s ease; }
-        .close-scroll-btn:hover { background: #facc15; color: #000; transform: scale(1.1); border-color: #000; }
+        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(0,0,0,0.6); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 22px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 360; transition: background 0.3s ease, transform 0.2s ease; }
+        .close-scroll-btn:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
         .hidden { opacity: 0 !important; pointer-events: none !important; }
 
         /* RESPONSIVE DESIGN */
         @media screen and (max-width: 900px) { .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; } .paper-wrapper { box-shadow: none !important; filter: none !important; transform: translate(-50%, -50%) scale(0.85); transform-origin: center center; } }
-        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); } .scroll-content-text { padding: 40px 30px; font-size: 20px; } }
-        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } .scroll-content-text { padding: 30px 20px; font-size: 18px; } }
+        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); } .scroll-content-text { padding: 40px 40px; font-size: 20px; } }
+        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } .scroll-content-text { padding: 30px 30px; font-size: 18px; } }
         @media screen and (max-width: 390px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.6); } }
     </style>
 </head>
@@ -182,9 +165,10 @@
             <div class="custom-alert-desc" id="sequence-message">Bạn là người thứ... gửi thư đến dải ngân hà.</div>
         </div>
 
-        <!-- Hòm thư bọc ngoài chứa sẵn lá thư rớt -->
         <div class="mailbox-wrapper" id="mailbox-container">
-            <img src="assets/letter.png" class="incoming-letter" id="incoming-letter" alt="Thư tới">
+            <div class="slit-mask">
+                <img src="assets/letter.png" class="incoming-letter" id="incoming-letter" alt="Thư tới">
+            </div>
             <img src="assets/mailbox.png" class="mailbox-img" alt="Hòm Thư">
             <div class="letter-counter" id="letter-counter">0 Thư</div>
         </div>
@@ -197,42 +181,25 @@
             <div class="close-pass-btn" onclick="closePasswordModal()">X</div>
             
             <div class="lock-animation-area">
-                <!-- Ổ KHÓA CSS -->
-                <div class="css-lock">
-                    <div class="css-lock-shackle"></div>
-                    <div class="css-lock-body">
-                        <div class="css-lock-hole"></div>
-                    </div>
-                </div>
-                <!-- CHÌA KHÓA CSS -->
-                <div class="css-key" id="auth-key">
-                    <div class="css-key-shaft">
-                        <div class="css-key-teeth"></div>
-                    </div>
-                    <div class="css-key-head">
-                        <div class="css-key-gem"></div>
-                    </div>
-                </div>
+                <img src="assets/lock.png" class="lock-img" alt="Ổ Khóa">
+                <img src="assets/key.png" class="key-img" id="auth-key" alt="Chìa Khóa">
             </div>
-            
             <input type="password" id="letter-pass" class="pass-input" placeholder="MẬT CHÚ">
             <button class="pass-submit-btn" onclick="verifyAdminPassword()">MỞ KHÓA</button>
         </div>
     </div>
 
     <div id="scroll-modal">
+        <div class="close-scroll-btn" onclick="closeScroll()">X</div>
         <div class="scroll-wrapper">
-            <div class="close-scroll-btn" onclick="closeScroll()">X</div>
-            
-            <!-- THÁNH CHỈ CSS -->
-            <div class="css-scroll-roller top"></div>
+            <img src="assets/scroll-top.png" class="scroll-top" alt="Trục trên">
             <div class="scroll-middle" id="magic-scroll">
                 <div class="scroll-content-text">
                     <strong>Gửi từ: <span id="display-sender">...</span></strong><br><br>
                     <span id="display-message">Nội dung thư...</span>
                 </div>
             </div>
-            <div class="css-scroll-roller bottom"></div>
+            <img src="assets/scroll-bottom.png" class="scroll-bottom" alt="Trục dưới">
         </div>
     </div>
 
@@ -326,10 +293,11 @@
             }
 
             const key = document.getElementById('auth-key');
-            key.classList.add('key-insert'); // Đâm vô
+            
+            key.classList.add('key-insert');
             
             setTimeout(() => {
-                key.classList.add('key-turn'); // Vặn 90 độ
+                key.classList.add('key-turn');
                 
                 setTimeout(() => {
                     closePasswordModal(); 
@@ -339,7 +307,7 @@
         }
 
         function deployAdminScene() {
-            // MỐC THỜI GIAN KIỂM THỬ TẠM THỜI (Hãy đổi số '01' thành '25' khi triển khai thực tế)
+            /* THIẾT LẬP THỜI GIAN (Điều chỉnh tham số thành '2026-09-25T00:00:00' trước khi biên dịch cuối) */
             const unlockDate = new Date('2026-09-01T00:00:00'); 
             const currentDate = new Date();
             
@@ -395,8 +363,8 @@
                 let randomX = Math.floor(Math.random() * 90) + 5; 
                 let randomY = Math.floor(Math.random() * 85) + 10; 
                 let randomRotation = Math.floor(Math.random() * 360);
-                let randomScale = (Math.random() * 0.5) + 0.7; 
-                let animationDelay = Math.random() * 3.5; 
+                let randomScale = (Math.random() * 0.6) + 0.6;
+                let animationDelay = Math.random() * 3; 
 
                 letter.style.animation = `massSpillOut 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
                 letter.style.top = `${randomY}vh`;
@@ -404,7 +372,7 @@
                 letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${randomRotation}deg)`;
 
                 letter.onclick = function() {
-                    openMagicScroll("Đồng bọn số " + (i+1), "Chúc Star Princess sinh nhật 20 tuổi rực rỡ và luôn hạnh phúc nhé! Đây là nội dung CSS thuần 100%.");
+                    openMagicScroll("Đồng bọn số " + (i+1), "Chúc Star Princess sinh nhật 20 tuổi rực rỡ và luôn hạnh phúc nhé! Đây là nội dung thử nghiệm, cơ sở dữ liệu sẽ được liên kết ở giai đoạn kế tiếp.");
                 };
                 fragment.appendChild(letter);
             }
