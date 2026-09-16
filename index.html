@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     
     <style>
-        /* THIẾT LẬP CƠ SỞ */
+        /* THIẾT LẬP CƠ SỞ VÀ KHÓA VIEWPORT */
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%; height: 100dvh; 
             overflow: hidden; background-color: #150824; touch-action: none; 
@@ -53,83 +53,82 @@
         /* SCENE 3: LƯU TRỮ VÀ PHÂN TÁN */
         #scene-3 { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1.5s ease-in-out; z-index: 110; }
         
-        .custom-alert-box { position: absolute; top: 8%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(10px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 120; }
+        .custom-alert-box { position: absolute; top: 8%; width: 85vw; max-width: 500px; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(10px); border: 2px solid rgba(216, 180, 254, 0.8); border-radius: 12px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8); opacity: 0; transform: translateY(-20px); transition: all 0.8s ease; z-index: 250; }
         .custom-alert-box.show { opacity: 1; transform: translateY(0); }
         .custom-alert-title { font-size: 28px; font-weight: 700; color: #facc15; margin-bottom: 12px; letter-spacing: 1px; }
         .custom-alert-desc { font-size: 22px; color: #e9d5ff; line-height: 1.5; white-space: pre-line; }
 
-        .mailbox-wrapper { position: relative; display: flex; justify-content: center; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 80px; z-index: 115; }
-        .mailbox-img { width: 180px; image-rendering: pixelated; filter: drop-shadow(0 0 50px rgba(216, 180, 254, 1)); position: relative; z-index: 3; }
+        /* HÒM THƯ (Kích thước nhỏ hơn, nằm trên cùng) */
+        .mailbox-wrapper { position: relative; display: flex; flex-direction: column; align-items: center; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 50px; z-index: 200; }
+        .mailbox-img { width: 140px; image-rendering: pixelated; filter: drop-shadow(0 0 45px rgba(216, 180, 254, 0.9)); position: relative; z-index: 201; }
         
-        /* Bộ đếm số lượng: Đưa lên phía trên hòm thư */
-        .letter-counter { position: absolute; top: -65px; bottom: auto; font-size: 26px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.9); backdrop-filter: blur(6px); padding: 8px 30px; border-radius: 30px; border: 2px solid rgba(216, 180, 254, 0.8); z-index: 116; opacity: 0; transition: opacity 1s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.5); letter-spacing: 2px; }
-        
-        /* Hiệu ứng thư chui khe hòm: Tối ưu z-index và tỷ lệ */
-        .incoming-letter { position: absolute; top: -180px; left: 50%; margin-left: -37.5px; width: 75px; opacity: 0; z-index: 1; image-rendering: pixelated; }
-        .animate-incoming { animation: physicalInsert 1.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        /* HOẠT ẢNH THƯ RƠI VÀO HÒM */
+        .incoming-letter { position: absolute; top: -150px; left: 50%; width: 60px; margin-left: -30px; opacity: 0; z-index: 199; /* Đứng sau mặt hòm thư */ image-rendering: pixelated; }
+        .animate-incoming { animation: physicalInsert 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         @keyframes physicalInsert { 
-            0% { transform: translateY(0) scale(1.2); opacity: 0; } 
-            20% { opacity: 1; } 
-            90% { transform: translateY(180px) scale(0.8); opacity: 1; } 
-            100% { transform: translateY(195px) scale(0.7); opacity: 0; } /* Rơi khuất sau nắp hòm thư */
-        }
-
-        /* Thư phân tán: Kích thước nhỏ, rải đều toàn màn hình */
-        .spilled-letter { position: absolute; width: 35px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
-        .spilled-letter:hover { transform: scale(1.5) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
-        @keyframes massSpillOut { 
-            0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
+            0% { transform: translateY(0px) scale(1); opacity: 0; } 
             30% { opacity: 1; } 
-            100% { opacity: 1; } 
+            100% { transform: translateY(170px) scale(0.7); opacity: 0; } 
         }
 
-        /* GIAO DIỆN XÁC THỰC QUẢN TRỊ */
+        .letter-counter { font-size: 22px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.9); padding: 6px 25px; border-radius: 30px; border: 2px solid #d8b4fe; margin-top: -15px; z-index: 202; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+        
+        /* 259 LÁ THƯ RẢI THẢM (Z-index thấp hơn hòm thư, kích thước nhỏ) */
+        .spilled-letter { position: absolute; cursor: pointer; opacity: 0; z-index: 100; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
+        .spilled-letter:hover { transform: scale(1.5) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 101; }
+        @keyframes massSpillOut { 0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 30% { opacity: 1; } 100% { opacity: 1; } }
+
+        /* MODAL BẢO MẬT & BẺ KHÓA */
         #password-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; z-index: 300; }
-        .security-box { position: relative; display: flex; flex-direction: column; align-items: center; background: rgba(30, 10, 70, 0.95); border: 3px dashed #d8b4fe; padding: 40px; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .security-box { position: relative; display: flex; flex-direction: column; align-items: center; background: rgba(30, 10, 70, 0.95); border: 3px dashed #d8b4fe; padding: 40px 60px; border-radius: 15px; box-shadow: 0 0 50px rgba(0,0,0,0.9); transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .close-pass-btn { position: absolute; top: -15px; right: -15px; width: 35px; height: 35px; background: #facc15; color: #150824; border-radius: 50%; font-family: sans-serif; font-size: 18px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border: 2px solid #3b0764; transition: transform 0.2s ease; }
         .close-pass-btn:hover { transform: scale(1.1); }
         
-        .lock-animation-area { display: flex; justify-content: center; align-items: center; position: relative; width: 160px; height: 140px; margin-bottom: 25px; }
-        .lock-img { width: 120px; z-index: 2; image-rendering: pixelated; position: relative; }
+        /* Ổ KHÓA VÀ CHÌA KHÓA TỐI ƯU HÓA */
+        .lock-animation-area { position: relative; width: 140px; height: 140px; margin-bottom: 25px; display: flex; justify-content: center; align-items: center; }
+        .lock-img { width: 110px; z-index: 2; image-rendering: pixelated; }
         
-        /* Hiệu chỉnh Chìa khóa: Tỷ lệ, Tâm xoay và Hành vi Đâm/Xoay */
-        .key-img { width: 65px; position: absolute; right: -10px; top: 50px; z-index: 3; opacity: 0; image-rendering: pixelated; transform-origin: 15% 50%; transform: rotate(90deg); transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; }
-        .key-insert { opacity: 1; transform: translateX(-45px) rotate(90deg); }
-        .key-turn { opacity: 1; transform: translateX(-45px) rotate(0deg); }
+        /* Chìa khóa: Kích thước 50px, tâm xoay tại mũi, bắt đầu ở trạng thái nằm ngang */
+        .key-img { width: 50px; position: absolute; right: -20px; top: 60px; z-index: 3; opacity: 0; image-rendering: pixelated; transform-origin: 10% 50%; transform: rotate(90deg); transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease; }
         
-        .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; text-align: center; width: 200px; outline: none; letter-spacing: 4px; margin-bottom: 25px; }
-        .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 35px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; }
+        /* Hoạt ảnh cắm vào (Tịnh tiến trục X) và vặn (Xoay trục Z) */
+        .key-insert { opacity: 1; transform: translateX(-55px) rotate(90deg); }
+        .key-turn { opacity: 1; transform: translateX(-55px) rotate(0deg); }
+        
+        .pass-input { background: transparent; border: none; border-bottom: 2px solid #facc15; color: #facc15; font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; text-align: center; width: 220px; outline: none; letter-spacing: 4px; margin-bottom: 25px; }
+        .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 40px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; }
         .pass-submit-btn:hover { background: #c084fc; }
 
-        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN */
+        /* GIAO DIỆN CUỘN THÁNH CHỈ (Kích thước chuẩn) */
         #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; z-index: 350; }
         
-        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 500px; }
-        .scroll-top { width: 120%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
-        .scroll-bottom { width: 120%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
+        /* Ép kích thước max-width để thanh lịch hơn */
+        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 350px; }
+        .scroll-top { width: 100%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
+        .scroll-bottom { width: 100%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         
         .scroll-middle { 
             width: 89%; background: url('assets/scroll-bg.png') repeat-y top center; background-size: 100% auto; 
             max-height: 0px; overflow: hidden; display: flex; flex-direction: column; align-items: center; 
             transition: max-height 2.5s cubic-bezier(0.34, 1.56, 0.64, 1); margin: -4px 0; z-index: 2; 
         }
-        .scroll-middle.open { max-height: 65vh; }
+        .scroll-middle.open { max-height: 55vh; }
         
         .scroll-content-text { 
-            color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; 
-            line-height: 1.7; text-align: left; opacity: 0; transition: opacity 1s ease 1.8s; 
-            padding: 50px 60px; box-sizing: border-box; width: 100%; 
+            color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; 
+            line-height: 1.6; text-align: left; opacity: 0; transition: opacity 1s ease 1.8s; 
+            padding: 40px 30px; box-sizing: border-box; width: 100%; 
         }
         .scroll-middle.open .scroll-content-text { opacity: 1; }
         
-        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(0,0,0,0.6); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 22px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 360; transition: background 0.3s ease, transform 0.2s ease; }
-        .close-scroll-btn:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
+        .close-scroll-btn { position: absolute; top: -10px; right: -20px; width: 40px; height: 40px; background: rgba(0,0,0,0.8); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 360; transition: background 0.3s ease, transform 0.2s ease; }
+        .close-scroll-btn:hover { background: #facc15; color: #000; transform: scale(1.1); border-color: #000; }
         .hidden { opacity: 0 !important; pointer-events: none !important; }
 
         /* RESPONSIVE DESIGN */
         @media screen and (max-width: 900px) { .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; } .paper-wrapper { box-shadow: none !important; filter: none !important; transform: translate(-50%, -50%) scale(0.85); transform-origin: center center; } }
-        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); } .scroll-content-text { padding: 40px 40px; font-size: 20px; } }
-        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } .scroll-content-text { padding: 30px 30px; font-size: 18px; } }
+        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); } }
+        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } }
         @media screen and (max-width: 390px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.6); } }
     </style>
 </head>
@@ -170,30 +169,37 @@
         </div>
 
         <div class="mailbox-wrapper" id="mailbox-container">
+            <!-- Thư rớt vào hòm (Z-index ảo giác) -->
             <img src="assets/letter.png" class="incoming-letter" id="incoming-letter" alt="Thư tới">
             <img src="assets/mailbox.png" class="mailbox-img" alt="Hòm Thư">
             <div class="letter-counter" id="letter-counter">0 Thư</div>
         </div>
         
+        <!-- Vùng phân tán 259 lá thư -->
         <div id="spilled-letters-area"></div>
     </div>
 
+    <!-- MODAL KHÓA -->
     <div id="password-modal">
         <div class="security-box" id="security-box">
             <div class="close-pass-btn" onclick="closePasswordModal()">X</div>
             
             <div class="lock-animation-area">
                 <img src="assets/lock.png" class="lock-img" alt="Ổ Khóa">
+                <!-- Chìa khóa sử dụng tài nguyên gốc, thu nhỏ 50px -->
                 <img src="assets/key.png" class="key-img" id="auth-key" alt="Chìa Khóa">
             </div>
+            
             <input type="password" id="letter-pass" class="pass-input" placeholder="MẬT CHÚ">
             <button class="pass-submit-btn" onclick="verifyAdminPassword()">MỞ KHÓA</button>
         </div>
     </div>
 
+    <!-- MODAL THÁNH CHỈ -->
     <div id="scroll-modal">
-        <div class="close-scroll-btn" onclick="closeScroll()">X</div>
         <div class="scroll-wrapper">
+            <div class="close-scroll-btn" onclick="closeScroll()">X</div>
+            
             <img src="assets/scroll-top.png" class="scroll-top" alt="Trục trên">
             <div class="scroll-middle" id="magic-scroll">
                 <div class="scroll-content-text">
@@ -262,7 +268,7 @@
                         document.getElementById('notif-title').innerText = "Gửi Thành Công! ✨";
                         document.getElementById('sequence-message').innerText = `Bạn là người thứ ${sequenceNumber} gửi thư đến dải ngân hà.`;
                         notif.classList.add('show');
-                    }, 1800); 
+                    }, 1500); 
                 }, 1200); 
             }, 100);
         }
@@ -295,11 +301,12 @@
             }
 
             const key = document.getElementById('auth-key');
-            
-            key.classList.add('key-insert');
+            // Cắm thẳng vào rãnh (theo phương ngang do đã rotate 90 độ từ ban đầu)
+            key.classList.add('key-insert'); 
             
             setTimeout(() => {
-                key.classList.add('key-turn');
+                // Xoay trục 0 độ để chìa khóa dọc trở lại, tạo hiệu ứng vặn
+                key.classList.add('key-turn'); 
                 
                 setTimeout(() => {
                     closePasswordModal(); 
@@ -309,7 +316,8 @@
         }
 
         function deployAdminScene() {
-            /* THIẾT LẬP THỜI GIAN (Thay đổi thành 25/09 khi vận hành) */
+            // MỐC THỜI GIAN KIỂM THỬ: Đang cài đặt về quá khứ (01/09) để bỏ qua rào cản thời gian.
+            // HÃY SỬA THÀNH '2026-09-25T00:00:00' SAU KHI HOÀN TẤT BẢN THỬ NGHIỆM
             const unlockDate = new Date('2026-09-01T00:00:00'); 
             const currentDate = new Date();
             
@@ -362,19 +370,21 @@
                 letter.src = 'assets/letter.png';
                 letter.className = 'spilled-letter';
                 
-                let randomX = Math.floor(Math.random() * 96) + 2; 
-                let randomY = Math.floor(Math.random() * 96) + 2; 
+                // Thu nhỏ kích thước phân tán (30px - 45px)
+                let randomX = Math.floor(Math.random() * 90) + 5; 
+                let randomY = Math.floor(Math.random() * 85) + 10; 
                 let randomRotation = Math.floor(Math.random() * 360);
-                let randomScale = (Math.random() * 0.4) + 0.4; 
-                let animationDelay = Math.random() * 3; 
+                let randomWidth = Math.floor(Math.random() * 15) + 30; // Trọng số chiều rộng nội suy
+                let animationDelay = Math.random() * 3.5; 
 
+                letter.style.width = `${randomWidth}px`;
                 letter.style.animation = `massSpillOut 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
                 letter.style.top = `${randomY}vh`;
                 letter.style.left = `${randomX}vw`;
-                letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${randomRotation}deg)`;
+                letter.style.transform = `translate(-50%, -50%) rotate(${randomRotation}deg)`;
 
                 letter.onclick = function() {
-                    openMagicScroll("Đồng bọn số " + (i+1), "Chúc Star Princess sinh nhật rực rỡ và luôn hạnh phúc nhé! Đây là nội dung thử nghiệm.");
+                    openMagicScroll("Đồng bọn số " + (i+1), "Chúc Star Princess sinh nhật tuổi 16 và tuổi 20 rực rỡ nhé! Tọa độ hình ảnh đã được chuẩn hóa, vui lòng thiết lập liên kết dữ liệu.");
                 };
                 fragment.appendChild(letter);
             }
