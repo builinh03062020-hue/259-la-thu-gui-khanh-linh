@@ -211,13 +211,11 @@
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
-        // KHỞI TẠO BIẾN DỮ LIỆU TOÀN CỤC
+        // KHỞI TẠO BIẾN DỮ LIỆU TOÀN CỤC VÀ API LINK
         let databaseLetters = [];
-        
-        // LIÊN KẾT ĐẾN API GOOGLE SHEETS CỦA HỆ THỐNG
         const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbx8zdIEAlgQ8kHpNd8cKmn4EjN5XThxhcYuKjQqHrFCfDa_4wNUPBwSownfKicbxI8C/exec";
 
-        // Hàm nạp dữ liệu bất đồng bộ từ cơ sở dữ liệu
+        // ĐỒNG BỘ DỮ LIỆU TỪ MÁY CHỦ BẰNG ASYNC/AWAIT
         async function fetchLettersData() {
             try {
                 const response = await fetch(GOOGLE_SHEETS_API_URL);
@@ -229,13 +227,11 @@
                 }
             } catch (error) {
                 console.error("[Hệ thống] Lỗi kết nối đến cơ sở dữ liệu:", error);
-                alert("Mất kết nối với dải ngân hà. Vui lòng kiểm tra lại mạng!");
             }
         }
-
-        // Kích hoạt tiến trình đồng bộ dữ liệu ngay khi tải trang
         fetchLettersData();
 
+        // XỬ LÝ GỬI THƯ MỚI ĐỒNG THỜI CẬP NHẬT CSDL
         function processSubmission() {
             const sender = document.getElementById('sender').value.trim();
             const message = document.getElementById('message').value.trim();
@@ -249,9 +245,26 @@
                 alert("Bạn vui lòng điền đầy đủ tên và lời nhắn nhé! ✨");
                 return; 
             }
-            runGuestFlow(sender, message);
+
+            // Cập nhật bộ đếm hiển thị ngay lập tức (Local State Update)
+            databaseLetters.push({ sender: sender, content: message });
+            const realSequenceNumber = databaseLetters.length;
+
+            // Đóng gói Payload theo định dạng x-www-form-urlencoded
+            const formData = new URLSearchParams();
+            formData.append('sender', sender);
+            formData.append('content', message);
+
+            // Gửi dữ liệu qua phương thức POST để lưu vào Sheets
+            fetch(GOOGLE_SHEETS_API_URL, {
+                method: 'POST',
+                body: formData
+            }).catch(error => console.error("[Hệ thống] Lỗi khi lưu thư:", error));
+
+            runGuestFlow(realSequenceNumber);
         }
 
+        // KÍCH HOẠT TIẾN TRÌNH LẮNG NGHE SỰ KIỆN PHÍM ENTER
         document.addEventListener('DOMContentLoaded', () => {
             const senderInput = document.getElementById('sender');
             const messageInput = document.getElementById('message');
@@ -274,7 +287,7 @@
             });
         });
 
-        function runGuestFlow(sender, message) {
+        function runGuestFlow(sequenceNumber) {
             const witch = document.getElementById('witch');
             witch.style.transform = "rotate(-30deg) translateY(-20px)";
 
@@ -288,8 +301,6 @@
                 document.getElementById('twinkle-audio').play().catch(() => {});
 
                 setTimeout(() => {
-                    const currentTotal = databaseLetters.length > 0 ? databaseLetters.length : 50;
-                    const sequenceNumber = Math.floor(Math.random() * (currentTotal)) + 50;
                     initGuestPhaseTwo(sequenceNumber);
                 }, 4000); 
             }, 600);
@@ -357,6 +368,7 @@
         }
 
         function deployAdminScene() {
+            // Thay đổi cấu hình ngày mở khóa tự động
             const unlockDate = new Date('2026-09-01T00:00:00'); 
             const currentDate = new Date();
             
@@ -410,13 +422,12 @@
 
             let cx = window.innerWidth / 2;
             let cy = window.innerHeight / 2;
-            let auraRadius = 150; // Vùng cấm bay tuyệt đối tính bằng Pixels (Ôm vừa khít hộp thư)
-            let gapBetweenRings = Math.max(65, Math.min(window.innerWidth, window.innerHeight) * 0.12); // Khoảng cách giãn cách rộng rãi
+            let auraRadius = 150; 
+            let gapBetweenRings = Math.max(65, Math.min(window.innerWidth, window.innerHeight) * 0.12); 
             let rStepPerRadian = gapBetweenRings / (2 * Math.PI);
             
             let bestPoints = [];
             
-            // Thuật toán dò tìm mật độ tối ưu để rải đủ thư vào màn hình
             for (let spacing = 90; spacing >= 10; spacing -= 1) {
                 let tempPoints = [];
                 let theta = 0;
@@ -425,12 +436,9 @@
                 
                 while (tempPoints.length < totalCount && attempts < 5000) {
                     attempts++;
-                    // Đo bằng Pixel tuyệt đối để xoắn ốc tròn vành vạnh, không bị bóp méo thành Elip
                     let x = cx + r * Math.cos(theta);
                     let y = cy + r * Math.sin(theta);
                     
-                    // Thuật toán "Ngoặc đơn": Các lá thư lọt ra ngoài mép trên/dưới sẽ bị loại bỏ. 
-                    // Những phần sót lại ở 2 bên mép dọc tự động hình thành các cung tròn (Ngoặc đơn) đứt quãng.
                     let inBoundsX = x > 25 && x < window.innerWidth - 25;
                     let inBoundsY = y > 25 && y < window.innerHeight - 25;
                     
@@ -438,7 +446,6 @@
                         tempPoints.push({x, y, theta});
                     }
                     
-                    // Chống lặp vô hạn khi màn hình đã phủ kín
                     if (x < -cx || x > cx * 3) break;
                     
                     let dTheta = spacing / r;
@@ -452,7 +459,6 @@
                 }
             }
 
-            // Phương án dự phòng: Nối mảng nếu thiết bị có tỷ lệ màn hình quá đặc thù
             if (bestPoints.length < totalCount) {
                 bestPoints = bestPoints.concat(bestPoints.slice(0, totalCount - bestPoints.length)); 
             }
@@ -464,7 +470,6 @@
                 
                 let pt = bestPoints[i];
                 
-                // Hướng xoay: Nương theo cung tròn quỹ đạo kết hợp góc lệch ngẫu nhiên +-25 độ tạo nét tự nhiên
                 let baseRotation = (pt.theta * (180 / Math.PI)) + 90; 
                 let randomWiggle = (Math.random() * 50) - 25; 
                 let finalRotation = baseRotation + randomWiggle;
@@ -473,7 +478,6 @@
                 let animationDelay = (i % 60) * 0.025; 
 
                 letter.style.animation = `massSpillOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
-                // Đặt tọa độ bằng px tĩnh để giữ vững cấu trúc hình học
                 letter.style.top = `${pt.y}px`;
                 letter.style.left = `${pt.x}px`;
                 letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${finalRotation}deg)`;
