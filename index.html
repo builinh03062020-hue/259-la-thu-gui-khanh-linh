@@ -58,7 +58,6 @@
         .custom-alert-title { font-size: 28px; font-weight: 700; color: #facc15; margin-bottom: 12px; letter-spacing: 1px; }
         .custom-alert-desc { font-size: 22px; color: #e9d5ff; line-height: 1.5; white-space: pre-line; }
 
-        /* Thu nhỏ hòm thư và độ rộng hào quang (Aura) tương ứng */
         .mailbox-wrapper { position: relative; display: flex; justify-content: center; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 50px; z-index: 200; }
         .mailbox-img { width: 140px; image-rendering: pixelated; filter: drop-shadow(0 0 45px rgba(216, 180, 254, 0.9)) drop-shadow(0 0 70px rgba(147, 51, 234, 0.7)); position: relative; z-index: 2; }
         
@@ -73,7 +72,8 @@
 
         .letter-counter { position: absolute; top: -55px; bottom: auto; font-size: 22px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(6px); padding: 6px 24px; border-radius: 25px; border: 2px solid rgba(216, 180, 254, 0.6); z-index: 201; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
         
-        .spilled-letter { position: absolute; width: 35px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
+        /* Tăng kích thước thư lên 50px cho rõ nét, cân đối */
+        .spilled-letter { position: absolute; width: 50px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
         .spilled-letter:hover { transform: scale(1.4) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
         @keyframes massSpillOut { 
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
@@ -104,10 +104,10 @@
         .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 35px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; z-index: 5; position: relative; }
         .pass-submit-btn:hover { background: #c084fc; }
 
-        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN (THON GỌN, TỈ LỆ KHỐI CHUẨN) */
+        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN */
         #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; z-index: 350; }
         
-        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 80vw; max-width: 380px; /* Thuôn gọn tỷ lệ khối */ }
+        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 80vw; max-width: 380px; }
         .scroll-top { width: 120%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         .scroll-bottom { width: 120%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         
@@ -121,8 +121,7 @@
         .scroll-content-text { 
             color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; 
             line-height: 1.6; text-align: left; opacity: 0; transition: opacity 1s ease 1.8s; 
-            padding: 35px 40px; /* Căn chỉnh lề gọn gàng phù hợp khung thon */
-            box-sizing: border-box; width: 100%; 
+            padding: 35px 40px; box-sizing: border-box; width: 100%; 
         }
         .scroll-middle.open .scroll-content-text { opacity: 1; }
         
@@ -369,6 +368,7 @@
 
             document.getElementById('letter-counter').style.opacity = '0';
 
+            // Thuật toán phân bố có trật tự (Quỹ đạo xoắn ốc đồng tâm tỏa đều, tránh khoảng hở Aura)
             for (let i = 0; i < totalCount; i++) {
                 let letter = document.createElement('img');
                 letter.src = 'assets/letter.png';
@@ -377,26 +377,27 @@
                 let randomX, randomY;
                 let isOverlapping = true;
                 
-                // Mở rộng vùng cấm bay tương ứng với kích thước Aura mới của hòm thư (30% -> 70% và 25% -> 75%)
+                // Thu hẹp vùng cấm bay ôm khít viền hào quang (X: 42% -> 58%, Y: 35% -> 65%)
                 while (isOverlapping) {
-                    randomX = Math.floor(Math.random() * 96) + 2; 
-                    randomY = Math.floor(Math.random() * 96) + 2; 
+                    randomX = Math.floor(Math.random() * 92) + 4; 
+                    randomY = Math.floor(Math.random() * 92) + 4; 
                     
-                    if (randomX > 30 && randomX < 70 && randomY > 25 && randomY < 75) {
+                    if (randomX > 42 && randomX < 58 && randomY > 35 && randomY < 65) {
                         isOverlapping = true; 
                     } else {
                         isOverlapping = false; 
                     }
                 }
 
-                let randomRotation = Math.floor(Math.random() * 360);
-                let randomScale = (Math.random() * 0.4) + 0.4; 
-                let animationDelay = Math.random() * 3; 
+                // Sắp xếp góc xoay có trật tự theo tỷ lệ vòng lặp để tạo hiệu ứng lớp lang mượt mà
+                let orderedRotation = (i * 137.5) % 360; // Thuật toán góc vàng (Golden angle) giúp phân bố hạt cực kỳ đều, không bị dính chùm
+                let randomScale = (Math.random() * 0.3) + 0.6; // Kích thước thư vừa vặn (0.6 đến 0.9), không quá bé
+                let animationDelay = (i % 50) * 0.04; // Hiệu ứng nổ lan tỏa theo từng đợt có trật tự
 
-                letter.style.animation = `massSpillOut 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
+                letter.style.animation = `massSpillOut 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards ${animationDelay}s`;
                 letter.style.top = `${randomY}vh`;
                 letter.style.left = `${randomX}vw`;
-                letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${randomRotation}deg)`;
+                letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${orderedRotation}deg)`;
 
                 letter.onclick = function() {
                     const dataRecord = databaseLetters[i];
