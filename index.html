@@ -290,7 +290,7 @@
             });
         });
 
-        function runGuestFlow(sequenceNumber) {
+        function runGuestFlow(sender, message) {
             const witch = document.getElementById('witch');
             witch.style.transform = "rotate(-30deg) translateY(-20px)";
 
@@ -302,13 +302,15 @@
                 document.getElementById('scene-2').style.pointerEvents = 'auto';
                 document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
                 
-                // Đồng bộ âm thanh: Kích hoạt tại 3600ms (Ngay trước khi hoạt ảnh 4000ms kết thúc)
+                // Đồng bộ âm thanh: Điều chỉnh mốc 2800ms để triệt tiêu hiện tượng chồng lấp cảnh
                 setTimeout(() => {
                     document.getElementById('twinkle-audio').play().catch(() => {});
-                }, 3600);
+                }, 3000);
 
-                // Chuyển đổi Scene sau khi hoàn tất chu kỳ 4000ms
                 setTimeout(() => {
+                    // Chuyển đổi sang Scene 3 (Hòm thư) sau chu kỳ 4000ms
+                    const currentTotal = databaseLetters.length > 0 ? databaseLetters.length : 50;
+                    const sequenceNumber = Math.floor(Math.random() * (currentTotal)) + 50;
                     initGuestPhaseTwo(sequenceNumber);
                 }, 4000); 
             }, 600);
