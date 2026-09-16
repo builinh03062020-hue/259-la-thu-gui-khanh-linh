@@ -298,14 +298,18 @@
                 document.getElementById('scene-2').style.opacity = '1';
                 document.getElementById('scene-2').style.pointerEvents = 'auto';
                 document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
-                document.getElementById('twinkle-audio').play().catch(() => {});
+                
+                // Đồng bộ âm thanh: Kích hoạt tại 3600ms (Ngay trước khi hoạt ảnh 4000ms kết thúc)
+                setTimeout(() => {
+                    document.getElementById('twinkle-audio').play().catch(() => {});
+                }, 3600);
 
+                // Chuyển đổi Scene sau khi hoàn tất chu kỳ 4000ms
                 setTimeout(() => {
                     initGuestPhaseTwo(sequenceNumber);
                 }, 4000); 
             }, 600);
         }
-
         function initGuestPhaseTwo(sequenceNumber) {
             document.getElementById('scene-2').classList.add('hidden');
             const scene3 = document.getElementById('scene-3');
