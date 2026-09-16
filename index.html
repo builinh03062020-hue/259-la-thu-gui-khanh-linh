@@ -211,14 +211,30 @@
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
+        // KHỞI TẠO BIẾN DỮ LIỆU TOÀN CỤC
         let databaseLetters = [];
         
-        for(let k = 0; k < 259; k++) {
-            databaseLetters.push({
-                sender: "Người bạn số " + (k + 1),
-                content: "Chúc mừng sinh nhật 16 tuổi! Kén thời gian đã mở thành công."
-            });
+        // LIÊN KẾT ĐẾN API GOOGLE SHEETS CỦA HỆ THỐNG
+        const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbx8zdIEAlgQ8kHpNd8cKmn4EjN5XThxhcYuKjQqHrFCfDa_4wNUPBwSownfKicbxI8C/exec";
+
+        // Hàm nạp dữ liệu bất đồng bộ từ cơ sở dữ liệu
+        async function fetchLettersData() {
+            try {
+                const response = await fetch(GOOGLE_SHEETS_API_URL);
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    databaseLetters = data;
+                    console.log(`[Hệ thống] Đã đồng bộ thành công ${databaseLetters.length} lá thư từ máy chủ.`);
+                }
+            } catch (error) {
+                console.error("[Hệ thống] Lỗi kết nối đến cơ sở dữ liệu:", error);
+                alert("Mất kết nối với dải ngân hà. Vui lòng kiểm tra lại mạng!");
+            }
         }
+
+        // Kích hoạt tiến trình đồng bộ dữ liệu ngay khi tải trang
+        fetchLettersData();
 
         function processSubmission() {
             const sender = document.getElementById('sender').value.trim();
