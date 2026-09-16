@@ -58,21 +58,22 @@
         .custom-alert-title { font-size: 28px; font-weight: 700; color: #facc15; margin-bottom: 12px; letter-spacing: 1px; }
         .custom-alert-desc { font-size: 22px; color: #e9d5ff; line-height: 1.5; white-space: pre-line; }
 
+        /* Thu nhỏ hòm thư và độ rộng hào quang (Aura) tương ứng */
         .mailbox-wrapper { position: relative; display: flex; justify-content: center; transform: scale(0); transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 50px; z-index: 200; }
-        .mailbox-img { width: 180px; image-rendering: pixelated; filter: drop-shadow(0 0 50px rgba(216, 180, 254, 0.9)) drop-shadow(0 0 80px rgba(147, 51, 234, 0.7)); position: relative; z-index: 2; }
+        .mailbox-img { width: 140px; image-rendering: pixelated; filter: drop-shadow(0 0 45px rgba(216, 180, 254, 0.9)) drop-shadow(0 0 70px rgba(147, 51, 234, 0.7)); position: relative; z-index: 2; }
         
         .slit-mask { position: absolute; top: -50vh; left: 0; width: 100%; height: calc(50vh + 25px); overflow: hidden; z-index: 1; }
-        .incoming-letter { position: absolute; top: 0; left: 50%; width: 65px; opacity: 0; transform: translate(-50%, -100px) scale(1.5); image-rendering: pixelated; }
+        .incoming-letter { position: absolute; top: 0; left: 50%; width: 55px; opacity: 0; transform: translate(-50%, -100px) scale(1.5); image-rendering: pixelated; }
         .animate-incoming { animation: physicalInsert 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
         @keyframes physicalInsert { 
             0% { transform: translate(-50%, -50px) scale(1.5); opacity: 0; } 
             20% { opacity: 1; } 
-            100% { transform: translate(-50%, calc(50vh + 50px)) scale(0.8); opacity: 1; } 
+            100% { transform: translate(-50%, calc(50vh + 45px)) scale(0.7); opacity: 1; } 
         }
 
-        .letter-counter { position: absolute; top: -65px; bottom: auto; font-size: 26px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.8); backdrop-filter: blur(6px); padding: 8px 30px; border-radius: 30px; border: 2px solid rgba(216, 180, 254, 0.6); z-index: 201; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
+        .letter-counter { position: absolute; top: -55px; bottom: auto; font-size: 22px; font-weight: 700; color: #ffffff; background: rgba(46, 16, 101, 0.85); backdrop-filter: blur(6px); padding: 6px 24px; border-radius: 25px; border: 2px solid rgba(216, 180, 254, 0.6); z-index: 201; opacity: 0; transition: opacity 1s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.6); letter-spacing: 2px; }
         
-        .spilled-letter { position: absolute; width: 40px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
+        .spilled-letter { position: absolute; width: 35px; cursor: pointer; opacity: 0; z-index: 111; transition: transform 0.3s ease, filter 0.3s ease; image-rendering: pixelated; will-change: transform; }
         .spilled-letter:hover { transform: scale(1.4) !important; filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.9)); z-index: 112; }
         @keyframes massSpillOut { 
             0% { top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; } 
@@ -103,10 +104,10 @@
         .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 35px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; z-index: 5; position: relative; }
         .pass-submit-btn:hover { background: #c084fc; }
 
-        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN */
+        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN (THON GỌN, TỈ LỆ KHỐI CHUẨN) */
         #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; z-index: 350; }
         
-        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 90vw; max-width: 500px; }
+        .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 80vw; max-width: 380px; /* Thuôn gọn tỷ lệ khối */ }
         .scroll-top { width: 120%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         .scroll-bottom { width: 120%; height: auto; image-rendering: pixelated; z-index: 3; flex-shrink: 0; }
         
@@ -115,23 +116,24 @@
             max-height: 0px; overflow: hidden; display: flex; flex-direction: column; align-items: center; 
             transition: max-height 2.5s cubic-bezier(0.34, 1.56, 0.64, 1); margin: -4px 0; z-index: 2; 
         }
-        .scroll-middle.open { max-height: 65vh; }
+        .scroll-middle.open { max-height: 60vh; }
         
         .scroll-content-text { 
-            color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; 
-            line-height: 1.7; text-align: left; opacity: 0; transition: opacity 1s ease 1.8s; 
-            padding: 50px 60px; box-sizing: border-box; width: 100%; 
+            color: #3b2818; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; 
+            line-height: 1.6; text-align: left; opacity: 0; transition: opacity 1s ease 1.8s; 
+            padding: 35px 40px; /* Căn chỉnh lề gọn gàng phù hợp khung thon */
+            box-sizing: border-box; width: 100%; 
         }
         .scroll-middle.open .scroll-content-text { opacity: 1; }
         
-        .close-scroll-btn { position: absolute; top: 20px; right: 20px; width: 45px; height: 45px; background: rgba(0,0,0,0.6); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 22px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 360; transition: background 0.3s ease, transform 0.2s ease; }
+        .close-scroll-btn { position: absolute; top: 15px; right: 15px; width: 40px; height: 40px; background: rgba(0,0,0,0.6); color: #fff; border: 2px solid #fff; border-radius: 50%; font-family: sans-serif; font-size: 20px; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 360; transition: background 0.3s ease, transform 0.2s ease; }
         .close-scroll-btn:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
         .hidden { opacity: 0 !important; pointer-events: none !important; }
 
         /* RESPONSIVE DESIGN */
         @media screen and (max-width: 900px) { .cloud-left, .cloud-right, .piano, .cauldron { display: none !important; } .paper-wrapper { box-shadow: none !important; filter: none !important; transform: translate(-50%, -50%) scale(0.85); transform-origin: center center; } }
-        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); } .scroll-content-text { padding: 40px 40px; font-size: 20px; } }
-        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } .scroll-content-text { padding: 30px 30px; font-size: 18px; } }
+        @media screen and (max-width: 768px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.75); } .scroll-content-text { padding: 30px 30px; font-size: 18px; } }
+        @media screen and (max-width: 480px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.65); } .scroll-content-text { padding: 25px 25px; font-size: 16px; } }
         @media screen and (max-width: 390px) { .paper-wrapper { transform: translate(-50%, -50%) scale(0.6); } }
     </style>
 </head>
@@ -211,20 +213,14 @@
     <audio id="twinkle-audio" src="assets/twinkle.mp3"></audio>
 
     <script>
-        // ============================================================================
-        // [CẤU HÌNH DỮ LIỆU ĐỘNG]
-        // Mảng chứa dữ liệu thư. Khi tích hợp Google Sheets, hãy nạp dữ liệu vào đây.
-        // ============================================================================
         let databaseLetters = [];
         
-        // Tạo dữ liệu giả lập để kiểm thử (Mảng chứa 259 lá thư)
         for(let k = 0; k < 259; k++) {
             databaseLetters.push({
                 sender: "Người bạn số " + (k + 1),
                 content: "Chúc mừng sinh nhật 16 tuổi! Kén thời gian đã mở thành công."
             });
         }
-        // ============================================================================
 
         function processSubmission() {
             const sender = document.getElementById('sender').value.trim();
@@ -256,7 +252,6 @@
                 document.getElementById('twinkle-audio').play().catch(() => {});
 
                 setTimeout(() => {
-                    // Dựa trên số lượng thư thực tế hiện có trong database để tạo số thứ tự giả lập
                     const currentTotal = databaseLetters.length > 0 ? databaseLetters.length : 50;
                     const sequenceNumber = Math.floor(Math.random() * (currentTotal)) + 50;
                     initGuestPhaseTwo(sequenceNumber);
@@ -324,7 +319,6 @@
         }
 
         function deployAdminScene() {
-            /* THIẾT LẬP THỜI GIAN: Chỉnh sửa thành '2026-09-25T00:00:00' cho dữ liệu thực tế */
             const unlockDate = new Date('2026-09-01T00:00:00'); 
             const currentDate = new Date();
             
@@ -350,7 +344,6 @@
                         notif.classList.add('show');
                     }, 1000);
                 } else {
-                    // Cập nhật linh hoạt biến đếm số lượng dựa trên mảng dữ liệu thực tế
                     const totalLettersCount = databaseLetters.length;
                     
                     setTimeout(() => {
@@ -376,7 +369,6 @@
 
             document.getElementById('letter-counter').style.opacity = '0';
 
-            // Khởi tạo vòng lặp số lượng thực thể dựa trên độ dài dữ liệu mảng thực tế
             for (let i = 0; i < totalCount; i++) {
                 let letter = document.createElement('img');
                 letter.src = 'assets/letter.png';
@@ -385,11 +377,12 @@
                 let randomX, randomY;
                 let isOverlapping = true;
                 
+                // Mở rộng vùng cấm bay tương ứng với kích thước Aura mới của hòm thư (30% -> 70% và 25% -> 75%)
                 while (isOverlapping) {
                     randomX = Math.floor(Math.random() * 96) + 2; 
                     randomY = Math.floor(Math.random() * 96) + 2; 
                     
-                    if (randomX > 35 && randomX < 65 && randomY > 30 && randomY < 70) {
+                    if (randomX > 30 && randomX < 70 && randomY > 25 && randomY < 75) {
                         isOverlapping = true; 
                     } else {
                         isOverlapping = false; 
@@ -405,7 +398,6 @@
                 letter.style.left = `${randomX}vw`;
                 letter.style.transform = `translate(-50%, -50%) scale(${randomScale}) rotate(${randomRotation}deg)`;
 
-                // Liên kết cơ sở dữ liệu mảng trực tiếp vào sự kiện OnClick
                 letter.onclick = function() {
                     const dataRecord = databaseLetters[i];
                     openMagicScroll(dataRecord.sender, dataRecord.content);
