@@ -33,15 +33,22 @@
         .paper-wrapper { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; height: 680px; background: url('assets/paper.png') no-repeat center center; background-size: 100% 100%; padding: 115px 60px 120px 60px; box-sizing: border-box; z-index: 20; display: flex; flex-direction: column; box-shadow: 0 0 40px rgba(0,0,0,0.6); transition: transform 0.3s ease; }
         .paper-wrapper::after { content: ''; position: absolute; top: 80px; right: 45px; width: 90px; height: 90px; background: url('assets/paper_stars.png') no-repeat center center; background-size: contain; pointer-events: none; transform: rotate(8deg); }
         
-        /* Giới hạn độ rộng vùng nhập tên để không đè lên ngôi sao trang trí (width: calc) */
         .input-group { display: flex; align-items: center; margin-bottom: 6px; width: calc(100% - 95px); }
         .input-group label { color: #3b2818; font-weight: 700; font-size: 22px; margin-right: 8px; white-space: nowrap; }
         .paper-input, .paper-textarea { background: transparent; border: none; outline: none; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #3b2818; width: 100%; }
         .paper-input { border-bottom: 2.5px dashed #8b6b4a; }
-        .paper-textarea { resize: none; flex-grow: 1; margin-top: 40px; line-height: 40px; }
+        
+        /* Đã thiết lập lùi khoảng cách đáy (margin-bottom) để không ghi đè lên nút gửi */
+        .paper-textarea { resize: none; flex-grow: 1; margin-top: 40px; margin-bottom: 65px; line-height: 40px; }
+        
+        /* Đồng bộ hóa giao diện thanh cuộn khu vực nhập liệu */
+        .paper-textarea::-webkit-scrollbar { width: 6px; }
+        .paper-textarea::-webkit-scrollbar-track { background: transparent; }
+        .paper-textarea::-webkit-scrollbar-thumb { background: rgba(139, 107, 74, 0.4); border-radius: 4px; }
+        .paper-textarea::-webkit-scrollbar-thumb:hover { background: rgba(139, 107, 74, 0.7); }
         
         .submit-section { position: absolute; bottom: 85px; right: 40px; display: flex; align-items: center; cursor: pointer; z-index: 40; }
-        .submit-btn { background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; white-space: nowrap; }
+        .submit-btn { background: url('assets/border.png') no-repeat center center; background-size: 100% 100%; border: none; box-shadow: none; color: #1a1a1a; padding: 12px 55px 12px 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; white-space: nowrap; transition: opacity 0.3s ease; }
         .witch-character { width: 95px; margin-left: -23px; transition: transform 1s ease; }
 
         /* SCENE 2: HOẠT ẢNH CHUYỂN TIẾP */
@@ -105,7 +112,7 @@
         .pass-submit-btn { background: #d8b4fe; color: #150824; border: none; padding: 12px 35px; font-family: 'Cormorant Garamond', serif; font-weight: 700; border-radius: 8px; cursor: pointer; font-size: 20px; letter-spacing: 1.5px; transition: background 0.3s ease; z-index: 5; position: relative; }
         .pass-submit-btn:hover { background: #c084fc; }
 
-        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN (TÍCH HỢP SCROLLBAR & GỐC TỌA ĐỘ) */
+        /* THÀNH PHẦN HIỂN THỊ VĂN BẢN CUỘN (TÍCH HỢP SCROLLBAR) */
         #scroll-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; z-index: 350; }
         
         .scroll-wrapper { display: flex; flex-direction: column; align-items: center; position: relative; width: 85vw; max-width: 420px; }
@@ -127,7 +134,6 @@
         }
         .scroll-middle.open .scroll-content-container { opacity: 1; }
 
-        /* Định dạng thanh cuộn (Custom Scrollbar) thiết kế cổ điển */
         .scroll-content-container::-webkit-scrollbar { width: 6px; }
         .scroll-content-container::-webkit-scrollbar-track { background: rgba(139, 107, 74, 0.1); border-radius: 4px; }
         .scroll-content-container::-webkit-scrollbar-thumb { background: rgba(139, 107, 74, 0.4); border-radius: 4px; }
@@ -233,9 +239,24 @@
 
     <script>
         let databaseLetters = [];
+        let isDatabaseReady = false; 
         const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbx8zdIEAlgQ8kHpNd8cKmn4EjN5XThxhcYuKjQqHrFCfDa_4wNUPBwSownfKicbxI8C/exec";
 
+        function setButtonReady(isReady) {
+            const btn = document.querySelector('.submit-btn');
+            if (isReady) {
+                btn.innerText = "To the star holder";
+                btn.style.opacity = "1";
+                btn.style.cursor = "pointer";
+            } else {
+                btn.innerText = "Đang kết nối ngân hà...";
+                btn.style.opacity = "0.7";
+                btn.style.cursor = "wait";
+            }
+        }
+
         async function fetchLettersData() {
+            setButtonReady(false);
             try {
                 const response = await fetch(GOOGLE_SHEETS_API_URL);
                 const data = await response.json();
@@ -246,6 +267,9 @@
                 }
             } catch (error) {
                 console.error("[Hệ thống] Lỗi kết nối đến cơ sở dữ liệu:", error);
+            } finally {
+                isDatabaseReady = true;
+                setButtonReady(true);
             }
         }
         fetchLettersData();
@@ -256,6 +280,11 @@
 
             if (sender.toLowerCase() === 'starprincess') {
                 openPasswordModal();
+                return;
+            }
+
+            if (!isDatabaseReady) {
+                alert("Vũ trụ đang đồng bộ kén thời gian, bạn đợi khoảng 2-3 giây rồi bấm gửi lại nha! ⏳✨");
                 return;
             }
 
@@ -313,7 +342,6 @@
                 document.getElementById('scene-2').style.pointerEvents = 'auto';
                 document.getElementById('flying-envelope').classList.add('envelope-fly-animation');
                 
-                // Đồng bộ âm thanh tại mốc 2800ms
                 setTimeout(() => {
                     document.getElementById('twinkle-audio').play().catch(() => {});
                 }, 2800);
