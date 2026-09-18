@@ -258,27 +258,31 @@
         async function fetchLettersData() {
             setButtonReady(false);
             try {
-                // Tích hợp Cache-Busting để vô hiệu hóa bộ nhớ đệm
-                const cacheBuster = "?nocache=" + new Date().getTime();
-                const response = await fetch(GOOGLE_SHEETS_API_URL + cacheBuster, {
-                    method: 'GET',
-                    redirect: 'follow',
-                    headers: {
-                        'Cache-Control': 'no-cache'
-                    }
-                });
+                // Lớp bảo vệ 1: Gắn timestamp vào đuôi URL để ép tải mới, loại bỏ hoàn toàn bộ nhớ đệm
+                const cacheBusterUrl = GOOGLE_SHEETS_API_URL + "?v=" + new Date().getTime();
+                const response = await fetch(cacheBusterUrl);
+                
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                
                 const data = await response.json();
                 
-                if (data && data.length > 0) {
+                if (data && Array.isArray(data)) {
                     databaseLetters = data;
                     console.log(`[Hệ thống] Đã đồng bộ thành công ${databaseLetters.length} lá thư từ máy chủ.`);
                 }
             } catch (error) {
                 console.error("[Hệ thống] Lỗi kết nối đến cơ sở dữ liệu:", error);
-            } finally {
-                isDatabaseReady = true;
-                setButtonReady(true);
+                
+                // Lớp bảo vệ 2: Cảnh báo lỗi đếm số lượng và khóa cứng chức năng gửi
+                alert("Vũ trụ đang bị nhiễu sóng (Không thể đếm số thư cũ). Bạn vui lòng F5 tải lại trang để kết nối lại nhé! ✨");
+                return; // Dừng luồng chạy tại đây, isDatabaseReady vĩnh viễn bằng false cho đến khi F5 thành công
             }
+            
+            // Chỉ xác nhận an toàn khi đã ôm trọn dữ liệu trong tay
+            isDatabaseReady = true;
+            setButtonReady(true);
         }
         fetchLettersData();
 
@@ -291,8 +295,9 @@
                 return;
             }
 
+            // Kiểm tra kép trước khi ghi nhận thư
             if (!isDatabaseReady) {
-                alert("Vũ trụ đang đồng bộ kén thời gian, bạn đợi khoảng 2-3 giây rồi bấm gửi lại nha! ⏳✨");
+                alert("Vũ trụ chưa đồng bộ xong số thứ tự. Bạn vui lòng F5 tải lại trang nhé! ⏳✨");
                 return;
             }
 
@@ -301,7 +306,7 @@
                 return; 
             }
 
-            // Ghi nhận dữ liệu nội bộ và tính toán số thứ tự thực
+            // Ghi nhận dữ liệu và tính toán số thứ tự tuyệt đối
             databaseLetters.push({ sender: sender, content: message });
             const realSequenceNumber = databaseLetters.length;
 
@@ -309,10 +314,8 @@
             formData.append('sender', sender);
             formData.append('content', message);
 
-            // Gửi dữ liệu đi kèm thuộc tính redirect
             fetch(GOOGLE_SHEETS_API_URL, {
                 method: 'POST',
-                redirect: 'follow',
                 body: formData
             }).catch(error => console.error("[Hệ thống] Lỗi khi lưu thư:", error));
 
